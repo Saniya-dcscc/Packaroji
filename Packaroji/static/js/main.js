@@ -483,7 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document
             .querySelectorAll(
-                ".cart-badge, [data-cart-count]"
+                ".cart-badge"
             )
             .forEach(element => {
 
