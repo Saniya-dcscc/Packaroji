@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login | Packaroji{% endblock %}
+
+{% block meta_description %}
+Packaroji administration login.
+{% endblock %}
+
+{% block content %}
+
+<section class="admin-login-page">
+
+    <div class="admin-login-card">
+
+        <div class="admin-login-logo">
+            <img
+                src="{{ url_for('static', filename='images/packaroji-logo.png') }}"
+                alt="Packaroji logo"
+            >
+        </div>
+
+        <span class="eyebrow">
+            PACKAROJI ADMINISTRATION
+        </span>
+
+        <h1>
+            Admin Login
+        </h1>
+
+        <p class="login-intro">
+            Sign in to manage Packaroji customers, orders,
+            reviews and customization requests.
+        </p>
+
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                <div class="login-messages">
+
+                    {% for message in messages %}
+
+                        <div class="login-message">
+                            {{ message }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form
+            method="POST"
+            action="{{ url_for('admin') }}"
+            class="admin-login-form"
+        >
+
+            <div class="form-group">
+
+                <label for="password">
+                    Admin Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter admin password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword()"
+                    >
+                        Show
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-submit"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+
+        <div class="admin-login-footer">
+
+            <a href="{{ url_for('home') }}">
+                ← Back to Packaroji
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<style>
+
+.admin-login-page {
+    min-height: 78vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 70px 20px;
+
+    background:
+        linear-gradient(
+            rgba(244, 241, 231, 0.95),
+            rgba(244, 241, 231, 0.97)
+        ),
+        url(
+            "{{ url_for(
+                'static',
+                filename='images/hero-bg.png'
+            ) }}"
+        )
+        center / cover no-repeat;
+}
+
+
+.admin-login-card {
+    width: 100%;
+    max-width: 440px;
+
+    background: #ffffff;
+
+    border: 1px solid #e3dfd3;
+
+    border-radius: 24px;
+
+    padding: 42px;
+
+    text-align: center;
+
+    box-shadow:
+        0 22px 60px
+        rgba(35, 54, 40, 0.12);
+}
+
+
+.admin-login-logo {
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: #edf2e9;
+
+    overflow: hidden;
+}
+
+
+.admin-login-logo img {
+    width: 52px;
+    height: 52px;
+
+    object-fit: contain;
+}
+
+
+.eyebrow {
+    display: inline-block;
+
+    color: #61765d;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.8px;
+
+    margin-bottom: 10px;
+}
+
+
+.admin-login-card h1 {
+    margin: 0 0 10px;
+
+    color: #193021;
+
+    font-size: 36px;
+
+    line-height: 1.1;
+}
+
+
+.login-intro {
+    margin: 0 auto 30px;
+
+    max-width: 350px;
+
+    color: #72786f;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+/* Messages */
+
+.login-messages {
+    margin-bottom: 20px;
+}
+
+
+.login-message {
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    background: #fff0ed;
+
+    border: 1px solid #f1c9c2;
+
+    color: #95463d;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* Form */
+
+.admin-login-form {
+    text-align: left;
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #304238;
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.password-wrapper {
+    position: relative;
+}
+
+
+.password-wrapper input {
+    width: 100%;
+
+    height: 50px;
+
+    box-sizing: border-box;
+
+    padding:
+        0 65px
+        0 14px;
+
+    border:
+        1px solid
+        #d3d9d1;
+
+    border-radius: 11px;
+
+    background: #fbfcfa;
+
+    color: #27352b;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+
+.password-wrapper input:focus {
+    border-color: #496c4e;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(73,108,78,.10);
+}
+
+
+.password-wrapper input::placeholder {
+    color: #aaaFA9;
+}
+
+
+.password-toggle {
+    position: absolute;
+
+    right: 10px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: 0;
+
+    background: transparent;
+
+    color: #4b6b50;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+
+.password-toggle:hover {
+    color: #203d28;
+}
+
+
+/* Submit */
+
+.login-submit {
+    width: 100%;
+
+    min-height: 50px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background: #294d32;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        transform .2s ease;
+}
+
+
+.login-submit:hover {
+    background: #1f3e27;
+
+    transform: translateY(-1px);
+}
+
+
+/* Footer */
+
+.admin-login-footer {
+    margin-top: 25px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #eceee9;
+}
+
+
+.admin-login-footer a {
+    color: #506b53;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+.admin-login-footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* Mobile */
+
+@media (max-width: 520px) {
+
+    .admin-login-page {
+        padding:
+            45px 15px;
+    }
+
+
+    .admin-login-card {
+        padding: 30px 22px;
+
+        border-radius: 19px;
+    }
+
+
+    .admin-login-card h1 {
+        font-size: 30px;
+    }
+
+}
+
+</style>
+
+
+<script>
+
+function togglePassword() {
+
+    const input =
+        document.getElementById("password");
+
+    const button =
+        document.querySelector(".password-toggle");
+
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        button.textContent = "Hide";
+
+    } else {
+
+        input.type = "password";
+
+        button.textContent = "Show";
+
+    }
+
+}
+
+</script>
+
+{% endblock %}
