@@ -455,7 +455,7 @@
 
 
                     <!-- CUSTOMIZATION -->
-                    <a
+                    
                         href="{{ url_for('order_page', product=product.slug) }}"
                         class="product-btn btn-customize"
                     >
@@ -537,7 +537,7 @@
 
 
         <!-- BACK -->
-        <a
+        
             href="{% if product.category == 'Bakery Packaging' %}{{ url_for('bakery_products') }}{% else %}{{ url_for('food_products') }}{% endif %}"
             class="back-link"
         >
@@ -577,11 +577,11 @@ function addProductToCart() {
 
             alert("Product added to cart!");
 
-            // Update cart count if the navigation has one
-            const cartCount = document.querySelector("[data-cart-count]");
-
-            if (cartCount && data.cart_count !== undefined) {
-                cartCount.textContent = data.cart_count;
+            // Update cart count badge(s) in the navigation
+            if (data.cart_count !== undefined) {
+                document.querySelectorAll(".cart-badge").forEach(function (badge) {
+                    badge.textContent = data.cart_count;
+                });
             }
 
         } else {
