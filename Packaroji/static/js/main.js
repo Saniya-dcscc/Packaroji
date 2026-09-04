@@ -10,42 +10,23 @@ document.addEventListener("DOMContentLoaded", () => {
     if (toggle && nav) {
 
         toggle.addEventListener("click", () => {
-
             const isOpen = nav.classList.toggle("open");
 
-            toggle.setAttribute(
-                "aria-expanded",
-                String(isOpen)
-            );
-
+            toggle.setAttribute("aria-expanded", String(isOpen));
             toggle.setAttribute(
                 "aria-label",
                 isOpen ? "Close menu" : "Open menu"
             );
-
         });
-
 
         nav.querySelectorAll("a").forEach(link => {
-
             link.addEventListener("click", () => {
-
                 nav.classList.remove("open");
 
-                toggle.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-                toggle.setAttribute(
-                    "aria-label",
-                    "Open menu"
-                );
-
+                toggle.setAttribute("aria-expanded", "false");
+                toggle.setAttribute("aria-label", "Open menu");
             });
-
         });
-
     }
 
 
@@ -53,73 +34,50 @@ document.addEventListener("DOMContentLoaded", () => {
        NAVIGATION DROPDOWNS
     ========================================================== */
 
-    document
-        .querySelectorAll(".nav-dropdown-toggle")
-        .forEach(button => {
+    document.querySelectorAll(".nav-dropdown-toggle").forEach(button => {
 
-            button.addEventListener("click", event => {
+        button.addEventListener("click", event => {
 
-                event.preventDefault();
-                event.stopPropagation();
+            event.preventDefault();
+            event.stopPropagation();
 
-                const dropdown =
-                    button.closest(".nav-dropdown");
+            const dropdown = button.closest(".nav-dropdown");
 
-                if (!dropdown) return;
+            if (!dropdown) return;
 
-                const wasOpen =
-                    dropdown.classList.contains("open");
+            const wasOpen = dropdown.classList.contains("open");
 
+            document
+                .querySelectorAll(".nav-dropdown.open")
+                .forEach(other => {
 
-                /*
-                 * Close all other dropdowns
-                 */
+                    if (other !== dropdown) {
 
-                document
-                    .querySelectorAll(".nav-dropdown.open")
-                    .forEach(other => {
+                        other.classList.remove("open");
 
-                        if (other !== dropdown) {
+                        const otherButton =
+                            other.querySelector(".nav-dropdown-toggle");
 
-                            other.classList.remove("open");
+                        otherButton?.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+                    }
+                });
 
-                            const otherButton =
-                                other.querySelector(
-                                    ".nav-dropdown-toggle"
-                                );
+            dropdown.classList.toggle("open", !wasOpen);
 
-                            otherButton?.setAttribute(
-                                "aria-expanded",
-                                "false"
-                            );
-
-                        }
-
-                    });
-
-
-                /*
-                 * Toggle clicked dropdown
-                 */
-
-                dropdown.classList.toggle(
-                    "open",
-                    !wasOpen
-                );
-
-                button.setAttribute(
-                    "aria-expanded",
-                    String(!wasOpen)
-                );
-
-            });
-
+            button.setAttribute(
+                "aria-expanded",
+                String(!wasOpen)
+            );
         });
+    });
 
 
-    /*
-     * Close dropdowns when clicking elsewhere
-     */
+    /* =========================================================
+       CLOSE DROPDOWNS WHEN CLICKING OUTSIDE
+    ========================================================== */
 
     document.addEventListener("click", event => {
 
@@ -132,48 +90,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     dropdown.classList.remove("open");
 
                     dropdown
-                        .querySelector(
-                            ".nav-dropdown-toggle"
-                        )
+                        .querySelector(".nav-dropdown-toggle")
                         ?.setAttribute(
                             "aria-expanded",
                             "false"
                         );
-
                 });
-
         }
-
-    });
-
-
-    /*
-     * Close dropdowns with Escape
-     */
-
-    document.addEventListener("keydown", event => {
-
-        if (event.key === "Escape") {
-
-            document
-                .querySelectorAll(".nav-dropdown.open")
-                .forEach(dropdown => {
-
-                    dropdown.classList.remove("open");
-
-                    dropdown
-                        .querySelector(
-                            ".nav-dropdown-toggle"
-                        )
-                        ?.setAttribute(
-                            "aria-expanded",
-                            "false"
-                        );
-
-                });
-
-        }
-
     });
 
 
@@ -181,19 +104,17 @@ document.addEventListener("DOMContentLoaded", () => {
        HEADER SCROLL EFFECT
     ========================================================== */
 
-    const header =
-        document.getElementById("siteHeader");
-
+    const header = document.getElementById("siteHeader");
 
     const updateHeader = () => {
 
-        header?.classList.toggle(
-            "scrolled",
-            window.scrollY > 20
-        );
-
+        if (header) {
+            header.classList.toggle(
+                "scrolled",
+                window.scrollY > 20
+            );
+        }
     };
-
 
     window.addEventListener(
         "scroll",
@@ -210,10 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("resize", () => {
 
-        if (
-            window.innerWidth > 900 &&
-            nav
-        ) {
+        if (window.innerWidth > 900 && nav) {
 
             nav.classList.remove("open");
 
@@ -226,9 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "aria-label",
                 "Open menu"
             );
-
         }
-
     });
 
 
@@ -245,68 +161,43 @@ document.addEventListener("DOMContentLoaded", () => {
                 const targetId =
                     link.getAttribute("href");
 
-
-                if (
-                    !targetId ||
-                    targetId === "#"
-                ) {
+                if (!targetId || targetId === "#") {
                     return;
                 }
 
-
                 const target =
                     document.querySelector(targetId);
-
 
                 if (!target) {
                     return;
                 }
 
-
                 event.preventDefault();
-
 
                 target.scrollIntoView({
                     behavior: "smooth",
                     block: "start"
                 });
 
-
-                /*
-                 * Update URL without forcing page reload
-                 */
-
                 try {
-
                     history.replaceState(
                         null,
                         "",
                         targetId
                     );
-
                 } catch (error) {
-
                     console.warn(
                         "Could not update URL:",
                         error
                     );
-
                 }
-
             });
-
         });
 
 
     /* =========================================================
-       GENERIC "ADD TO CART" BUTTONS
-       
-       Product pages can use:
-       
-       data-add-to-cart
-       data-product-slug="..."
-       data-packaging-type="Food Packaging"
-       ========================================================== */
+       ADD TO CART
+    ========================================================== */
 
     document
         .querySelectorAll("[data-add-to-cart]")
@@ -331,23 +222,18 @@ document.addEventListener("DOMContentLoaded", () => {
                             "#productQuantity"
                         );
 
-
                     let quantity =
                         parseInt(
                             quantityInput?.value || "1",
                             10
                         );
 
-
                     if (
                         Number.isNaN(quantity) ||
                         quantity < 1
                     ) {
-
                         quantity = 1;
-
                     }
-
 
                     if (!productSlug) {
 
@@ -356,24 +242,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         );
 
                         return;
-
                     }
-
 
                     const originalText =
                         button.textContent;
 
-
                     button.disabled = true;
-
-                    button.textContent =
-                        "Adding…";
-
+                    button.textContent = "Adding…";
 
                     try {
 
-                        const formData =
-                            new FormData();
+                        const formData = new FormData();
 
                         formData.append(
                             "product",
@@ -390,7 +269,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             String(quantity)
                         );
 
-
                         const response =
                             await fetch(
                                 "/cart/add",
@@ -400,10 +278,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                 }
                             );
 
-
                         const data =
                             await response.json();
-
 
                         if (!response.ok || !data.ok) {
 
@@ -411,32 +287,23 @@ document.addEventListener("DOMContentLoaded", () => {
                                 data.message ||
                                 "Unable to add product to cart."
                             );
-
                         }
-
 
                         updateCartBadges(
                             data.cart_count
                         );
-
 
                         showToast(
                             data.message ||
                             "Added to cart."
                         );
 
-
-                        button.textContent =
-                            "✓ Added";
-
+                        button.textContent = "✓ Added";
 
                         setTimeout(() => {
-
                             button.textContent =
                                 originalText;
-
                         }, 1400);
-
 
                     } catch (error) {
 
@@ -445,12 +312,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             error
                         );
 
-
                         showToast(
                             error.message ||
                             "Something went wrong."
                         );
-
 
                         button.textContent =
                             originalText;
@@ -458,17 +323,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     } finally {
 
                         button.disabled = false;
-
                     }
-
                 }
             );
-
         });
 
 
     /* =========================================================
        CART BADGE UPDATE
+       
+       IMPORTANT:
+       Never select [data-cart-count] globally because the
+       <body> itself contains data-cart-count.
     ========================================================== */
 
     function updateCartBadges(count) {
@@ -480,28 +346,18 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-
         document
-            .querySelectorAll(
-                ".cart-badge"
-            )
+            .querySelectorAll(".cart-badge")
             .forEach(element => {
 
-                element.textContent = count;
+                element.textContent = String(count);
 
                 element.classList.add("bump");
 
-
                 setTimeout(() => {
-
-                    element.classList.remove(
-                        "bump"
-                    );
-
+                    element.classList.remove("bump");
                 }, 180);
-
             });
-
     }
 
 
@@ -516,11 +372,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 "packarojiToast"
             );
 
-
-        /*
-         * Create toast if it doesn't already exist.
-         */
-
         if (!toast) {
 
             toast =
@@ -532,34 +383,21 @@ document.addEventListener("DOMContentLoaded", () => {
             toast.className =
                 "packaroji-js-toast";
 
-            document.body.appendChild(
-                toast
-            );
-
+            document.body.appendChild(toast);
         }
 
-
-        toast.textContent =
-            message;
-
+        toast.textContent = message;
 
         toast.classList.add("show");
 
-
-        clearTimeout(
-            toast._hideTimer
-        );
-
+        clearTimeout(toast._hideTimer);
 
         toast._hideTimer =
             setTimeout(() => {
 
-                toast.classList.remove(
-                    "show"
-                );
+                toast.classList.remove("show");
 
             }, 2500);
-
     }
 
 
@@ -568,9 +406,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ========================================================== */
 
     document
-        .querySelectorAll(
-            'input[type="number"]'
-        )
+        .querySelectorAll('input[type="number"]')
         .forEach(input => {
 
             input.addEventListener(
@@ -579,12 +415,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const min =
                         parseInt(
-                            input.getAttribute(
-                                "min"
-                            ) || "0",
+                            input.getAttribute("min") || "0",
                             10
                         );
-
 
                     let value =
                         parseInt(
@@ -592,37 +425,24 @@ document.addEventListener("DOMContentLoaded", () => {
                             10
                         );
 
-
                     if (Number.isNaN(value)) {
-
                         return;
-
                     }
-
 
                     if (value < min) {
-
-                        input.value =
-                            min;
-
+                        input.value = min;
                     }
-
                 }
             );
-
         });
 
 
     /* =========================================================
        FILE UPLOAD FEEDBACK
-       
-       Shows the customer which files they selected.
     ========================================================== */
 
     document
-        .querySelectorAll(
-            'input[type="file"]'
-        )
+        .querySelectorAll('input[type="file"]')
         .forEach(input => {
 
             input.addEventListener(
@@ -634,42 +454,30 @@ document.addEventListener("DOMContentLoaded", () => {
                             input.files || []
                         );
 
-
                     let fileInfo =
                         input.parentElement
                             ?.querySelector(
                                 ".selected-files"
                             );
 
-
                     if (!fileInfo) {
 
                         fileInfo =
-                            document.createElement(
-                                "div"
-                            );
+                            document.createElement("div");
 
                         fileInfo.className =
                             "selected-files";
 
-
                         input.parentElement
-                            ?.appendChild(
-                                fileInfo
-                            );
-
+                            ?.appendChild(fileInfo);
                     }
-
 
                     if (!files.length) {
 
-                        fileInfo.textContent =
-                            "";
+                        fileInfo.textContent = "";
 
                         return;
-
                     }
-
 
                     fileInfo.textContent =
                         `${files.length} file${
@@ -677,17 +485,13 @@ document.addEventListener("DOMContentLoaded", () => {
                                 ? ""
                                 : "s"
                         } selected`;
-
                 }
             );
-
         });
 
 
     /* =========================================================
        ESCAPE KEY
-       
-       Close mobile navigation and common modals.
     ========================================================== */
 
     document.addEventListener(
@@ -698,64 +502,54 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-
-            nav?.classList.remove(
-                "open"
-            );
-
+            nav?.classList.remove("open");
 
             toggle?.setAttribute(
                 "aria-expanded",
                 "false"
             );
 
-
             document
-                .querySelectorAll(
-                    ".modal.open"
-                )
+                .querySelectorAll(".modal.open")
                 .forEach(modal => {
 
-                    modal.classList.remove(
-                        "open"
-                    );
+                    modal.classList.remove("open");
 
                     modal.setAttribute(
                         "aria-hidden",
                         "true"
                     );
-
                 });
-
         }
     );
 
 
     /* =========================================================
        SIMPLE CART COUNT INITIALIZATION
+       
+       IMPORTANT:
+       Read the body attribute, but DO NOT update the body
+       itself.
     ========================================================== */
 
     const serverCartCount =
-        document.body.dataset.cartCount;
-
+        document.body?.dataset?.cartCount;
 
     if (
         serverCartCount !== undefined &&
         serverCartCount !== ""
     ) {
 
-        updateCartBadges(
-            serverCartCount
-        );
-
+        /*
+         * Only update actual cart badge elements.
+         * The <body> must never be selected here.
+         */
+        updateCartBadges(serverCartCount);
     }
 
 
     /* =========================================================
        TOAST STYLES
-       
-       Added dynamically so we don't need to immediately
-       modify style.css for the basic JS cart message.
     ========================================================== */
 
     if (
@@ -770,19 +564,14 @@ document.addEventListener("DOMContentLoaded", () => {
         style.id =
             "packaroji-js-toast-style";
 
-
         style.textContent = `
             .packaroji-js-toast {
                 position: fixed;
                 left: 50%;
                 bottom: 25px;
-                transform:
-                    translate(-50%, 20px);
+                transform: translate(-50%, 20px);
                 z-index: 9999;
-                max-width: min(
-                    90vw,
-                    420px
-                );
+                max-width: min(90vw, 420px);
                 padding: 13px 20px;
                 border-radius: 12px;
                 background: #20382a;
@@ -790,9 +579,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 font-size: 14px;
                 font-weight: 700;
                 text-align: center;
-                box-shadow:
-                    0 12px 35px
-                    rgba(0,0,0,.20);
+                box-shadow: 0 12px 35px rgba(0,0,0,.20);
                 opacity: 0;
                 pointer-events: none;
                 transition:
@@ -802,8 +589,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             .packaroji-js-toast.show {
                 opacity: 1;
-                transform:
-                    translate(-50%, 0);
+                transform: translate(-50%, 0);
             }
 
             .cart-badge.bump {
@@ -819,11 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         `;
 
-
-        document.head.appendChild(
-            style
-        );
-
+        document.head.appendChild(style);
     }
 
 });
