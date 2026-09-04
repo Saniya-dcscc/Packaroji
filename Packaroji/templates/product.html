@@ -455,10 +455,7 @@
 
 
                     <!-- CUSTOMIZATION -->
-                    
-                        href="{{ url_for('order_page', product=product.slug) }}"
-                        class="product-btn btn-customize"
-                    >
+                    <a href="{{ url_for('order_page', product=product.slug) }}" class="product-btn btn-customize">
                         Customize This Product
                     </a>
 
@@ -537,10 +534,7 @@
 
 
         <!-- BACK -->
-        
-            href="{% if product.category == 'Bakery Packaging' %}{{ url_for('bakery_products') }}{% else %}{{ url_for('food_products') }}{% endif %}"
-            class="back-link"
-        >
+        <a href="{% if product.category == 'Bakery Packaging' %}{{ url_for('bakery_products') }}{% else %}{{ url_for('food_products') }}{% endif %}" class="back-link">
             ← Back to Packaging
         </a>
 
