@@ -1,0 +1,1560 @@
+{% extends "base.html" %}
+
+{% block title %}
+Packaroji | Eco-Friendly Food & Bakery Packaging in Hyderabad
+{% endblock %}
+
+{% block description %}
+Packaroji provides food and bakery packaging solutions for restaurants,
+cafés, bakeries, caterers, cloud kitchens, takeaway and delivery businesses
+in Hyderabad. Explore packaging products or request customized packaging.
+{% endblock %}
+
+
+{% block head %}
+
+<!-- =====================================================
+     SEO / STRUCTURED DATA
+===================================================== -->
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Packaroji",
+    "description": "Food and bakery packaging solutions for takeaway, delivery and food businesses in Hyderabad.",
+    "url": "{{ request.url_root }}",
+    "telephone": "{{ business.phone }}",
+    "email": "{{ business.email }}",
+
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Hyderabad",
+        "addressRegion": "Telangana",
+        "addressCountry": "IN"
+    },
+
+    "areaServed": {
+        "@type": "City",
+        "name": "Hyderabad"
+    },
+
+    "brand": {
+        "@type": "Brand",
+        "name": "Packaroji"
+    }
+}
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+    class="hero"
+    id="home"
+>
+
+    <div class="hero-overlay"></div>
+
+
+    <div class="container hero-content">
+
+        <div class="hero-copy">
+
+            <p class="eyebrow">
+                GOOD FOR FOOD • BETTER FOR THE PLANET
+            </p>
+
+
+            <h1>
+                Packaging that carries your food —
+                <span>and your values.</span>
+            </h1>
+
+
+            <p class="hero-lead">
+                Practical packaging solutions for restaurants,
+                cafés, bakeries, caterers, cloud kitchens and
+                takeaway businesses in Hyderabad.
+            </p>
+
+
+            <!-- =================================================
+                 HERO BUTTONS
+            ================================================== -->
+
+            <div class="hero-buttons">
+
+                <a
+                    class="btn btn-primary"
+                    href="#packaging-options"
+                >
+                    Explore Products
+                    <span>→</span>
+                </a>
+
+
+                <a
+                    class="btn btn-light"
+                    href="{{ url_for('order_page') }}"
+                >
+                    Want a Customization
+                </a>
+
+            </div>
+
+
+            <div class="hero-points">
+
+                <span>
+                    ✓ No public prices
+                </span>
+
+                <span>
+                    ✓ Business enquiries welcome
+                </span>
+
+                <span>
+                    ✓ WhatsApp support
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         TRUST BAR
+    ================================================== -->
+
+    <div class="hero-bottom">
+
+        <div class="container trust-row">
+
+            <span>
+                🌱 Responsible Packaging
+            </span>
+
+            <span>
+                🍱 Takeaway Ready
+            </span>
+
+            <span>
+                📦 Business Orders
+            </span>
+
+            <span>
+                🚚 Food Service & Delivery
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PACKAGING OPTIONS
+===================================================== -->
+
+<section
+    class="section packaging-options"
+    id="packaging-options"
+>
+
+    <div class="container">
+
+        <div class="section-heading center">
+
+            <p class="eyebrow">
+                EXPLORE OUR RANGE
+            </p>
+
+            <h2>
+                What are you looking for?
+            </h2>
+
+            <p>
+                Choose the type of packaging you need and
+                explore the products available for your business.
+            </p>
+
+        </div>
+
+
+        <div class="packaging-choice-grid">
+
+
+            <!-- =================================================
+                 BAKERY PACKAGING
+            ================================================== -->
+
+            <a
+                href="{{ url_for('bakery_products') }}"
+                class="packaging-choice-card"
+            >
+
+                <div class="packaging-choice-image bakery-choice-image">
+
+                    <span class="packaging-choice-icon">
+                        🥐
+                    </span>
+
+                </div>
+
+
+                <div class="packaging-choice-content">
+
+                    <span class="product-kicker">
+                        FOR BAKERIES
+                    </span>
+
+                    <h3>
+                        Bakery Packaging
+                    </h3>
+
+                    <p>
+                        Packaging solutions for cakes,
+                        pastries, cookies, donuts, breads,
+                        desserts and other baked products.
+                    </p>
+
+                    <span class="choice-link">
+                        Explore Bakery Packaging →
+                    </span>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- =================================================
+                 FOOD PACKAGING
+            ================================================== -->
+
+            <a
+                href="{{ url_for('food_products') }}"
+                class="packaging-choice-card"
+            >
+
+                <div class="packaging-choice-image food-choice-image">
+
+                    <span class="packaging-choice-icon">
+                        🍱
+                    </span>
+
+                </div>
+
+
+                <div class="packaging-choice-content">
+
+                    <span class="product-kicker">
+                        FOR FOOD BUSINESSES
+                    </span>
+
+                    <h3>
+                        Food Packaging
+                    </h3>
+
+                    <p>
+                        Packaging solutions for hot meals,
+                        takeaway, delivery, sauces,
+                        sandwiches, wraps and food service.
+                    </p>
+
+                    <span class="choice-link">
+                        Explore Food Packaging →
+                    </span>
+
+                </div>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ABOUT PACKAROJI
+===================================================== -->
+
+<section
+    class="section intro"
+    id="about"
+>
+
+    <div class="container split">
+
+
+        <div>
+
+            <p class="eyebrow">
+                ABOUT PACKAROJI
+            </p>
+
+            <h2>
+                Simple packaging.
+                Smarter choice.
+            </h2>
+
+        </div>
+
+
+        <div>
+
+            <p class="large-copy">
+
+                Packaroji is a Hyderabad-focused food and
+                bakery packaging business built around one
+                simple idea: businesses should have practical
+                packaging that works for the way they operate.
+
+            </p>
+
+
+            <p>
+
+                From bags and boxes to pouches, wraps,
+                liners, cups and containers, we bring
+                packaging solutions together in one place.
+
+            </p>
+
+
+            <p>
+
+                Need something different?
+
+                You can also send us your exact
+                customization requirements, branding
+                details and reference files.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     WHY PACKAROJI
+===================================================== -->
+
+<section class="section features">
+
+    <div class="container">
+
+
+        <div class="section-heading center">
+
+            <p class="eyebrow">
+                WHY PACKAROJI
+            </p>
+
+            <h2>
+                Made for busy food businesses
+            </h2>
+
+            <p>
+                Packaging should protect your food,
+                present your brand well and fit the
+                way your business works.
+            </p>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+
+            <article class="feature-card">
+
+                <span>
+                    🌿
+                </span>
+
+                <h3>
+                    Responsible choices
+                </h3>
+
+                <p>
+                    Explore packaging options designed
+                    with practicality and a more
+                    thoughtful approach to packaging.
+                </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+                <span>
+                    📦
+                </span>
+
+                <h3>
+                    Takeaway focused
+                </h3>
+
+                <p>
+                    Formats designed around takeaway,
+                    delivery, catering and food-service
+                    requirements.
+                </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+                <span>
+                    🧾
+                </span>
+
+                <h3>
+                    Business friendly
+                </h3>
+
+                <p>
+                    Tell us your product, quantity,
+                    size and requirements and we'll
+                    prepare the details for you.
+                </p>
+
+            </article>
+
+
+            <article class="feature-card">
+
+                <span>
+                    💬
+                </span>
+
+                <h3>
+                    Easy ordering
+                </h3>
+
+                <p>
+                    Add standard products directly to
+                    your cart or create a customized
+                    packaging requirement.
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FEATURED PRODUCTS
+===================================================== -->
+
+<section
+    class="section products-section"
+    id="products"
+>
+
+    <div class="container">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="eyebrow">
+                    OUR PRODUCTS
+                </p>
+
+                <h2>
+                    Explore our packaging range
+                </h2>
+
+                <p>
+                    Open any product to see its complete
+                    details, uses, material, sizes and
+                    ordering options.
+                </p>
+
+            </div>
+
+
+            <div class="section-heading-actions">
+
+                <a
+                    class="text-link"
+                    href="{{ url_for('bakery_products') }}"
+                >
+                    Bakery Packaging →
+                </a>
+
+
+                <a
+                    class="text-link"
+                    href="{{ url_for('food_products') }}"
+                >
+                    Food Packaging →
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="product-grid">
+
+
+            {% for product in products %}
+
+            <article
+                class="product-card"
+                data-category="{{ product.category }}"
+            >
+
+
+                <!-- =================================================
+                     PRODUCT IMAGE
+                ================================================== -->
+
+                <a
+                    href="{{ url_for(
+                        'product_detail',
+                        slug=product.slug
+                    ) }}"
+                    class="product-image-wrap"
+                    aria-label="View {{ product.name }} details"
+                >
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='images/' + product.image
+                        ) }}"
+                        alt="{{ product.name }}"
+                        loading="lazy"
+                        onerror="
+                            this.style.display='none';
+                            this.parentElement.classList.add(
+                                'image-placeholder'
+                            );
+                        "
+                    >
+
+
+                    <span class="image-fallback">
+
+                        Packaroji
+
+                        <small>
+                            {{ product.name }}
+                        </small>
+
+                    </span>
+
+
+                    <span class="product-arrow">
+                        ↗
+                    </span>
+
+
+                    <span class="product-view">
+                        View Product
+                    </span>
+
+                </a>
+
+
+
+                <!-- =================================================
+                     PRODUCT INFORMATION
+                ================================================== -->
+
+                <div class="product-info">
+
+                    <span class="product-kicker">
+                        {{ product.category }}
+                    </span>
+
+
+                    <h3>
+                        {{ product.name }}
+                    </h3>
+
+
+                    <p>
+                        {{ product.description }}
+                    </p>
+
+
+                    <div class="product-meta">
+
+                        <strong>
+                            Sizes:
+                        </strong>
+
+                        {{ product.sizes }}
+
+                    </div>
+
+
+                    <!-- =================================================
+                         ACTIONS
+                    ================================================== -->
+
+                    <div class="product-actions">
+
+                        <a
+                            href="{{ url_for(
+                                'product_detail',
+                                slug=product.slug
+                            ) }}"
+                            class="product-link"
+                        >
+                            View Full Details →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+
+        </div>
+
+
+
+        <div class="products-bottom">
+
+            <div class="product-actions">
+
+                <a
+                    class="btn btn-secondary"
+                    href="{{ url_for('bakery_products') }}"
+                >
+                    Explore Bakery Packaging
+                </a>
+
+
+                <a
+                    class="btn btn-secondary"
+                    href="{{ url_for('food_products') }}"
+                >
+                    Explore Food Packaging
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CUSTOMIZATION
+===================================================== -->
+
+<section class="section customization-section">
+
+    <div class="container customization-card">
+
+
+        <div class="customization-copy">
+
+            <p class="eyebrow">
+                NEED SOMETHING UNIQUE?
+            </p>
+
+
+            <h2>
+                Make the packaging yours.
+            </h2>
+
+
+            <p>
+                Want your logo, specific dimensions,
+                colours, printing or a completely
+                customized packaging requirement?
+            </p>
+
+
+            <p>
+                Send us your exact requirements and
+                upload your logo, artwork, design or
+                reference files.
+            </p>
+
+        </div>
+
+
+        <div class="customization-actions">
+
+            <a
+                class="btn btn-primary"
+                href="{{ url_for('order_page') }}"
+            >
+                Want a Customization →
+            </a>
+
+
+            <span>
+                Your customization details stay
+                attached to the product in your cart.
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SUSTAINABILITY
+===================================================== -->
+
+<section
+    class="section nature-section"
+    id="sustainability"
+>
+
+    <div class="container nature-grid">
+
+
+        <div class="nature-image"></div>
+
+
+        <div class="nature-copy">
+
+            <p class="eyebrow">
+                OUR PURPOSE
+            </p>
+
+
+            <h2>
+                Packaging with purpose.
+            </h2>
+
+
+            <p>
+                We believe packaging can be practical
+                while businesses also make more
+                thoughtful material choices.
+            </p>
+
+
+            <p>
+                Packaroji focuses on packaging solutions
+                that work for everyday food service,
+                takeaway and delivery businesses.
+            </p>
+
+
+            <div class="impact-list">
+
+
+                <div>
+
+                    <b>
+                        01
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Choose purposefully
+                        </strong>
+
+                        <small>
+                            Select packaging based on
+                            your actual food, quantity
+                            and delivery requirements.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <b>
+                        02
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Reduce unnecessary waste
+                        </strong>
+
+                        <small>
+                            Choose formats and quantities
+                            that make sense for your
+                            business operations.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <b>
+                        03
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Build better habits
+                        </strong>
+
+                        <small>
+                            Make thoughtful packaging
+                            part of everyday food service.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section class="section process">
+
+    <div class="container">
+
+
+        <div class="section-heading center">
+
+            <p class="eyebrow">
+                HOW IT WORKS
+            </p>
+
+            <h2>
+                From requirement to delivery
+            </h2>
+
+            <p>
+                Simple ordering for standard products
+                and customized packaging.
+            </p>
+
+        </div>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <span>
+                    01
+                </span>
+
+                <h3>
+                    Explore products
+                </h3>
+
+                <p>
+                    Choose Bakery Packaging or Food
+                    Packaging and open any product
+                    for complete information.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    02
+                </span>
+
+                <h3>
+                    Add to cart
+                </h3>
+
+                <p>
+                    Add standard products directly
+                    to your cart with the quantity
+                    you require.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    03
+                </span>
+
+                <h3>
+                    Customize if needed
+                </h3>
+
+                <p>
+                    Add your exact dimensions,
+                    branding, colour, printing and
+                    reference files.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    04
+                </span>
+
+                <h3>
+                    Submit your order
+                </h3>
+
+                <p>
+                    Submit your requirements and
+                    Packaroji will contact you with
+                    availability and pricing.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     REVIEWS
+===================================================== -->
+
+<section
+    class="section reviews-section"
+    id="reviews"
+>
+
+    <div class="container">
+
+
+        <div class="section-heading">
+
+            <div>
+
+                <p class="eyebrow">
+                    CUSTOMER VOICE
+                </p>
+
+                <h2>
+                    What customers say
+                </h2>
+
+                <p>
+                    Customer reviews appear here after
+                    being reviewed and approved by Packaroji.
+                </p>
+
+            </div>
+
+
+            <button
+                class="btn btn-secondary"
+                type="button"
+                data-open-review
+            >
+                Leave a Review
+            </button>
+
+        </div>
+
+
+
+        <div class="reviews-grid">
+
+
+            {% if reviews %}
+
+                {% for review in reviews %}
+
+                <article class="review-card">
+
+                    <div class="stars">
+
+                        {% for _ in range(review['rating']) %}
+                            ★
+                        {% endfor %}
+
+                        {% for _ in range(5 - review['rating']) %}
+                            ☆
+                        {% endfor %}
+
+                    </div>
+
+
+                    <p>
+                        “{{ review['review_text'] }}”
+                    </p>
+
+
+                    <strong>
+                        {{ review['customer_name'] }}
+                    </strong>
+
+                </article>
+
+                {% endfor %}
+
+
+            {% else %}
+
+                <article class="review-card empty-review">
+
+                    <div class="stars">
+                        ★★★★★
+                    </div>
+
+                    <h3>
+                        Be one of our first reviewers.
+                    </h3>
+
+                    <p>
+                        Customer reviews will appear
+                        here after approval.
+                    </p>
+
+
+                    <button
+                        class="text-link button-reset"
+                        type="button"
+                        data-open-review
+                    >
+                        Write the first review →
+                    </button>
+
+                </article>
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section
+    class="section cta-section"
+    id="contact"
+>
+
+    <div class="container cta-card">
+
+
+        <div>
+
+            <p class="eyebrow">
+                READY TO GET STARTED?
+            </p>
+
+
+            <h2>
+                Tell us what your food business needs.
+            </h2>
+
+
+            <p>
+                No prices are displayed online.
+                Explore products, add your required
+                quantities and submit your order.
+                Packaroji will contact you with pricing
+                and availability.
+            </p>
+
+        </div>
+
+
+        <div class="cta-actions">
+
+
+            <a
+                class="btn btn-primary"
+                href="{{ url_for('cart') }}"
+            >
+                View Cart
+            </a>
+
+
+            <a
+                class="btn btn-outline"
+                href="{{ url_for(
+                    'order_page'
+                ) }}"
+            >
+                Want a Customization
+            </a>
+
+
+            <a
+                class="btn btn-outline"
+                href="https://wa.me/{{ business.whatsapp }}"
+                target="_blank"
+                rel="noopener"
+            >
+                WhatsApp Us
+            </a>
+
+
+            <a
+                class="contact-small"
+                href="mailto:{{ business.email }}"
+            >
+                {{ business.email }}
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     REVIEW MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="reviewModal"
+    aria-hidden="true"
+>
+
+    <div
+        class="modal-backdrop"
+        data-close-review
+    ></div>
+
+
+    <div
+        class="modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="reviewTitle"
+    >
+
+
+        <button
+            class="modal-close"
+            type="button"
+            data-close-review
+            aria-label="Close review form"
+        >
+            ×
+        </button>
+
+
+        <p class="eyebrow">
+            YOUR EXPERIENCE
+        </p>
+
+
+        <h2 id="reviewTitle">
+            Leave a review
+        </h2>
+
+
+        <form id="reviewForm">
+
+
+            <label>
+
+                Name
+
+                <input
+                    name="customer_name"
+                    required
+                    maxlength="80"
+                    autocomplete="name"
+                >
+
+            </label>
+
+
+            <label>
+
+                Rating
+
+                <select
+                    name="rating"
+                    required
+                >
+
+                    <option value="5">
+                        ★★★★★ — Excellent
+                    </option>
+
+                    <option value="4">
+                        ★★★★☆ — Very good
+                    </option>
+
+                    <option value="3">
+                        ★★★☆☆ — Good
+                    </option>
+
+                    <option value="2">
+                        ★★☆☆☆ — Okay
+                    </option>
+
+                    <option value="1">
+                        ★☆☆☆☆ — Poor
+                    </option>
+
+                </select>
+
+            </label>
+
+
+            <label>
+
+                Review
+
+                <textarea
+                    name="review_text"
+                    required
+                    maxlength="500"
+                    rows="5"
+                ></textarea>
+
+            </label>
+
+
+            <button
+                class="btn btn-primary"
+                type="submit"
+            >
+                Submit Review
+            </button>
+
+
+            <div
+                class="form-message"
+                id="reviewMessage"
+            ></div>
+
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+
+    /* =====================================================
+       REVIEW MODAL
+    ====================================================== */
+
+    const modal =
+        document.getElementById(
+            "reviewModal"
+        );
+
+
+    document
+        .querySelectorAll(
+            "[data-open-review]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    if (!modal) {
+                        return;
+                    }
+
+                    modal.classList.add(
+                        "open"
+                    );
+
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "false"
+                    );
+
+                    document.body.classList.add(
+                        "modal-open"
+                    );
+
+                }
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "[data-close-review]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    if (!modal) {
+                        return;
+                    }
+
+                    modal.classList.remove(
+                        "open"
+                    );
+
+                    modal.setAttribute(
+                        "aria-hidden",
+                        "true"
+                    );
+
+                    document.body.classList.remove(
+                        "modal-open"
+                    );
+
+                }
+            );
+
+        });
+
+
+    /* =====================================================
+       ESCAPE KEY FOR REVIEW MODAL
+    ====================================================== */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+                && modal
+            ) {
+
+                modal.classList.remove(
+                    "open"
+                );
+
+                modal.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+                document.body.classList.remove(
+                    "modal-open"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       REVIEW FORM
+    ====================================================== */
+
+    const reviewForm =
+        document.getElementById(
+            "reviewForm"
+        );
+
+
+    reviewForm?.addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const message =
+                document.getElementById(
+                    "reviewMessage"
+                );
+
+
+            const submitButton =
+                reviewForm.querySelector(
+                    "button[type='submit']"
+                );
+
+
+            submitButton.disabled = true;
+
+            submitButton.textContent =
+                "Submitting…";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "{{ url_for('submit_review') }}",
+                        {
+                            method: "POST",
+                            body:
+                                new FormData(
+                                    reviewForm
+                                )
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                message.textContent =
+                    data.message ||
+                    "Review submitted.";
+
+
+                message.className =
+                    "form-message " +
+                    (
+                        data.ok
+                        ? "success"
+                        : "error"
+                    );
+
+
+                if (data.ok) {
+
+                    reviewForm.reset();
+
+                    setTimeout(
+                        () => {
+
+                            modal?.classList.remove(
+                                "open"
+                            );
+
+                            modal?.setAttribute(
+                                "aria-hidden",
+                                "true"
+                            );
+
+                            document.body.classList.remove(
+                                "modal-open"
+                            );
+
+                        },
+                        1300
+                    );
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Review error:",
+                    error
+                );
+
+
+                message.textContent =
+                    "Something went wrong. Please try again.";
+
+
+                message.className =
+                    "form-message error";
+
+
+            } finally {
+
+                submitButton.disabled =
+                    false;
+
+                submitButton.textContent =
+                    "Submit Review";
+
+            }
+
+        }
+    );
+
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block title %}Login | Packaroji{% endblock %}
+
+{% block meta_description %}
+Login to your Packaroji account to manage your packaging orders, customized orders, and previous purchases.
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .auth-page {
+        min-height: 75vh;
+        background: #f7f4ec;
+        padding: 80px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .auth-container {
+        width: 100%;
+        max-width: 460px;
+    }
+
+    .auth-card {
+        background: #ffffff;
+        border: 1px solid #e4e8df;
+        border-radius: 24px;
+        padding: 42px;
+        box-shadow: 0 15px 45px rgba(35, 55, 42, 0.08);
+    }
+
+    .auth-heading {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .auth-heading h1 {
+        margin: 0 0 10px;
+        color: #20372a;
+        font-size: 36px;
+    }
+
+    .auth-heading p {
+        margin: 0;
+        color: #697168;
+        line-height: 1.6;
+        font-size: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #304238;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .form-group input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 14px 15px;
+        border: 1px solid #ccd4c9;
+        border-radius: 10px;
+        background: #fbfcf9;
+        color: #25352b;
+        font-size: 15px;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus {
+        border-color: #315c3d;
+        box-shadow: 0 0 0 3px rgba(49, 92, 61, 0.1);
+    }
+
+    .login-btn {
+        width: 100%;
+        border: none;
+        border-radius: 11px;
+        padding: 15px;
+        background: #315c3d;
+        color: white;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 0.25s ease;
+    }
+
+    .login-btn:hover {
+        background: #24482f;
+        transform: translateY(-1px);
+    }
+
+    .auth-message {
+        margin-bottom: 20px;
+        padding: 12px 14px;
+        border-radius: 9px;
+        background: #f8e9e5;
+        color: #91483f;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .signup-link {
+        text-align: center;
+        margin-top: 25px;
+        color: #687168;
+        font-size: 14px;
+    }
+
+    .signup-link a {
+        color: #315c3d;
+        font-weight: 800;
+        text-decoration: none;
+    }
+
+    .signup-link a:hover {
+        text-decoration: underline;
+    }
+
+    .forgot-note {
+        margin-top: 12px;
+        color: #7a8279;
+        font-size: 12px;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    @media (max-width: 520px) {
+        .auth-page {
+            padding: 50px 15px;
+        }
+
+        .auth-card {
+            padding: 30px 22px;
+            border-radius: 19px;
+        }
+
+        .auth-heading h1 {
+            font-size: 30px;
+        }
+    }
+</style>
+
+<section class="auth-page">
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="auth-heading">
+                <h1>Welcome Back</h1>
+
+                <p>
+                    Login to your Packaroji account to manage your orders
+                    and packaging requirements.
+                </p>
+            </div>
+
+
+            {% if error %}
+
+                <div class="auth-message">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                action="{{ url_for('login') }}"
+            >
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value="{{ request.form.get('email', '') }}"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                >
+                    Login
+                </button>
+
+            </form>
+
+
+            <div class="signup-link">
+
+                Don't have an account?
+
+                <a href="{{ url_for('signup') }}">
+                    Create an Account
+                </a>
+
+            </div>
+
+
+            <div class="forgot-note">
+                Your account lets you view previous orders and easily
+                repeat packaging orders.
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
