@@ -1,0 +1,615 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} | Disposable Food Packaging | Packaroji{% endblock %}
+
+{% block description %}
+{{ product.name }} from Packaroji — disposable food packaging and food-service product for restaurants, cafés, bakeries, caterers, cloud kitchens and takeaway businesses. Explore uses, material, sizes and customization options.
+{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Product",
+  "name": {{ product.name|tojson }},
+  "description": {{ product.long_description|default(product.description)|tojson }},
+  "image": [{{ url_for('static', filename='images/' ~ product.image, _external=True)|tojson }}],
+  "brand": {"@type":"Brand","name":"Packaroji"},
+  "category": {{ product.category|tojson }}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .product-page {
+        background: #f7f4ec;
+        padding-bottom: 80px;
+    }
+
+    .product-hero {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 42px 24px 32px;
+    }
+
+    .breadcrumb {
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #687064;
+    }
+
+    .breadcrumb a {
+        color: #315c3d;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .product-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 42px;
+        align-items: start;
+    }
+
+    .product-image-box {
+        background: #ffffff;
+        border-radius: 24px;
+        min-height: 360px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        box-shadow: 0 15px 40px rgba(40, 55, 42, 0.08);
+        overflow: hidden;
+    }
+
+    .product-image-box img {
+        width: min(100%, 420px);
+        max-height: 310px;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+    }
+
+    .product-image-box:hover img {
+        transform: scale(1.04);
+    }
+
+    .product-info {
+        padding-top: 10px;
+    }
+
+    .product-category {
+        display: inline-block;
+        background: #e2eadc;
+        color: #315c3d;
+        padding: 8px 14px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 18px;
+    }
+
+    .product-info h1 {
+        color: #20372a;
+        font-size: clamp(32px, 5vw, 52px);
+        line-height: 1.08;
+        margin: 0 0 20px;
+    }
+
+    .product-short-description {
+        color: #596158;
+        font-size: 18px;
+        line-height: 1.7;
+        margin-bottom: 28px;
+    }
+
+    .product-details-box {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 24px;
+        margin-bottom: 28px;
+        border: 1px solid #e4e7df;
+    }
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: 130px 1fr;
+        gap: 15px;
+        padding: 13px 0;
+        border-bottom: 1px solid #eceee8;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        font-weight: 700;
+        color: #315c3d;
+    }
+
+    .detail-value {
+        color: #5e655d;
+        line-height: 1.6;
+    }
+
+    .quantity-area {
+        margin-bottom: 22px;
+    }
+
+    .quantity-area label {
+        display: block;
+        font-weight: 700;
+        color: #20372a;
+        margin-bottom: 8px;
+    }
+
+    .quantity-input {
+        width: 120px;
+        padding: 13px 14px;
+        border: 1px solid #cdd5ca;
+        border-radius: 10px;
+        font-size: 16px;
+        background: white;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .product-btn {
+        border: none;
+        border-radius: 12px;
+        padding: 15px 22px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.25s ease;
+    }
+
+    .btn-cart {
+        background: #315c3d;
+        color: white;
+    }
+
+    .btn-cart:hover {
+        background: #24482f;
+        transform: translateY(-2px);
+    }
+
+    .btn-customize {
+        background: #d8b879;
+        color: #24352a;
+    }
+
+    .btn-customize:hover {
+        background: #cba966;
+        transform: translateY(-2px);
+    }
+
+    .product-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 35px 24px 0;
+    }
+
+    .info-card {
+        background: #ffffff;
+        border-radius: 22px;
+        padding: 35px;
+        margin-top: 25px;
+        border: 1px solid #e5e8df;
+    }
+
+    .info-card h2 {
+        color: #20372a;
+        font-size: 27px;
+        margin: 0 0 15px;
+    }
+
+    .info-card p {
+        color: #5d655d;
+        line-height: 1.8;
+        font-size: 16px;
+    }
+
+    .feature-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        padding: 0;
+        margin: 20px 0 0;
+        list-style: none;
+    }
+
+    .feature-list li {
+        background: #f4f6f0;
+        border-radius: 12px;
+        padding: 15px;
+        color: #405044;
+        line-height: 1.5;
+    }
+
+    .feature-list li::before {
+        content: "✓";
+        color: #315c3d;
+        font-weight: 800;
+        margin-right: 9px;
+    }
+
+    .custom-box {
+        background: #20372a;
+        color: white;
+        border-radius: 24px;
+        padding: 42px;
+        margin-top: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+    }
+
+    .custom-box h2 {
+        margin: 0 0 10px;
+        font-size: 30px;
+    }
+
+    .custom-box p {
+        margin: 0;
+        color: #dce5db;
+        line-height: 1.7;
+        max-width: 680px;
+    }
+
+    .custom-box a {
+        flex-shrink: 0;
+        background: #d8b879;
+        color: #24352a;
+        text-decoration: none;
+        padding: 14px 22px;
+        border-radius: 11px;
+        font-weight: 800;
+    }
+
+    .custom-box a:hover {
+        background: #e4c98f;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 35px;
+        color: #315c3d;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    @media (max-width: 850px) {
+        .product-layout {
+            grid-template-columns: 1fr;
+            gap: 35px;
+        }
+
+        .product-image-box {
+            min-height: 300px;
+        }
+
+        .custom-box {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .product-hero {
+            padding-top: 40px;
+        }
+
+        .product-image-box {
+            min-height: 240px;
+            padding: 20px;
+            border-radius: 18px;
+        }
+
+        .product-info h1 {
+            font-size: 34px;
+        }
+
+        .product-short-description {
+            font-size: 16px;
+        }
+
+        .detail-row {
+            grid-template-columns: 1fr;
+            gap: 4px;
+        }
+
+        .feature-list {
+            grid-template-columns: 1fr;
+        }
+
+        .product-actions {
+            flex-direction: column;
+        }
+
+        .product-btn {
+            width: 100%;
+        }
+
+        .info-card,
+        .custom-box {
+            padding: 25px;
+        }
+    }
+</style>
+
+<div class="product-page">
+
+    <section class="product-hero">
+
+        <div class="breadcrumb">
+            <a href="{{ url_for('home') }}">Home</a>
+            &nbsp; / &nbsp;
+
+            <a href="{{ url_for('product_category_page', category_slug=product.category|lower|replace(' & ', '-')|replace(' ', '-')) }}">{{ product.category }}</a>
+
+            &nbsp; / &nbsp; {{ product.name }}
+        </div>
+
+        <div class="product-layout">
+
+            <!-- PRODUCT IMAGE -->
+            <div class="product-image-box">
+
+                {% if product.image %}
+                    <img
+                        src="{{ url_for('static', filename='images/' ~ product.image) }}"
+                        alt="{{ product.name }}"
+                    >
+                {% else %}
+                    <img
+                        src="{{ url_for('static', filename='images/product-placeholder.svg') }}"
+                        alt="{{ product.name }}"
+                    >
+                {% endif %}
+
+            </div>
+
+
+            <!-- PRODUCT INFORMATION -->
+            <div class="product-info">
+
+                {% if product.category %}
+                    <span class="product-category">
+                        {{ product.category }}
+                    </span>
+                {% endif %}
+
+                <h1>{{ product.name }}</h1>
+
+                {% if product.description %}
+                    <div class="product-short-description">
+                        {{ product.description }}
+                    </div>
+                {% endif %}
+
+
+                <div class="product-details-box">
+
+                    {% if product.material %}
+                    <div class="detail-row">
+                        <div class="detail-label">Material</div>
+                        <div class="detail-value">
+                            {{ product.material }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if product.best_for %}
+                    <div class="detail-row">
+                        <div class="detail-label">Best For</div>
+                        <div class="detail-value">
+                            {{ product.best_for }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if product.packaging_categories %}
+                    <div class="detail-row">
+                        <div class="detail-label">Category</div>
+                        <div class="detail-value">
+                            {{ product.packaging_categories | join(", ") }}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                </div>
+
+
+                <!-- QUANTITY -->
+                <div class="quantity-area">
+
+                    <label for="productQuantity">
+                        Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        id="productQuantity"
+                        class="quantity-input"
+                        value="1"
+                        min="1"
+                    >
+
+                </div>
+
+
+                <!-- ACTIONS -->
+                <div class="product-actions">
+
+                    <!-- STANDARD ADD TO CART -->
+                    <button
+                        type="button"
+                        class="product-btn btn-cart"
+                        onclick="addProductToCart()"
+                    >
+                        Add to Cart
+                    </button>
+
+
+                    <!-- BUY NOW -->
+                    <a href="{{ url_for('checkout') }}" class="product-btn btn-buy-now" onclick="event.preventDefault(); addProductToCart(true);">
+                        Buy Now
+                    </a>
+
+                    <!-- CUSTOMIZATION -->
+                    <a href="{{ url_for('order_page', product=product.slug) }}" class="product-btn btn-customize">
+                        Customize This Product
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FULL PRODUCT DESCRIPTION -->
+    <section class="product-section">
+
+        {% if product.long_description %}
+
+        <div class="info-card">
+
+            <h2>About This Product</h2>
+
+            <p>
+                {{ product.long_description }}
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- FEATURES -->
+        {% if product.features %}
+
+        <div class="info-card">
+
+            <h2>Product Features</h2>
+
+            <ul class="feature-list">
+
+                {% for feature in product.features %}
+
+                    <li>
+                        {{ feature }}
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- CUSTOMIZATION CTA -->
+        <div class="custom-box">
+
+            <div>
+
+                <h2>Need Something Customized?</h2>
+
+                <p>
+                    Tell us exactly what you want customized, your printing and branding requirements, additional requirements, and upload your logo, artwork or reference design so our team can understand your packaging idea.
+                </p>
+
+            </div>
+
+            <a href="{{ url_for('order_page', product=product.slug) }}">
+                Customize This Product
+            </a>
+
+        </div>
+
+
+        <!-- BACK -->
+        <a href="{{ url_for('product_category_page', category_slug=product.category|lower|replace(' & ', '-')|replace(' ', '-')) }}" class="back-link">
+            ← Back to {{ product.category }}
+        </a>
+
+    </section>
+
+</div>
+
+
+<script>
+function addProductToCart(goToCheckout = false) {
+
+    const quantityInput = document.getElementById("productQuantity");
+    const quantity = parseInt(quantityInput.value) || 1;
+
+    if (quantity < 1) {
+        alert("Please enter a valid quantity.");
+        return;
+    }
+
+    fetch("{{ url_for('add_to_cart') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            product: "{{ product.slug }}",
+            quantity: quantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.success) {
+
+            if (goToCheckout) {
+                window.location.href = "{{ url_for('checkout') }}";
+                return;
+            }
+
+            alert("Product added to cart!");
+
+            // Update cart count badge(s) in the navigation
+            if (data.cart_count !== undefined) {
+                document.querySelectorAll(".cart-badge").forEach(function (badge) {
+                    badge.textContent = data.cart_count;
+                });
+            }
+
+        } else {
+
+            alert(data.message || "Could not add the product to cart.");
+
+        }
+
+    })
+    .catch(error => {
+
+        console.error(error);
+
+        alert("Something went wrong. Please try again.");
+
+    });
+}
+</script>
+
+{% endblock %}

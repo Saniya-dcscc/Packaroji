@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Packaroji | Disposable Food Packaging & Food-Service Products in Hyderabad{% endblock %}
+
+{% block description %}Packaroji provides practical disposable food packaging for restaurants, cafés, bakeries, caterers, cloud kitchens, takeaway and delivery businesses in Hyderabad.{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Packaroji",
+  "description": "Disposable food packaging and food-service solutions in Hyderabad.",
+  "url": "{{ request.url_root }}",
+  "telephone": "{{ business.phone }}",
+  "email": "{{ business.email }}",
+  "address": {"@type": "PostalAddress", "addressLocality": "Hyderabad", "addressRegion": "Telangana", "addressCountry": "IN"}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="packaging-home">
+  <section class="packaging-home-hero" id="home">
+    <div class="container packaging-home-hero-grid">
+      <div class="packaging-home-copy">
+        <p class="packaging-kicker">PACKAROJI · HYDERABAD</p>
+        <h1>Packaging made for <em>real food</em> businesses.</h1>
+        <p class="packaging-home-lead">From the first order to the final delivery, find dependable packaging for serving, takeaway and your brand.</p>
+        <div class="packaging-home-actions">
+          <a class="btn btn-primary" href="#packaging-options">Explore packaging <span>→</span></a>
+          <a class="packaging-text-link" href="{{ url_for('order_page') }}">Create custom packaging <span>↗</span></a>
+        </div>
+        <div class="packaging-home-notes" aria-label="Packaroji benefits">
+          <span>Food-service ready</span><span>Bulk orders welcome</span><span>Custom branding</span>
+        </div>
+      </div>
+
+      <div class="packaging-hero-art" aria-hidden="true">
+        <div class="packaging-art-label">PACK / SERVE / DELIVER</div>
+        <img src="{{ url_for('static', filename='images/products/box.svg') }}" alt="">
+        <img class="packaging-art-bowl" src="{{ url_for('static', filename='images/products/bowl.svg') }}" alt="">
+        <div class="packaging-art-stamp">MADE FOR<br>FOOD SERVICE</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="packaging-home-section packaging-category-section" id="packaging-options">
+    <div class="container">
+      <div class="packaging-section-heading">
+        <p class="packaging-kicker">SHOP BY FORMAT</p>
+        <h2>Every order starts<br>with the right pack.</h2>
+        <p>Practical formats for cafés, bakeries, caterers, cloud kitchens and delivery businesses.</p>
+      </div>
+      <div class="packaging-category-grid">
+        {% for item in product_categories %}
+        <a class="packaging-category-card" href="{{ url_for('product_category_page', category_slug=item.name|lower|replace(' & ', '-')|replace(' ', '-')) }}">
+          <span class="packaging-category-icon">{{ item.icon }}</span>
+          <strong>{{ item.name }}</strong>
+          <span>{{ item.description }}</span>
+          <b>Browse range <i>→</i></b>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="packaging-story-section" id="about">
+    <div class="container packaging-story-grid">
+      <div class="packaging-story-image"><img src="{{ url_for('static', filename='images/disposable-packaging-hero.png') }}" alt="A selection of Packaroji food packaging" loading="lazy"></div>
+      <div class="packaging-story-copy">
+        <p class="packaging-kicker">BUILT AROUND YOUR MENU</p>
+        <h2>One partner for every item you serve.</h2>
+        <p>Whether you need a sturdy takeaway bowl, a bakery box that presents beautifully, or cups and cutlery for busy service, our range keeps everyday operations moving.</p>
+        <a class="packaging-text-link" href="{{ url_for('products') }}">View all products <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="packaging-home-section packaging-values" id="sustainability">
+    <div class="container">
+      <div class="packaging-section-heading packaging-heading-inline">
+        <div><p class="packaging-kicker">THE PACKAROJI STANDARD</p><h2>Thoughtful packaging,<br>without the fuss.</h2></div>
+        <p>Clear choices, useful formats and help when your packaging needs change.</p>
+      </div>
+      <div class="packaging-value-grid">
+        <article><span>01</span><h3>Made to perform</h3><p>Food-service formats selected for everyday handling, takeaway and delivery.</p></article>
+        <article><span>02</span><h3>Easy to order</h3><p>Browse the range, add what you need or contact us for business quantities.</p></article>
+        <article><span>03</span><h3>Ready for your brand</h3><p>Bring your logo, print or packaging idea and we’ll help shape it into a pack.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="packaging-order-cta" id="contact">
+    <div class="container packaging-order-cta-inner">
+      <p class="packaging-kicker">YOUR PACKAGING, YOUR WAY</p>
+      <h2>Have an idea for<br><em>your next order?</em></h2>
+      <p>Tell us what you serve and how you want it packed. We’ll help you find the right solution.</p>
+      <div><a class="btn btn-light" href="{{ url_for('order_page') }}">Start a custom order <span>→</span></a><a class="packaging-cta-contact" href="https://wa.me/{{ business.whatsapp }}" target="_blank" rel="noopener">Chat on WhatsApp ↗</a></div>
+    </div>
+  </section>
+</div>
+{% endblock %}
