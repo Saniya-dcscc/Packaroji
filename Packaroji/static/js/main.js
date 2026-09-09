@@ -1,49 +1,51 @@
 document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
-       MOBILE NAVIGATION
+       PAGE MOTION
+       Reveal content as it enters the viewport. Keeping this
+       class-driven means pages remain fully usable if JavaScript
+       is unavailable.
     ========================================================== */
 
-    const toggle = document.getElementById("navToggle");
-    const nav = document.getElementById("mainNav");
+    const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
 
-    if (toggle && nav) {
+    if (!prefersReducedMotion) {
 
-        toggle.addEventListener("click", () => {
-            const isOpen = nav.classList.toggle("open");
+        document.documentElement.classList.add("js-motion");
 
-            toggle.setAttribute("aria-expanded", String(isOpen));
-            toggle.setAttribute(
-                "aria-label",
-                isOpen ? "Close menu" : "Open menu"
+        const revealTargets = document.querySelectorAll(
+            ".section-heading, .category-card, .packaging-visual-image, " +
+            ".packaging-visual-copy, .intro-copy, .intro-image, " +
+            ".feature-card, .customization-card, .nature-grid > *, " +
+            ".process-step, .review-card, .cta-card, .product-card, " +
+            ".category-product-card, .page-header, .product-hero"
+        );
+
+        revealTargets.forEach((element, index) => {
+            element.classList.add("reveal-on-scroll");
+            element.style.setProperty(
+                "--reveal-delay",
+                `${Math.min((index % 4) * 70, 210)}ms`
             );
         });
 
-        nav.querySelectorAll("a").forEach(link => {
-            link.addEventListener("click", () => {
-                nav.classList.remove("open");
+        const revealObserver = new IntersectionObserver(
+            entries => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
 
-                toggle.setAttribute("aria-expanded", "false");
-                toggle.setAttribute("aria-label", "Open menu");
-            });
-        });
+                    entry.target.classList.add("is-revealed");
+                    revealObserver.unobserve(entry.target);
+                });
+            },
+            { threshold: 0.12, rootMargin: "0px 0px -36px" }
+        );
+
+        revealTargets.forEach(element => revealObserver.observe(element));
     }
-
-
-    /* =========================================================
-       NAVIGATION DROPDOWNS
-    ========================================================== */
-
-    document.querySelectorAll(".nav-dropdown-toggle").forEach(button => {
-
-        button.addEventListener("click", event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            const dropdown = button.closest(".nav-dropdown");
-
-            if (!dropdown) return;
 
             const wasOpen = dropdown.classList.contains("open");
 
