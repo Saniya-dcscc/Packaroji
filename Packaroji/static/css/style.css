@@ -5773,92 +5773,95 @@ body.inner-page .option-card:hover {
 .category-slider .category-slide .category-icon {
     font-size: 42px;
     margin-bottom: 18px;
+@media(max-width:620px){ .category-product-grid{grid-template-columns:1fr;} .category-page-hero{padding:55px 0;} .category-page-actions{flex-direction:column;} .category-page-actions .btn{width:100%;text-align:center;} .custom-hero{min-height:430px;background-position:60% center;} }
+.hero { background-image:url("../images/hero-bg.png"); background-position:center; background-size:cover; }
+.hero { background-image:url("../images/hero-bg.png"); background-position:center; background-size:cover; }
+
+/* =========================================================
+   MOTION SYSTEM
+   Small, intentional movement gives the storefront a livelier
+   feel without competing with product information.
+========================================================= */
+
+@keyframes hero-image-drift {
+    0%, 100% { background-position: center center; }
+    50% { background-position: center 46%; }
 }
-.category-slider .category-slide strong {
-    font-size: clamp(30px, 4vw, 46px);
-    margin-bottom: 10px;
+
+@keyframes hero-copy-enter {
+    from { opacity: 0; transform: translateY(22px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-.category-slider .category-slide > span:not(.category-icon) {
-    font-size: 16px;
-    max-width: 720px;
-    line-height: 1.7;
+
+@keyframes soft-pulse {
+    0%, 100% { box-shadow: 0 9px 24px rgba(37, 100, 65, .22); }
+    50% { box-shadow: 0 12px 30px rgba(37, 100, 65, .42); }
 }
-.category-slider .category-slide b {
-    font-size: 14px;
-    margin-top: 20px;
+
+.hero {
+    animation: hero-image-drift 15s ease-in-out infinite;
 }
-.category-slider .category-slider-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 5;
-    width: 50px;
-    height: 50px;
-    margin: 0;
-    padding: 0;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: #fffdf8;
-    color: var(--forest);
-    box-shadow: var(--shadow-soft);
-    font: 34px/44px Arial, sans-serif;
-    cursor: pointer;
-    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+
+.hero-copy > * {
+    animation: hero-copy-enter .7s both cubic-bezier(.22, .8, .25, 1);
 }
-.category-slider .category-slider-arrow:hover {
-    transform: translateY(-50%) scale(1.06);
-    background: #f1f6ed;
-    box-shadow: var(--shadow);
+
+.hero-copy > *:nth-child(1) { animation-delay: .08s; }
+.hero-copy > *:nth-child(2) { animation-delay: .17s; }
+.hero-copy > *:nth-child(3) { animation-delay: .27s; }
+.hero-copy > *:nth-child(4) { animation-delay: .37s; }
+
+.js-motion .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .65s ease var(--reveal-delay, 0ms),
+                transform .65s cubic-bezier(.22, .8, .25, 1) var(--reveal-delay, 0ms);
 }
-.category-slider .category-slider-prev { left: 8px; }
-.category-slider .category-slider-next { right: 8px; }
-.category-slider-controls {
-    position: absolute;
-    left: 70px;
-    right: 70px;
-    bottom: 0;
-    min-height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+.js-motion .reveal-on-scroll.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
-.category-slider .category-slider-dots {
-    position: static;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
+
+.btn, .product-btn, .category-card, .feature-card, .review-card,
+.packaging-visual-image, .category-product-card {
+    will-change: transform;
 }
-.category-slider .category-slider-dot {
-    width: 9px;
-    height: 9px;
-    padding: 0;
-    border: 0;
-    border-radius: 99px;
-    background: #c9c0b2;
-    cursor: pointer;
-    transition: width .2s ease, transform .2s ease;
+
+.btn, .product-btn {
+    transition: transform .22s ease, box-shadow .22s ease, background-color .22s ease, border-color .22s ease;
 }
-.category-slider .category-slider-dot:hover { transform: scale(1.2); }
-.category-slider .category-slider-dot.is-active { width: 28px; background: var(--forest); }
-.category-slider .category-slider-count {
-    position: absolute;
-    right: 0;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 700;
+
+.btn:hover, .product-btn:hover {
+    transform: translateY(-2px);
 }
-@media (max-width: 700px) {
-    .category-slider { padding: 0 48px 54px; }
-    .category-slider .category-slide { min-height: 230px; padding: 30px 28px; }
-    .category-slider .category-slide strong { font-size: 30px; }
-    .category-slider .category-slider-arrow { width: 42px; height: 42px; font-size: 30px; line-height: 36px; }
-    .category-slider .category-slider-prev { left: 2px; }
-    .category-slider .category-slider-next { right: 2px; }
-    .category-slider-controls { left: 48px; right: 48px; }
-    .category-slider .category-slider-count { display: none; }
+
+.category-card:hover, .feature-card:hover, .review-card:hover,
+.category-product-card:hover {
+    transform: translateY(-6px);
 }
+
+.packaging-visual-image img {
+    transition: transform .7s cubic-bezier(.22, .8, .25, 1);
+}
+
+.packaging-visual-image:hover img {
+    transform: scale(1.045);
+}
+
+.float-whatsapp {
+    animation: soft-pulse 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+main.js
 
 /* =========================================================
    HOMEPAGE CATEGORY SLIDER — PRODUCT PHOTO + NAME
