@@ -727,14 +727,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const metrics = () => {
                 const w = viewport.clientWidth;
                 if (w <= 600) {
-                    cardWidth = Math.min(300, w * 0.72);
-                    spacing = cardWidth * 0.72;
+                    cardWidth = Math.min(260, w * 0.66);
+                    spacing = cardWidth * 1.02;
                 } else if (w <= 980) {
                     cardWidth = Math.min(330, w * 0.42);
-                    spacing = cardWidth * 0.82;
+                    spacing = cardWidth * 0.98;
                 } else {
                     cardWidth = Math.min(360, w * 0.28);
-                    spacing = cardWidth * 0.86;
+                    spacing = cardWidth * 1.0;
                 }
                 viewport.style.setProperty('--carousel-card-width', `${cardWidth}px`);
                 viewport.style.setProperty('--carousel-card-height', w <= 600 ? '470px' : '530px');
@@ -763,14 +763,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     const index = Number(slide.dataset.carouselIndex);
                     const d = logicalDelta(index);
                     const x = center + d * spacing;
-                    const ratio = Math.min(1.55, Math.abs(d) / 2.45);
+                    const ratio = Math.min(2.2, Math.abs(d));
                     const sign = d === 0 ? 0 : (d > 0 ? 1 : -1);
-                    const scale = 1.04 - Math.min(0.26, ratio * 0.17);
-                    const rotateY = sign * Math.min(34, ratio * 26);
-                    const rotateZ = sign * Math.min(2.5, ratio * 2);
-                    const y = Math.min(34, ratio * ratio * 26);
-                    const z = Math.round(120 - ratio * 65);
-                    const opacity = Math.max(0.42, 1 - Math.max(0, ratio - 0.9) * 0.6);
+                    const scale = Math.max(0.6, 1 - ratio * 0.2);
+                    const rotateY = sign * Math.min(36, ratio * 24);
+                    const rotateZ = sign * Math.min(2.5, ratio * 1.6);
+                    const y = Math.min(30, ratio * ratio * 12);
+                    const z = Math.round(110 - ratio * 70);
+                    const opacity = Math.max(0, 1 - ratio * 0.6);
 
                     slide.style.left = `${x}px`;
                     slide.style.top = '50%';
@@ -778,7 +778,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     slide.style.transform = `translate3d(-50%, calc(-50% + ${y}px), ${z}px) scale(${scale}) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
                     slide.style.opacity = String(opacity);
                     slide.style.zIndex = String(1000 - Math.round(Math.abs(d) * 20));
-                    slide.style.pointerEvents = Math.abs(d) < 2.7 ? 'auto' : 'none';
+                    slide.style.pointerEvents = ratio < 1.1 ? 'auto' : 'none';
 
                     const ad = Math.abs(d);
                     if (ad < nearestDistance) {
