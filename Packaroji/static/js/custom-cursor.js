@@ -55,8 +55,9 @@
     })();
 
     var EMOJI = {
-        sad: "\u{1F979}",   // 🥹  used for "back to shop"
-        happy: "\u{1F601}"  // 😁  used for add-to-cart / order placed
+        sad: "\u{1F97A}",     // 🥺  used for "back to shop"
+        happy: "\u{1F601}",   // 😁  used for add-to-cart / order placed
+        excited: "\u{1F973}"  // 🥳  used for "place order"
     };
 
     var CURSOR_SIZE = 48;      // px, square cursor image
@@ -156,6 +157,62 @@
         } catch (e) {
             /* malformed or unavailable storage — ignore */
         }
+    }
+
+    // ---- Hover cursors: "back" / "add to cart" / "place order" ----
+    // While the pointer is over a matching element, the cursor becomes
+    // the mapped emoji. It reverts the instant the pointer leaves that
+    // element (checked via relatedTarget, so moving to a child element
+    // inside the same button doesn't flicker). Uses event delegation on
+    // document so it works for elements added later too (e.g. cloned
+    // carousel cards), no matter what order scripts run in.
+    var HOVER_MAP = [
+        { selector: ".back-link, [data-cursor-back]", emoji: EMOJI.sad },       // 🥺 back
+        { selector: ".btn-product, .btn-cart", emoji: EMOJI.happy },            // 😁 add to cart
+        { selector: ".submit-order-btn, .btn-buy-now", emoji: EMOJI.excited }   // 🥳 place order
+    ];
+
+    var hoverEl = null;
+
+    function findHoverMatch(el) {
+        for (var i = 0; i < HOVER_MAP.length; i++) {
+            var matched = el.closest(HOVER_MAP[i].selector);
+            if (matched) return { el: matched, emoji: HOVER_MAP[i].emoji };
+        }
+        return null;
+    }
+
+    function setHoverCursor(emoji) {
+        var url = buildCursorUrl(emoji);
+        if (!url) return;
+        document.body.style.cursor =
+            "url('" + url + "') " + (CURSOR_SIZE / 2) + " " + (CURSOR_SIZE / 2) + ", auto";
+    }
+
+    function clearHoverCursor() {
+        document.body.style.cursor = "";
+    }
+
+    if (!isTouchDevice) {
+        document.addEventListener("pointerover", function (event) {
+            var target = event.target;
+            if (!target || typeof target.closest !== "function") return;
+            var match = findHoverMatch(target);
+            if (match && match.el !== hoverEl) {
+                clearRevert(); // a hover cursor should win over any pending click-flash timer
+                hoverEl = match.el;
+                setHoverCursor(match.emoji);
+            }
+        });
+
+        document.addEventListener("pointerout", function (event) {
+            if (!hoverEl) return;
+            var related = event.relatedTarget;
+            if (!related || !hoverEl.contains(related)) {
+                hoverEl = null;
+                clearHoverCursor();
+            }
+        });
     }
 
     window.PackarojiCursor = {
