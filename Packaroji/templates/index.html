@@ -1,0 +1,863 @@
+{% extends "base.html" %}
+
+{% block title %}
+Packaroji | Disposable Food Packaging & Food-Service Products in Hyderabad
+{% endblock %}
+
+{% block description %}
+Packaroji provides disposable food packaging and food-service products for restaurants,
+cafés, bakeries, caterers, cloud kitchens, takeaway and delivery businesses
+in Hyderabad. Explore packaging products, disposable cutlery or request customization.
+{% endblock %}
+
+
+{% block head %}
+
+<!-- =====================================================
+     SEO / STRUCTURED DATA
+===================================================== -->
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Packaroji",
+    "description": "Disposable food packaging, food-service products and cutlery solutions for takeaway, delivery and food businesses in Hyderabad.",
+    "url": "{{ request.url_root }}",
+    "telephone": "{{ business.phone }}",
+    "email": "{{ business.email }}",
+
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Hyderabad",
+        "addressRegion": "Telangana",
+        "addressCountry": "IN"
+    },
+
+    "areaServed": {
+        "@type": "City",
+        "name": "Hyderabad"
+    },
+
+    "brand": {
+        "@type": "Brand",
+        "name": "Packaroji"
+    }
+}
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =====================================================
+     HERO — TEMPLATE-INSPIRED LANDING EXPERIENCE
+===================================================== -->
+<section class="hero hero-template" id="home" aria-label="Packaroji landing hero">
+    <div class="hero-template-bg" aria-hidden="true"></div>
+
+    <div class="hero-template-brand" aria-label="Packaroji">
+        <img src="{{ url_for('static', filename='images/packaroji-logo.png') }}" alt="" class="hero-template-mark">
+        <span>Packaroji</span>
+    </div>
+
+    <div class="hero-template-doodle hero-doodle-one" aria-hidden="true">
+        <svg viewBox="0 0 120 100" role="presentation">
+            <path d="M18 31 60 12l42 19-42 20-42-20Z M18 31v45l42 18 42-18V31 M60 51v43 M38 22l42 20"/>
+        </svg>
+    </div>
+    <div class="hero-template-doodle hero-doodle-two" aria-hidden="true">
+        <svg viewBox="0 0 120 120" role="presentation">
+            <path d="M28 27h64l-6 75H34l-6-75Z M35 27c2-16 13-22 25-22s23 6 25 22 M43 49h34 M43 64h34 M43 79h24"/>
+        </svg>
+    </div>
+    <div class="hero-template-doodle hero-doodle-three" aria-hidden="true">
+        <svg viewBox="0 0 120 120" role="presentation">
+            <path d="M24 33h72l-8 70H32l-8-70Z M32 33c3-10 11-16 28-16s25 6 28 16 M42 49h36 M42 65h25"/>
+        </svg>
+    </div>
+    <div class="hero-template-doodle hero-doodle-four" aria-hidden="true">
+        <svg viewBox="0 0 120 100" role="presentation">
+            <path d="M15 26h90l-10 60H25L15 26Z M15 26l45 27 45-27 M60 53v33 M36 18l24-10 24 10"/>
+        </svg>
+    </div>
+    <div class="hero-template-doodle hero-doodle-five" aria-hidden="true">
+        <svg viewBox="0 0 120 120" role="presentation">
+            <path d="M31 24h58l-5 77H36l-5-77Z M31 24c4-8 10-12 29-12s25 4 29 12 M45 45h30 M45 61h30 M45 77h18"/>
+        </svg>
+    </div>
+
+    <div class="hero-template-character" aria-hidden="true">
+        <img src="{{ url_for('static', filename='images/packaroji-character-beige.png') }}" alt="">
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     WHY PACKAROJI
+===================================================== -->
+
+<section class="section features">
+
+    <div class="container">
+
+
+        <div class="section-heading center">
+
+            <p class="eyebrow">
+                WHY PACKAROJI
+            </p>
+
+            <h2>
+                Made for busy food businesses
+            </h2>
+
+            <p>
+                Packaging should protect your food,
+                present your brand well and fit the
+                way your business works.
+            </p>
+
+        </div>
+
+        <div class="feature-grid">
+
+
+
+
+            <article class="feature-card">
+
+                <span>
+                    📦
+                </span>
+
+                <h3>
+                    Takeaway focused
+                </h3>
+
+                <p>
+                    Formats designed around takeaway,
+                    delivery, catering and food-service
+                    requirements.
+                </p>
+
+            </article>
+
+
+
+
+            <article class="feature-card">
+
+                <span>
+                    🧾
+                </span>
+
+                <h3>
+                    Business friendly
+                </h3>
+
+                <p>
+                    Tell us your product, quantity,
+                    size and requirements and we'll
+                    prepare the details for you.
+                </p>
+
+            </article>
+
+
+
+
+            <article class="feature-card">
+
+                <span>
+                    💬
+                </span>
+
+                <h3>
+                    Easy ordering
+                </h3>
+
+                <p>
+                    Add standard products directly to
+                    your cart or create a customized
+                    packaging requirement.
+                </p>
+
+            </article>
+
+
+
+
+            <article class="feature-card">
+
+                <span>
+                    🌿
+                </span>
+
+                <h3>
+                    Responsible choices
+                </h3>
+
+                <p>
+                    Explore packaging options designed
+                    with practicality and a more
+                    thoughtful approach to packaging.
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     FEATURED PRODUCTS
+===================================================== -->
+<section class="section packaging-options" id="packaging-options">
+  <div class="container">
+    <div class="section-heading center category-heading">
+      <p class="eyebrow">EXPLORE OUR RANGE</p>
+      <h2>Choose your packaging.</h2>
+      <p>Explore our disposable food packaging and food-service essentials. Slide through the range and open any product for full details.</p>
+    </div>
+
+    {% if products %}
+    <div class="packaroji-curve-slider" data-curve-slider tabindex="0" aria-label="Featured Packaroji products carousel">
+  <button class="packaroji-curve-arrow packaroji-curve-prev" type="button" aria-label="Previous product" data-curve-prev>‹</button>
+  <div class="packaroji-curve-viewport" data-curve-viewport>
+    <div class="packaroji-curve-track" data-curve-track>
+      {% for product in products %}
+      <article class="product-card category-product-card packaroji-curve-slide" data-curve-slide>
+        <a href="{{ url_for('product_detail', slug=product.slug) }}" class="product-image-link" aria-label="View {{ product.name }} details">
+          <div class="product-image-wrap">
+            <img class="product-image" src="{{ url_for('static', filename='images/' ~ product.image) }}" alt="{{ product.name }} disposable food packaging" loading="{% if loop.index <= 3 %}eager{% else %}lazy{% endif %}">
+            <span class="product-view">View product →</span>
+          </div>
+        </a>
+        <div class="product-card-content">
+          <span class="product-category">{{ product.category }}</span>
+          <h3><a href="{{ url_for('product_detail', slug=product.slug) }}">{{ product.name }}</a></h3>
+          <p>{{ product.description }}</p>
+          <div class="product-card-actions">
+            <a href="{{ url_for('product_detail', slug=product.slug) }}" class="btn btn-product">View Details</a>
+            <a href="{{ url_for('order_page', product=product.slug) }}" class="btn btn-customize">Customize</a>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+  <button class="packaroji-curve-arrow packaroji-curve-next" type="button" aria-label="Next product" data-curve-next>›</button>
+  <div class="packaroji-curve-controls">
+    <div class="packaroji-curve-dots" aria-label="Product position">
+      {% for product in products %}
+      <button type="button" class="packaroji-curve-dot{% if loop.first %} is-active{% endif %}" data-curve-dot="{{ loop.index0 }}" aria-label="Product {{ loop.index }}"></button>
+      {% endfor %}
+    </div>
+    <div class="packaroji-curve-count" aria-live="polite"><span data-curve-current>1</span> / {{ products|length }}</div>
+  </div>
+</div>
+{% endif %}
+<script>
+(function () {
+  function initCurveSlider(slider) {
+    if (slider.dataset.curveReady) return;
+    slider.dataset.curveReady = "1";
+    const viewport = slider.querySelector("[data-curve-viewport]");
+    const track = slider.querySelector("[data-curve-track]");
+    const original = Array.from(track.querySelectorAll("[data-curve-slide]"));
+    const prev = slider.querySelector("[data-curve-prev]");
+    const next = slider.querySelector("[data-curve-next]");
+    const dots = Array.from(slider.querySelectorAll("[data-curve-dot]"));
+    const count = slider.querySelector("[data-curve-current]");
+    if (!viewport || !track || original.length < 2) return;
+
+    const copies = 3;
+    for (let set = 1; set < copies; set++) {
+      original.forEach(function (card) {
+        const clone = card.cloneNode(true);
+        clone.dataset.curveClone = "1";
+        track.appendChild(clone);
+      });
+    }
+    const cards = Array.from(track.querySelectorAll("[data-curve-slide]"));
+    const n = original.length;
+    let step = 320;
+    let offset = 0;
+    let baseOffset = 0;
+    let last = performance.now();
+    let speed = 34;
+    let direction = -1;
+    let paused = false;
+    let dragging = false;
+    let pointerId = null;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let moved = false;
+    let lastInteraction = performance.now();
+
+    function measure(firstTime) {
+      const first = cards[0];
+      if (!first) return;
+      const rect = first.getBoundingClientRect();
+      const gap = parseFloat(getComputedStyle(track).gap || "0") || 0;
+      step = Math.max(190, rect.width + gap);
+      const centerSet = 1;
+      baseOffset = (viewport.clientWidth / 2) - ((centerSet * n + 0.5) * step);
+      if (firstTime) offset = baseOffset;
+    }
+
+    function wrapOffset() {
+      const setWidth = n * step;
+      while (offset < baseOffset - setWidth) offset += setWidth;
+      while (offset > baseOffset + setWidth) offset -= setWidth;
+    }
+
+    function render() {
+      const center = viewport.clientWidth / 2;
+      const sideRange = Math.max(center * 1.08, 500);
+      let closest = 0, closestDist = Infinity;
+      cards.forEach(function (card, i) {
+        const x = i * step + offset;
+        const cardCenter = x + step / 2;
+        const relative = cardCenter - center;
+        const norm = Math.max(-1, Math.min(1, relative / sideRange));
+        const abs = Math.abs(norm);
+        const scale = 1 - abs * 0.15;
+        const rotate = norm * -18;
+        const curveY = Math.pow(abs, 1.65) * 62;
+        const opacity = 1 - abs * 0.15;
+        card.style.transform = "translate3d(" + (x - step / 2) + "px," + curveY + "px,0) scale(" + scale + ") rotateY(" + rotate + "deg)";
+        card.style.zIndex = String(1000 - Math.round(abs * 100));
+        card.style.opacity = String(opacity);
+        const dist = Math.abs(relative);
+        if (dist < closestDist) { closestDist = dist; closest = i % n; }
+      });
+      if (count) count.textContent = String(closest + 1);
+      dots.forEach(function(dot, i) { dot.classList.toggle("is-active", i === closest); });
+    }
+
+    function frame(now) {
+      const dt = Math.min(40, now - last);
+      last = now;
+      if (!dragging && !paused) {
+        const ramp = Math.min(1, (now - lastInteraction) / 350);
+        offset += direction * speed * (dt / 1000) * ramp;
+        wrapOffset();
+      }
+      render();
+      requestAnimationFrame(frame);
+    }
+    function nudge(amount) { offset += amount; lastInteraction = performance.now(); wrapOffset(); render(); }
+    function beginDrag(e) {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      dragging = true; moved = false; pointerId = e.pointerId; dragStartX = e.clientX; dragStartOffset = offset;
+      slider.classList.add("is-dragging"); slider.setPointerCapture?.(pointerId); lastInteraction = performance.now();
+    }
+    function moveDrag(e) {
+      if (!dragging || e.pointerId !== pointerId) return;
+      const dx = e.clientX - dragStartX; if (Math.abs(dx) > 4) moved = true;
+      offset = dragStartOffset + dx; wrapOffset(); render(); lastInteraction = performance.now();
+    }
+    function endDrag(e) {
+      if (!dragging || (e.pointerId != null && e.pointerId !== pointerId)) return;
+      dragging = false; pointerId = null; slider.classList.remove("is-dragging"); lastInteraction = performance.now();
+    }
+    slider.addEventListener("pointerdown", beginDrag);
+    slider.addEventListener("pointermove", moveDrag);
+    slider.addEventListener("pointerup", endDrag);
+    slider.addEventListener("pointercancel", endDrag);
+    slider.addEventListener("click", function(e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+    prev.addEventListener("click", function() { nudge(step * 0.9); });
+    next.addEventListener("click", function() { nudge(-step * 0.9); });
+    dots.forEach(function(dot, i) { dot.addEventListener("click", function() {
+      const target = i + n; const center = viewport.clientWidth / 2; offset += center - (target * step + step / 2); wrapOffset(); render(); lastInteraction = performance.now();
+    }); });
+    slider.addEventListener("keydown", function(e) { if (e.key === "ArrowLeft") { e.preventDefault(); nudge(step * 0.9); } if (e.key === "ArrowRight") { e.preventDefault(); nudge(-step * 0.9); } });
+    slider.addEventListener("mouseenter", function() { paused = true; });
+    slider.addEventListener("mouseleave", function() { paused = false; lastInteraction = performance.now(); });
+    slider.addEventListener("focusin", function() { paused = true; });
+    slider.addEventListener("focusout", function(e) { if (!slider.contains(e.relatedTarget)) { paused = false; lastInteraction = performance.now(); } });
+    window.addEventListener("resize", function() { measure(false); wrapOffset(); render(); }, { passive: true });
+    measure(true); render(); requestAnimationFrame(function(t) { last = t; requestAnimationFrame(frame); });
+  }
+  function boot() { document.querySelectorAll("[data-curve-slider]").forEach(initCurveSlider); }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+})();
+</script>
+</section>
+
+
+<!-- =====================================================
+     PACKAGING VISUAL
+===================================================== -->
+<section class="section packaging-visual-section">
+    <div class="container packaging-visual">
+        <div class="packaging-visual-image">
+            <img src="{{ url_for('static', filename='images/disposable-packaging-hero.png') }}" alt="Disposable food packaging and food-service products" loading="lazy">
+        </div>
+        <div class="packaging-visual-copy">
+            <p class="eyebrow">MORE THAN ONE MATERIAL</p>
+            <h2>Packaging for every part of the food-service experience.</h2>
+            <p>Need a bowl for meals, a cup for drinks, a plate for serving, a box for bakery items or cutlery for takeaway? Packaroji is built around the full range — not just one material or one product type.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     ABOUT PACKAROJI
+===================================================== -->
+
+<section
+    class="section intro"
+    id="about"
+>
+
+    <div class="container split">
+
+
+        <div>
+
+            <p class="eyebrow">
+                ABOUT PACKAROJI
+            </p>
+
+            <h2>
+                Simple packaging.
+                Smarter choice.
+            </h2>
+
+        </div>
+
+
+        <div>
+
+            <p class="large-copy">
+
+                Packaroji is a Hyderabad-focused disposable food-packaging and food-service business built around one simple idea: businesses should have practical products that work for the way they serve, pack and deliver food.
+
+            </p>
+
+
+            <p>
+
+                From bags, boxes and pouches to bowls, cups, plates, containers, trays and disposable cutlery, we bring the essentials together in one place — with sustainable options wherever they fit your needs.
+
+            </p>
+
+
+            <p>
+
+                Need something different?
+
+                You can also send us your exact
+                customization requirements, branding
+                details and reference files.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+<!-- =====================================================
+     CUSTOMIZATION
+===================================================== -->
+
+<section class="section customization-section">
+
+    <div class="container customization-card">
+
+
+        <div class="customization-copy">
+
+            <p class="eyebrow">
+                NEED SOMETHING UNIQUE?
+            </p>
+
+
+            <h2>
+                Make the packaging yours.
+            </h2>
+
+
+            <p>
+                Want your logo, specific dimensions,
+                colours, printing or a completely
+                customized packaging requirement?
+            </p>
+
+
+            <p>
+                Send us your exact requirements and
+                upload your logo, artwork, design or
+                reference files.
+            </p>
+
+        </div>
+
+
+        <div class="customization-actions">
+
+            <a
+                class="btn btn-primary"
+                href="{{ url_for('order_page') }}"
+            >
+                Want a Customization →
+            </a>
+
+
+            <span>
+                Your customization details stay
+                attached to the product in your cart.
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SUSTAINABILITY
+===================================================== -->
+
+<section
+    class="section nature-section"
+    id="sustainability"
+>
+
+    <div class="container nature-grid">
+
+
+        <div class="nature-image"></div>
+
+
+        <div class="nature-copy">
+
+            <p class="eyebrow">
+                OUR PURPOSE
+            </p>
+
+
+            <h2>
+                Packaging with purpose.
+            </h2>
+
+
+            <p>
+                We believe packaging can be practical
+                while businesses also make more
+                thoughtful material choices.
+            </p>
+
+
+            <p>
+                Packaroji focuses on packaging solutions
+                that work for everyday food service,
+                takeaway and delivery businesses.
+            </p>
+
+
+            <div class="impact-list">
+
+
+                <div>
+
+                    <b>
+                        01
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Choose purposefully
+                        </strong>
+
+                        <small>
+                            Select packaging based on
+                            your actual food, quantity
+                            and delivery requirements.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <b>
+                        02
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Reduce unnecessary waste
+                        </strong>
+
+                        <small>
+                            Choose formats and quantities
+                            that make sense for your
+                            business operations.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <b>
+                        03
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Build better habits
+                        </strong>
+
+                        <small>
+                            Make thoughtful packaging
+                            part of everyday food service.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section class="section process">
+
+    <div class="container">
+
+
+        <div class="section-heading center">
+
+            <p class="eyebrow">
+                HOW IT WORKS
+            </p>
+
+            <h2>
+                From requirement to delivery
+            </h2>
+
+            <p>
+                Simple ordering for standard products
+                and customized packaging.
+            </p>
+
+        </div>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <span>
+                    01
+                </span>
+
+                <h3>
+                    Explore products
+                </h3>
+
+                <p>
+                    Choose Bakery Packaging or Food
+                    Packaging and open any product
+                    for complete information.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    02
+                </span>
+
+                <h3>
+                    Add to cart
+                </h3>
+
+                <p>
+                    Add standard products directly
+                    to your cart with the quantity
+                    you require.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    03
+                </span>
+
+                <h3>
+                    Customize if needed
+                </h3>
+
+                <p>
+                    Add your exact dimensions,
+                    branding, colour, printing and
+                    reference files.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    04
+                </span>
+
+                <h3>
+                    Submit your order
+                </h3>
+
+                <p>
+                    Submit your requirements and
+                    Packaroji will contact you with
+                    availability and pricing.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section
+    class="section cta-section"
+    id="contact"
+>
+
+    <div class="container cta-card">
+
+
+        <div>
+
+            <p class="eyebrow">
+                READY TO GET STARTED?
+            </p>
+
+
+            <h2>
+                Tell us what your food business needs.
+            </h2>
+
+
+            <p>
+                No prices are displayed online.
+                Explore products, add your required
+                quantities and submit your order.
+                Packaroji will contact you with pricing
+                and availability.
+            </p>
+
+        </div>
+
+
+        <div class="cta-actions">
+
+
+            <a
+                class="btn btn-primary"
+                href="{{ url_for('cart') }}"
+            >
+                View Cart
+            </a>
+
+
+            <a
+                class="btn btn-outline"
+                href="{{ url_for(
+                    'order_page'
+                ) }}"
+            >
+                Want a Customization
+            </a>
+
+
+            <a
+                class="btn btn-outline"
+                href="https://wa.me/{{ business.whatsapp }}"
+                target="_blank"
+                rel="noopener"
+            >
+                WhatsApp Us
+            </a>
+
+
+            <a
+                class="contact-small"
+                href="mailto:{{ business.email }}"
+            >
+                {{ business.email }}
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+
+
+{% endblock %}
