@@ -1,0 +1,677 @@
+{% extends "base.html" %}
+
+{% block title %}Your Cart | Packaroji{% endblock %}
+
+{% block meta_description %}
+Review your Packaroji packaging items, update quantities, add customization details, and continue to checkout.
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .cart-page {
+        background: #f7f4ec;
+        min-height: 75vh;
+        padding: 70px 20px 90px;
+    }
+
+    .cart-container {
+        max-width: 1150px;
+        margin: 0 auto;
+    }
+
+    .cart-header {
+        margin-bottom: 35px;
+    }
+
+    .cart-header h1 {
+        margin: 0 0 10px;
+        color: #20372a;
+        font-size: clamp(34px, 5vw, 52px);
+        line-height: 1.1;
+    }
+
+    .cart-header p {
+        margin: 0;
+        color: #697168;
+        font-size: 17px;
+    }
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 30px;
+        align-items: start;
+    }
+
+    .cart-items {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .cart-item {
+        background: #ffffff;
+        border: 1px solid #e4e8df;
+        border-radius: 20px;
+        padding: 22px;
+        display: grid;
+        grid-template-columns: 125px 1fr auto;
+        gap: 22px;
+        align-items: center;
+        box-shadow: 0 8px 25px rgba(35, 55, 42, 0.05);
+    }
+
+    .cart-item-image {
+        width: 125px;
+        height: 125px;
+        background: #f5f5ef;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .cart-item-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 10px;
+    }
+
+    .cart-item-info h2 {
+        margin: 0 0 8px;
+        color: #20372a;
+        font-size: 21px;
+    }
+
+    .cart-item-category {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        color: #315c3d;
+        background: #e7eee2;
+        padding: 6px 10px;
+        border-radius: 30px;
+        margin-bottom: 12px;
+    }
+
+    .cart-item-description {
+        color: #697168;
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .customized-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 12px;
+        padding: 7px 11px;
+        border-radius: 8px;
+        background: #f1e5cb;
+        color: #70552a;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .custom-details {
+        margin-top: 13px;
+        padding: 13px;
+        border-radius: 10px;
+        background: #f7f7f2;
+        border-left: 3px solid #d8b879;
+    }
+
+    .custom-details p {
+        margin: 4px 0;
+        color: #5d655d;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .custom-details strong {
+        color: #34463a;
+    }
+
+    .cart-item-actions {
+        text-align: right;
+        min-width: 120px;
+    }
+
+    .quantity-label {
+        display: block;
+        color: #657066;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 7px;
+    }
+
+    .quantity-input {
+        width: 85px;
+        padding: 10px;
+        border: 1px solid #ccd4c9;
+        border-radius: 9px;
+        text-align: center;
+        font-size: 15px;
+        margin-bottom: 12px;
+    }
+
+    .update-btn {
+        display: block;
+        margin-left: auto;
+        border: none;
+        background: #315c3d;
+        color: white;
+        padding: 9px 13px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .update-btn:hover {
+        background: #24482f;
+    }
+
+    .remove-btn {
+        display: inline-block;
+        margin-top: 10px;
+        border: none;
+        background: transparent;
+        color: #a14e45;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .remove-btn:hover {
+        text-decoration: underline;
+    }
+
+    .cart-summary {
+        background: #20372a;
+        color: white;
+        border-radius: 22px;
+        padding: 28px;
+        position: sticky;
+        top: 95px;
+    }
+
+    .cart-summary h2 {
+        margin: 0 0 25px;
+        font-size: 25px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .summary-row span:first-child {
+        color: #d7dfd7;
+    }
+
+    .summary-row span:last-child {
+        font-weight: 700;
+    }
+
+    .summary-note {
+        color: #cbd6cc;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 20px 0;
+    }
+
+    .checkout-btn {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        text-decoration: none;
+        background: #d8b879;
+        color: #24352a;
+        padding: 15px 20px;
+        border-radius: 11px;
+        font-weight: 800;
+        transition: 0.25s ease;
+    }
+
+    .checkout-btn:hover {
+        background: #e5ca91;
+        transform: translateY(-2px);
+    }
+
+    .continue-shopping {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        color: #e1e8df;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .continue-shopping:hover {
+        color: white;
+    }
+
+    .clear-cart {
+        width: 100%;
+        margin-top: 15px;
+        padding: 11px;
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 9px;
+        background: transparent;
+        color: #e3e9e3;
+        cursor: pointer;
+        font-weight: 700;
+    }
+
+    .clear-cart:hover {
+        background: rgba(255,255,255,0.08);
+    }
+
+    .empty-cart {
+        background: #ffffff;
+        border-radius: 25px;
+        padding: 65px 25px;
+        text-align: center;
+        border: 1px solid #e3e7df;
+        box-shadow: 0 10px 30px rgba(35, 55, 42, 0.05);
+    }
+
+    .empty-cart-icon {
+        font-size: 55px;
+        margin-bottom: 15px;
+    }
+
+    .empty-cart h2 {
+        color: #20372a;
+        margin: 0 0 10px;
+        font-size: 28px;
+    }
+
+    .empty-cart p {
+        color: #687168;
+        max-width: 500px;
+        margin: 0 auto 25px;
+        line-height: 1.7;
+    }
+
+    .shop-btn {
+        display: inline-block;
+        text-decoration: none;
+        background: #315c3d;
+        color: white;
+        padding: 14px 22px;
+        border-radius: 10px;
+        font-weight: 800;
+    }
+
+    .shop-btn:hover {
+        background: #24482f;
+    }
+
+    @media (max-width: 900px) {
+        .cart-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .cart-summary {
+            position: static;
+        }
+    }
+
+    @media (max-width: 650px) {
+        .cart-page {
+            padding: 45px 15px 70px;
+        }
+
+        .cart-item {
+            grid-template-columns: 90px 1fr;
+            gap: 15px;
+            padding: 16px;
+        }
+
+        .cart-item-image {
+            width: 90px;
+            height: 90px;
+        }
+
+        .cart-item-actions {
+            grid-column: 1 / -1;
+            text-align: left;
+            border-top: 1px solid #eceee8;
+            padding-top: 15px;
+        }
+
+        .update-btn {
+            display: inline-block;
+            margin-left: 0;
+        }
+
+        .remove-btn {
+            margin-left: 10px;
+        }
+    }
+</style>
+
+
+<section class="cart-page">
+
+    <div class="cart-container">
+
+        <div class="cart-header">
+            <h1>Your Cart</h1>
+            <p>
+                Review your packaging requirements before continuing.
+            </p>
+        </div>
+
+
+        {% if cart and cart|length > 0 %}
+
+        <div class="cart-layout">
+
+            <!-- CART ITEMS -->
+            <div class="cart-items">
+
+                {% for item in cart %}
+
+                <article class="cart-item">
+
+                    <!-- IMAGE -->
+                    <div class="cart-item-image">
+
+                        {% if item.image %}
+
+                            <img
+                                src="{{ url_for('static', filename='images/' ~ item.image) }}"
+                                alt="{{ item.name }}"
+                            >
+
+                        {% else %}
+
+                            <img
+                                src="{{ url_for('static', filename='images/product-placeholder.svg') }}"
+                                alt="{{ item.name }}"
+                            >
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- INFORMATION -->
+                    <div class="cart-item-info">
+
+                        <h2>
+                            {{ item.name }}
+                        </h2>
+
+                        {% if item.category %}
+                            <span class="cart-item-category">
+                                {{ item.category }}
+                            </span>
+                        {% endif %}
+
+                        {% if item.description %}
+                            <p class="cart-item-description">
+                                {{ item.description }}
+                            </p>
+                        {% endif %}
+
+
+                        {% if item.customized %}
+
+                            <div class="customized-badge">
+                                ✦ Customized Order
+                            </div>
+
+                            <div class="custom-details">
+
+                                {% if item.customization.description %}
+                                <p>
+                                    <strong>Requirements:</strong>
+                                    {{ item.customization.description }}
+                                </p>
+                                {% endif %}
+
+                                {% if item.customization.dimensions %}
+                                <p>
+                                    <strong>Dimensions:</strong>
+                                    {{ item.customization.dimensions }}
+                                </p>
+                                {% endif %}
+
+                                {% if item.customization.shape %}
+                                <p>
+                                    <strong>Shape:</strong>
+                                    {{ item.customization.shape }}
+                                </p>
+                                {% endif %}
+
+                                {% if item.customization.color %}
+                                <p>
+                                    <strong>Colour:</strong>
+                                    {{ item.customization.color }}
+                                </p>
+                                {% endif %}
+
+                                {% if item.customization.printing %}
+                                <p>
+                                    <strong>Printing:</strong>
+                                    {{ item.customization.printing }}
+                                </p>
+                                {% endif %}
+
+                                {% if item.customization.branding %}
+                                <p>
+                                    <strong>Branding:</strong>
+                                    {{ item.customization.branding }}
+                                </p>
+                                {% endif %}
+
+                                {% if item.customization.additional %}
+                                <p>
+                                    <strong>Additional:</strong>
+                                    {{ item.customization.additional }}
+                                </p>
+                                {% endif %}
+
+                                {% if item.customization.files %}
+                                <p>
+                                    <strong>Files:</strong>
+                                    {{ item.customization.files|length }} file(s) uploaded
+                                </p>
+                                {% endif %}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- QUANTITY / ACTIONS -->
+                    <div class="cart-item-actions">
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('update_cart') }}"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="product"
+                                value="{{ item.slug }}"
+                            >
+
+                            {% if item.customized %}
+                                <input
+                                    type="hidden"
+                                    name="customized"
+                                    value="1"
+                                >
+                            {% endif %}
+
+                            <label
+                                class="quantity-label"
+                                for="quantity-{{ loop.index }}"
+                            >
+                                Quantity
+                            </label>
+
+                            <input
+                                id="quantity-{{ loop.index }}"
+                                class="quantity-input"
+                                type="number"
+                                name="quantity"
+                                value="{{ item.quantity }}"
+                                min="1"
+                                required
+                            >
+
+                            <button
+                                type="submit"
+                                class="update-btn"
+                            >
+                                Update
+                            </button>
+
+                        </form>
+
+
+                        <form
+                            method="POST"
+                            action="{{ url_for('remove_from_cart') }}"
+                            style="display:inline;"
+                        >
+
+                            <input
+                                type="hidden"
+                                name="product"
+                                value="{{ item.slug }}"
+                            >
+
+                            {% if item.customized %}
+                                <input
+                                    type="hidden"
+                                    name="customized"
+                                    value="1"
+                                >
+                            {% endif %}
+
+                            <button
+                                type="submit"
+                                class="remove-btn"
+                            >
+                                Remove
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </article>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- SUMMARY -->
+            <aside class="cart-summary">
+
+                <h2>Order Summary</h2>
+
+                <div class="summary-row">
+                    <span>Items</span>
+                    <span>{{ cart|length }}</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Total Quantity</span>
+                    <span>{{ cart_count }}</span>
+                </div>
+
+                <p class="summary-note">
+                    Packaroji does not display standard prices publicly.
+                    After you submit your order, our team will review your
+                    requirements and contact you with pricing and availability.
+                </p>
+
+                <a
+                    href="{{ url_for('checkout') }}"
+                    class="checkout-btn"
+                >
+                    Continue to Checkout
+                </a>
+
+                <a
+                    href="{{ url_for('food_products') }}"
+                    class="continue-shopping"
+                    data-cursor-back
+                >
+                    ← Continue Shopping
+                </a>
+
+                <form
+                    method="POST"
+                    action="{{ url_for('clear_cart') }}"
+                    onsubmit="return confirm('Are you sure you want to clear your cart?');"
+                >
+
+                    <button
+                        type="submit"
+                        class="clear-cart"
+                    >
+                        Clear Cart
+                    </button>
+
+                </form>
+
+            </aside>
+
+        </div>
+
+
+        {% else %}
+
+        <!-- EMPTY CART -->
+        <div class="empty-cart">
+
+            <div class="empty-cart-icon">
+                🛒
+            </div>
+
+            <h2>Your cart is empty</h2>
+
+            <p>
+                You haven't added any packaging products yet.
+                Explore our bakery and food packaging collections
+                and add the products you need.
+            </p>
+
+            <a
+                href="{{ url_for('bakery_products') }}"
+                class="shop-btn"
+            >
+                Explore Products
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
