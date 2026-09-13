@@ -7972,3 +7972,172 @@ option,
     .home-page .homepage-product-carousel .product-card-content h3 { font-size: 19px !important; }
     .home-page .homepage-product-carousel .product-card-content p { font-size: 15px !important; }
 }
+
+/* =========================================================
+   V33 — SIMPLE, RELIABLE (NON-OVERLAPPING) PRODUCT CAROUSEL
+   Deliberately placed last in this file so it overrides every
+   earlier carousel experiment above (v30/v31/v32 3D coverflow).
+   Standard flex row + translateX. No absolute positioning,
+   no scale/rotate math — cards cannot overlap by construction.
+========================================================= */
+.home-page .homepage-product-carousel {
+    position: relative !important;
+    width: min(100%, 1240px) !important;
+    height: auto !important;
+    margin: 28px auto 0 !important;
+    padding: 0 54px !important;
+    perspective: none !important;
+    overflow: visible !important;
+    touch-action: pan-y !important;
+}
+.home-page .homepage-product-carousel .product-carousel-viewport {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    border-radius: 24px !important;
+    isolation: isolate !important;
+}
+.home-page .homepage-product-carousel .product-carousel-track {
+    position: static !important;
+    inset: auto !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    transform-style: flat !important;
+    will-change: transform;
+}
+.home-page .homepage-product-carousel .product-carousel-slide {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    flex: 0 0 auto !important;
+    max-width: none !important;
+    height: 530px !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    transform: none !important;
+    opacity: 1 !important;
+    z-index: 1 !important;
+    pointer-events: auto !important;
+    will-change: transform;
+}
+.home-page .homepage-product-carousel .product-carousel-slide:hover {
+    transform: none !important;
+}
+.home-page .homepage-product-carousel .category-product-card {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    overflow: hidden !important;
+    border-radius: 24px !important;
+    box-shadow: 0 16px 38px rgba(55, 42, 30, .13) !important;
+    background: #fffdf8 !important;
+}
+.home-page .homepage-product-carousel .product-image-wrap {
+    height: 220px !important;
+    min-height: 220px !important;
+    border-radius: 24px 24px 0 0 !important;
+    overflow: hidden !important;
+    background: #eee4d3 !important;
+}
+.home-page .homepage-product-carousel .product-image,
+.home-page .homepage-product-carousel .product-image-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+.home-page .homepage-product-carousel .product-card-content {
+    padding: 20px !important;
+    height: calc(100% - 220px) !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+.home-page .homepage-product-carousel .product-card-content h3 {
+    font-size: 21px !important;
+    line-height: 1.25 !important;
+    margin: 0 0 9px !important;
+}
+.home-page .homepage-product-carousel .product-card-content p {
+    font-size: 16px !important;
+    line-height: 1.45 !important;
+    margin: 0 0 15px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+}
+.home-page .homepage-product-carousel .product-card-actions {
+    display: flex !important;
+    gap: 9px !important;
+    flex-wrap: nowrap !important;
+}
+.home-page .homepage-product-carousel .product-card-actions .btn {
+    min-width: 0 !important;
+    flex: 1 1 50% !important;
+    white-space: nowrap !important;
+}
+.home-page .homepage-product-carousel .product-carousel-arrow {
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 20 !important;
+}
+.home-page .homepage-product-carousel .product-carousel-prev { left: 6px !important; }
+.home-page .homepage-product-carousel .product-carousel-next { right: 6px !important; }
+.home-page .homepage-product-carousel .product-carousel-controls {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    margin-top: 18px !important;
+}
+.home-page .homepage-product-carousel.is-dragging {
+    cursor: grabbing;
+}
+.home-page .homepage-product-carousel.is-dragging .product-carousel-slide {
+    transition: none !important;
+}
+.home-page .homepage-product-carousel.is-dragging * {
+    user-select: none;
+}
+@media (max-width: 1000px) {
+    .home-page .homepage-product-carousel {
+        padding: 0 40px !important;
+    }
+    .home-page .homepage-product-carousel .product-carousel-slide {
+        height: 490px !important;
+    }
+}
+@media (max-width: 700px) {
+    .home-page .homepage-product-carousel {
+        padding: 0 20px !important;
+    }
+    .home-page .homepage-product-carousel .product-carousel-arrow {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 24px !important;
+        line-height: 33px !important;
+    }
+    .home-page .homepage-product-carousel .product-carousel-slide {
+        height: 460px !important;
+    }
+    .home-page .homepage-product-carousel .product-image-wrap {
+        height: 190px !important;
+        min-height: 190px !important;
+    }
+    .home-page .homepage-product-carousel .product-card-content {
+        height: calc(100% - 190px) !important;
+        padding: 15px !important;
+    }
+    .home-page .homepage-product-carousel .product-card-content h3 { font-size: 18px !important; }
+    .home-page .homepage-product-carousel .product-card-content p { font-size: 14px !important; }
+}
