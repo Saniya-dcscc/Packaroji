@@ -728,13 +728,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const w = viewport.clientWidth;
                 if (w <= 600) {
                     cardWidth = Math.min(300, w * 0.72);
-                    spacing = cardWidth * 1.02;
+                    spacing = cardWidth * 1.15;
                 } else if (w <= 980) {
                     cardWidth = Math.min(330, w * 0.42);
-                    spacing = cardWidth * 1.05;
+                    spacing = cardWidth * 1.1;
                 } else {
                     cardWidth = Math.min(360, w * 0.28);
-                    spacing = cardWidth * 1.1;
+                    spacing = cardWidth * 1.08;
                 }
                 viewport.style.setProperty('--carousel-card-width', `${cardWidth}px`);
                 viewport.style.setProperty('--carousel-card-height', w <= 600 ? '470px' : '530px');
