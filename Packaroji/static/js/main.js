@@ -679,10 +679,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       PRODUCT CAROUSEL — CONTINUOUS INFINITE 3D ARC (v32)
-       Homepage only. Position-based infinite carousel: every card is
-       placed from its live distance to the viewport center, so there is
-       no track reset and no multi-card "8-10 / 12" state.
+       PRODUCT CAROUSEL — SIMPLE FLEX SLIDER (v33)
+       Homepage only. Standard flex track + translateX slider.
+       Slide width is always computed as an exact fraction of the
+       viewport minus real gaps, so cards can never overlap.
     ========================================================== */
     (() => {
         const sliders = document.querySelectorAll('.homepage-product-carousel[data-product-carousel]');
@@ -700,146 +700,122 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const count = originalSlides.length;
             const originals = originalSlides.map((s) => s.cloneNode(true));
-            track.innerHTML = '';
-            // Enough copies to fill either edge while the live phase moves forever.
-            for (let copy = -2; copy <= 2; copy++) {
-                originals.forEach((template, index) => {
-                    const slide = template.cloneNode(true);
-                    slide.dataset.carouselIndex = String(index);
-                    slide.dataset.carouselCopy = String(copy);
-                    track.appendChild(slide);
-                });
-            }
-            const slides = Array.from(track.querySelectorAll('[data-product-slide]'));
+            const CLONES = Math.min(count, 3);
 
-            let phase = 0; // 0 = first product centered.
-            let last = performance.now();
-            let raf = 0;
+            const buildSlide = (i) => {
+                const slide = originals[i].cloneNode(true);
+                slide.dataset.carouselIndex = String(i);
+                return slide;
+            };
+
+            track.innerHTML = '';
+            for (let i = count - CLONES; i < count; i++) track.appendChild(buildSlide(i));
+            originals.forEach((_, i) => track.appendChild(buildSlide(i)));
+            for (let i = 0; i < CLONES; i++) track.appendChild(buildSlide(i));
+
+            const slides = Array.from(track.children);
+
+            let perView = 3;
+            let gapPx = 22;
+            let slideWidth = 0;
+            let index = CLONES;
             let dragging = false;
             let pointerId = null;
-            let lastX = 0;
-            let hover = false;
-            let focusInside = false;
-            let spacing = 0;
-            let cardWidth = 0;
+            let startX = 0;
+            let startTranslate = 0;
+            let currentTranslate = 0;
+            let autoTimer = 0;
             let resizeTimer = 0;
 
             const metrics = () => {
                 const w = viewport.clientWidth;
-                if (w <= 600) {
-                    cardWidth = Math.min(300, w * 0.72);
-                    spacing = cardWidth * 1.15;
-                } else if (w <= 980) {
-                    cardWidth = Math.min(330, w * 0.42);
-                    spacing = cardWidth * 1.1;
+                if (w <= 700) {
+                    perView = 1;
+                    gapPx = 14;
+                } else if (w <= 1000) {
+                    perView = 2;
+                    gapPx = 18;
                 } else {
-                    cardWidth = Math.min(360, w * 0.28);
-                    spacing = cardWidth * 1.08;
+                    perView = 3;
+                    gapPx = 22;
                 }
-                viewport.style.setProperty('--carousel-card-width', `${cardWidth}px`);
-                viewport.style.setProperty('--carousel-card-height', w <= 600 ? '470px' : '530px');
-            };
-
-            const wrapPhase = () => {
-                // Keep phase numerically small forever; this does not move any card visibly.
-                phase = ((phase % count) + count) % count;
-            };
-
-            const logicalDelta = (index) => {
-                let d = index - phase;
-                while (d > count / 2) d -= count;
-                while (d < -count / 2) d += count;
-                return d;
-            };
-
-            const render = () => {
-                if (!spacing) return;
-                const center = viewport.clientWidth / 2;
-                let nearestIndex = Math.round(phase) % count;
-                if (nearestIndex < 0) nearestIndex += count;
-                let nearestDistance = Infinity;
-
-                slides.forEach((slide) => {
-                    const index = Number(slide.dataset.carouselIndex);
-                    const d = logicalDelta(index);
-                    const x = center + d * spacing;
-                    const ratio = Math.min(1.55, Math.abs(d) / 2.45);
-                    const sign = d === 0 ? 0 : (d > 0 ? 1 : -1);
-                    const scale = 1.04 - Math.min(0.26, ratio * 0.17);
-                    const rotateY = sign * Math.min(34, ratio * 26);
-                    const rotateZ = sign * Math.min(2.5, ratio * 2);
-                    const y = Math.min(34, ratio * ratio * 26);
-                    const z = Math.round(120 - ratio * 65);
-                    const opacity = Math.max(0.42, 1 - Math.max(0, ratio - 0.9) * 0.6);
-
-                    slide.style.left = `${x}px`;
-                    slide.style.top = '50%';
-                    slide.style.width = `${cardWidth}px`;
-                    slide.style.transform = `translate3d(-50%, calc(-50% + ${y}px), ${z}px) scale(${scale}) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
-                    slide.style.opacity = String(opacity);
-                    slide.style.zIndex = String(1000 - Math.round(Math.abs(d) * 20));
-                    slide.style.pointerEvents = Math.abs(d) < 2.7 ? 'auto' : 'none';
-
-                    const ad = Math.abs(d);
-                    if (ad < nearestDistance) {
-                        nearestDistance = ad;
-                        nearestIndex = index;
-                    }
+                slideWidth = (viewport.clientWidth - gapPx * (perView - 1)) / perView;
+                slides.forEach((s) => {
+                    s.style.width = `${slideWidth}px`;
+                    s.style.marginRight = `${gapPx}px`;
                 });
+                track.style.marginRight = `-${gapPx}px`;
+            };
 
-                if (current) current.textContent = `${nearestIndex + 1} / ${count}`;
+            const realIndex = () => ((index - CLONES) % count + count) % count;
+
+            const updateUI = () => {
+                const ri = realIndex();
+                if (current) current.textContent = `${ri + 1} / ${count}`;
                 dots.forEach((dot, i) => {
-                    const active = i === nearestIndex;
+                    const active = i === ri;
                     dot.classList.toggle('is-active', active);
                     dot.setAttribute('aria-current', active ? 'true' : 'false');
                 });
             };
 
-            const speed = () => window.innerWidth <= 600 ? 0.045 : window.innerWidth <= 980 ? 0.052 : 0.060;
+            const setPosition = (animate) => {
+                const x = -(index * (slideWidth + gapPx));
+                track.style.transition = animate ? 'transform 520ms cubic-bezier(.22,.61,.36,1)' : 'none';
+                track.style.transform = `translate3d(${x}px,0,0)`;
+                currentTranslate = x;
+                updateUI();
+            };
 
-            const animate = (now) => {
-                raf = requestAnimationFrame(animate);
-                const dt = Math.min(0.04, Math.max(0, (now - last) / 1000));
-                last = now;
-                if (!dragging) {
-                    let s = speed();
-                    if (hover || focusInside) s *= 0.28;
-                    phase += s * dt;
-                    wrapPhase();
+            const onTransitionEnd = () => {
+                if (index >= count + CLONES) {
+                    index -= count;
+                    setPosition(false);
+                } else if (index < CLONES) {
+                    index += count;
+                    setPosition(false);
                 }
-                render();
+            };
+            track.addEventListener('transitionend', onTransitionEnd);
+
+            const goTo = (i) => { index = i; setPosition(true); };
+            const nudge = (dir) => goTo(index + dir);
+            const goToDot = (i) => goTo(CLONES + i);
+
+            const startAuto = () => {
+                stopAuto();
+                autoTimer = setInterval(() => nudge(1), 3200);
+            };
+            const stopAuto = () => {
+                if (autoTimer) clearInterval(autoTimer);
+                autoTimer = 0;
             };
 
-            const nudge = (direction) => {
-                phase += direction * 1;
-                wrapPhase();
-                render();
-            };
+            prev?.addEventListener('click', () => { stopAuto(); nudge(-1); startAuto(); });
+            next?.addEventListener('click', () => { stopAuto(); nudge(1); startAuto(); });
+            dots.forEach((dot, i) => dot.addEventListener('click', () => { stopAuto(); goToDot(i); startAuto(); }));
 
-            const goToDot = (target) => {
-                phase = target;
-                wrapPhase();
-                render();
-            };
+            slider.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowLeft') { event.preventDefault(); stopAuto(); nudge(-1); startAuto(); }
+                if (event.key === 'ArrowRight') { event.preventDefault(); stopAuto(); nudge(1); startAuto(); }
+            });
 
             const onPointerDown = (event) => {
                 if (event.pointerType === 'mouse' && event.button !== 0) return;
                 dragging = true;
                 pointerId = event.pointerId;
-                lastX = event.clientX;
+                startX = event.clientX;
+                startTranslate = currentTranslate;
                 slider.classList.add('is-dragging');
+                track.style.transition = 'none';
                 try { viewport.setPointerCapture(pointerId); } catch (_) {}
-                event.preventDefault();
+                stopAuto();
             };
 
             const onPointerMove = (event) => {
                 if (!dragging || event.pointerId !== pointerId) return;
-                const dx = event.clientX - lastX;
-                lastX = event.clientX;
-                phase -= dx / Math.max(1, spacing);
-                wrapPhase();
-                render();
-                event.preventDefault();
+                const dx = event.clientX - startX;
+                track.style.transform = `translate3d(${startTranslate + dx}px,0,0)`;
             };
 
             const endDrag = (event) => {
@@ -847,33 +823,32 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (event && pointerId !== null && event.pointerId !== pointerId) return;
                 dragging = false;
                 slider.classList.remove('is-dragging');
+                const dx = (event ? event.clientX : startX) - startX;
+                if (Math.abs(dx) > slideWidth * 0.18) {
+                    index += dx > 0 ? -1 : 1;
+                }
                 try { if (pointerId !== null) viewport.releasePointerCapture(pointerId); } catch (_) {}
                 pointerId = null;
-                last = performance.now();
+                setPosition(true);
+                startAuto();
             };
 
-            prev?.addEventListener('click', () => nudge(-1));
-            next?.addEventListener('click', () => nudge(1));
-            dots.forEach((dot) => dot.addEventListener('click', () => goToDot(Number(dot.dataset.productDot) || 0)));
-            slider.addEventListener('keydown', (event) => {
-                if (event.key === 'ArrowLeft') { event.preventDefault(); nudge(-1); }
-                if (event.key === 'ArrowRight') { event.preventDefault(); nudge(1); }
-            });
-            slider.addEventListener('mouseenter', () => { hover = true; });
-            slider.addEventListener('mouseleave', () => { hover = false; });
-            slider.addEventListener('focusin', () => { focusInside = true; });
-            slider.addEventListener('focusout', (event) => { if (!slider.contains(event.relatedTarget)) focusInside = false; });
             viewport.addEventListener('pointerdown', onPointerDown, { passive: false });
             viewport.addEventListener('pointermove', onPointerMove, { passive: false });
             viewport.addEventListener('pointerup', endDrag, { passive: true });
             viewport.addEventListener('pointercancel', endDrag, { passive: true });
+            viewport.addEventListener('pointerleave', (event) => { if (dragging) endDrag(event); });
             viewport.addEventListener('lostpointercapture', endDrag, { passive: true });
 
-            const onResize = () => {
+            slider.addEventListener('mouseenter', stopAuto);
+            slider.addEventListener('mouseleave', startAuto);
+            slider.addEventListener('focusin', stopAuto);
+            slider.addEventListener('focusout', (event) => { if (!slider.contains(event.relatedTarget)) startAuto(); });
+
+            window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => { metrics(); render(); }, 80);
-            };
-            window.addEventListener('resize', onResize, { passive: true });
+                resizeTimer = setTimeout(() => { metrics(); setPosition(false); }, 120);
+            }, { passive: true });
 
             slider.querySelectorAll('img').forEach((img) => {
                 img.draggable = false;
@@ -881,9 +856,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             metrics();
-            render();
-            last = performance.now();
-            raf = requestAnimationFrame(animate);
+            setPosition(false);
+            startAuto();
         });
     })();
 
