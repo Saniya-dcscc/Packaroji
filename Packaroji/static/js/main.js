@@ -298,7 +298,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             "Added to cart."
                         );
 
-                        // HOOK: add to cart — flash the happy emoji cursor.
                         window.PackarojiCursor &&
                             window.PackarojiCursor.flash("happy");
 
@@ -335,10 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        CART BADGE UPDATE
-       
-       IMPORTANT:
-       Never select [data-cart-count] globally because the
-       <body> itself contains data-cart-count.
     ========================================================== */
 
     function updateCartBadges(count) {
@@ -530,10 +525,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
        SIMPLE CART COUNT INITIALIZATION
-       
-       IMPORTANT:
-       Read the body attribute, but DO NOT update the body
-       itself.
     ========================================================== */
 
     const serverCartCount =
@@ -544,10 +535,6 @@ document.addEventListener("DOMContentLoaded", () => {
         serverCartCount !== ""
     ) {
 
-        /*
-         * Only update actual cart badge elements.
-         * The <body> must never be selected here.
-         */
         updateCartBadges(serverCartCount);
     }
 
@@ -613,7 +600,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
     /* =========================================================
        HERO MASCOT — RELIABLE EYES FOLLOW CURSOR (v27)
     ========================================================== */
@@ -623,286 +609,825 @@ document.addEventListener("DOMContentLoaded", () => {
             const svg = document.getElementById("heroMascot");
             const leftPupil = document.getElementById("heroLeftPupil");
             const rightPupil = document.getElementById("heroRightPupil");
+
             if (!svg || !leftPupil || !rightPupil) return;
 
             const pupils = [
                 { el: leftPupil, cx: 458, cy: 300 },
-                { el: rightPupil, cx: 600, cy: 289 },
+                { el: rightPupil, cx: 600, cy: 289 }
             ];
+
             let mouseX = window.innerWidth / 2;
             let mouseY = window.innerHeight / 2;
             let raf = 0;
 
             const setEyes = () => {
+
                 raf = 0;
-                const rect = svg.getBoundingClientRect();
+
+                const rect =
+                    svg.getBoundingClientRect();
+
                 if (!rect.width || !rect.height) return;
 
-                // Convert the screen cursor position into the supplied mascot's 860x590 SVG space.
-                const mx = (mouseX - rect.left) * (860 / rect.width);
-                const my = (mouseY - rect.top) * (590 / rect.height);
+                const mx =
+                    (mouseX - rect.left) *
+                    (860 / rect.width);
+
+                const my =
+                    (mouseY - rect.top) *
+                    (590 / rect.height);
 
                 pupils.forEach((pupil) => {
-                    const dx = mx - pupil.cx;
-                    const dy = my - pupil.cy;
-                    const angle = Math.atan2(dy, dx);
-                    // Small, clearly visible eye movement while keeping pupils inside the eyes.
-                    const distance = Math.min(7, Math.max(0, Math.hypot(dx, dy) / 24));
-                    pupil.el.setAttribute("cx", (pupil.cx + Math.cos(angle) * distance).toFixed(2));
-                    pupil.el.setAttribute("cy", (pupil.cy + Math.sin(angle) * distance).toFixed(2));
+
+                    const dx =
+                        mx - pupil.cx;
+
+                    const dy =
+                        my - pupil.cy;
+
+                    const angle =
+                        Math.atan2(dy, dx);
+
+                    const distance =
+                        Math.min(
+                            7,
+                            Math.max(
+                                0,
+                                Math.hypot(dx, dy) / 24
+                            )
+                        );
+
+                    pupil.el.setAttribute(
+                        "cx",
+                        (
+                            pupil.cx +
+                            Math.cos(angle) *
+                            distance
+                        ).toFixed(2)
+                    );
+
+                    pupil.el.setAttribute(
+                        "cy",
+                        (
+                            pupil.cy +
+                            Math.sin(angle) *
+                            distance
+                        ).toFixed(2)
+                    );
                 });
             };
 
             const requestUpdate = () => {
-                if (!raf) raf = requestAnimationFrame(setEyes);
+
+                if (!raf) {
+                    raf =
+                        requestAnimationFrame(
+                            setEyes
+                        );
+                }
             };
 
             const trackPointer = (event) => {
+
                 mouseX = event.clientX;
                 mouseY = event.clientY;
+
                 requestUpdate();
             };
 
-            window.addEventListener("pointermove", trackPointer, { passive: true });
-            window.addEventListener("mousemove", trackPointer, { passive: true });
-            window.addEventListener("resize", requestUpdate, { passive: true });
+            window.addEventListener(
+                "pointermove",
+                trackPointer,
+                { passive: true }
+            );
+
+            window.addEventListener(
+                "mousemove",
+                trackPointer,
+                { passive: true }
+            );
+
+            window.addEventListener(
+                "resize",
+                requestUpdate,
+                { passive: true }
+            );
+
             requestUpdate();
         };
 
         if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", initMascotEyes, { once: true });
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                initMascotEyes,
+                { once: true }
+            );
+
         } else {
+
             initMascotEyes();
         }
+
     })();
 
 
-
     /* =========================================================
-       PRODUCT CAROUSEL — CONTINUOUS INFINITE 3D ARC (v37)
-       Homepage only. Each physical copy has its own absolute position,
-       so copies never sit on top of one another. The phase loops through
-       the copies seamlessly while the cards continuously follow a shallow
-       3D arc around the viewport center.
+       PRODUCT CAROUSEL — CONTINUOUS INFINITE 3D ARC
+       Homepage only.
+       No dots / no slide counter.
     ========================================================== */
+
     (() => {
-        const sliders = document.querySelectorAll('.homepage-product-carousel[data-product-carousel]');
+
+        const sliders =
+            document.querySelectorAll(
+                '.homepage-product-carousel[data-product-carousel]'
+            );
+
         if (!sliders.length) return;
 
         sliders.forEach((slider) => {
-            const viewport = slider.querySelector('[data-product-viewport]');
-            const track = slider.querySelector('[data-product-track]');
-            const originalSlides = Array.from(slider.querySelectorAll('[data-product-slide]'));
-            const prev = slider.querySelector('[data-product-prev]');
-            const next = slider.querySelector('[data-product-next]');
-            const dots = Array.from(slider.querySelectorAll('[data-product-dot]'));
-            const current = slider.querySelector('[data-product-current]');
-            if (!viewport || !track || originalSlides.length < 2) return;
 
-            const count = originalSlides.length;
-            const originals = originalSlides.map((slide) => slide.cloneNode(true));
-            track.innerHTML = '';
+            const viewport =
+                slider.querySelector(
+                    '[data-product-viewport]'
+                );
 
-            // Five complete copies give the animation enough runway on both edges.
-            for (let copy = -2; copy <= 2; copy += 1) {
-                originals.forEach((template, index) => {
-                    const slide = template.cloneNode(true);
-                    slide.dataset.carouselIndex = String(index);
-                    slide.dataset.carouselAbsolute = String(index + copy * count);
-                    track.appendChild(slide);
-                });
+            const track =
+                slider.querySelector(
+                    '[data-product-track]'
+                );
+
+            const originalSlides =
+                Array.from(
+                    slider.querySelectorAll(
+                        '[data-product-slide]'
+                    )
+                );
+
+            const prev =
+                slider.querySelector(
+                    '[data-product-prev]'
+                );
+
+            const next =
+                slider.querySelector(
+                    '[data-product-next]'
+                );
+
+            if (
+                !viewport ||
+                !track ||
+                originalSlides.length < 2
+            ) {
+                return;
             }
-            const slides = Array.from(track.querySelectorAll('[data-product-slide]'));
+
+            const count =
+                originalSlides.length;
+
+            const originals =
+                originalSlides.map(
+                    (slide) =>
+                        slide.cloneNode(true)
+                );
+
+            track.innerHTML = "";
+
+            /* Five complete copies give the animation
+               enough runway on both edges. */
+            for (
+                let copy = -2;
+                copy <= 2;
+                copy += 1
+            ) {
+
+                originals.forEach(
+                    (template, index) => {
+
+                        const slide =
+                            template.cloneNode(true);
+
+                        slide.dataset.carouselIndex =
+                            String(index);
+
+                        slide.dataset.carouselAbsolute =
+                            String(
+                                index +
+                                copy * count
+                            );
+
+                        track.appendChild(slide);
+                    }
+                );
+            }
+
+            const slides =
+                Array.from(
+                    track.querySelectorAll(
+                        '[data-product-slide]'
+                    )
+                );
 
             let phase = 0;
             let last = performance.now();
             let raf = 0;
+
             let dragging = false;
             let pointerId = null;
             let lastX = 0;
             let hover = false;
             let focusInside = false;
             let draggedDistance = 0;
+
             let spacing = 0;
             let cardWidth = 0;
             let resizeTimer = 0;
 
+
             const metrics = () => {
-                const w = viewport.clientWidth;
+
+                const w =
+                    viewport.clientWidth;
+
                 if (w <= 600) {
-                    cardWidth = Math.min(195, Math.max(165, w * 0.58));
-                    spacing = cardWidth * 1.10;
+
+                    cardWidth =
+                        Math.min(
+                            195,
+                            Math.max(
+                                165,
+                                w * 0.58
+                            )
+                        );
+
+                    spacing =
+                        cardWidth * 1.10;
+
                 } else if (w <= 980) {
-                    cardWidth = Math.min(205, Math.max(180, w * 0.33));
-                    spacing = cardWidth * 1.10;
+
+                    cardWidth =
+                        Math.min(
+                            205,
+                            Math.max(
+                                180,
+                                w * 0.33
+                            )
+                        );
+
+                    spacing =
+                        cardWidth * 1.10;
+
                 } else {
-                    cardWidth = Math.min(220, Math.max(205, w * 0.18));
-                    spacing = cardWidth * 1.10;
+
+                    cardWidth =
+                        Math.min(
+                            220,
+                            Math.max(
+                                205,
+                                w * 0.18
+                            )
+                        );
+
+                    spacing =
+                        cardWidth * 1.10;
                 }
-                viewport.style.setProperty('--carousel-card-width', `${cardWidth}px`);
-                viewport.style.setProperty('--carousel-card-height', `${w <= 600 ? 315 : 350}px`);
+
+                viewport.style.setProperty(
+                    "--carousel-card-width",
+                    `${cardWidth}px`
+                );
+
+                viewport.style.setProperty(
+                    "--carousel-card-height",
+                    `${w <= 600 ? 315 : 350}px`
+                );
             };
+
 
             const wrapPhase = () => {
-                phase = ((phase % count) + count) % count;
+
+                phase =
+                    (
+                        phase % count +
+                        count
+                    ) % count;
             };
 
+
             const render = () => {
+
                 if (!spacing) return;
 
-                const center = viewport.clientWidth / 2;
-                let nearestIndex = Math.round(phase) % count;
-                if (nearestIndex < 0) nearestIndex += count;
-                let nearestDistance = Infinity;
+                const center =
+                    viewport.clientWidth / 2;
+
+                let nearestIndex =
+                    Math.round(phase) % count;
+
+                if (nearestIndex < 0) {
+                    nearestIndex += count;
+                }
+
+                let nearestDistance =
+                    Infinity;
 
                 slides.forEach((slide) => {
-                    const absoluteIndex = Number(slide.dataset.carouselAbsolute);
-                    const index = Number(slide.dataset.carouselIndex);
-                    const d = absoluteIndex - phase;
-                    const ad = Math.abs(d);
 
-                    // Keep the physical copies parked outside the viewport instead
-                    // of stacking duplicate copies at the same coordinates.
-                    const x = center + d * spacing;
-                    const curve = Math.min(1, ad / 2.35);
-                    const sign = d === 0 ? 0 : (d < 0 ? -1 : 1);
-                    const scale = 1 - Math.min(0.22, curve * 0.12);
-                    const rotateY = sign * Math.min(30, curve * 25);
-                    const rotateZ = sign * Math.min(3.2, curve * 2.8);
-                    const y = Math.min(24, curve * curve * 20);
-                    const z = Math.round(110 - curve * 65);
-                    const opacity = Math.max(0.55, 1 - Math.max(0, curve - 0.78) * 0.85);
+                    const absoluteIndex =
+                        Number(
+                            slide.dataset.carouselAbsolute
+                        );
 
-                    slide.style.left = `${x}px`;
-                    slide.style.top = '50%';
-                    slide.style.width = `${cardWidth}px`;
-                    slide.style.transform = `translate3d(-50%, calc(-50% + ${y}px), ${z}px) scale(${scale}) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
-                    slide.style.opacity = String(opacity);
-                    slide.style.zIndex = String(1000 - Math.round(ad * 30));
-                    slide.style.pointerEvents = ad < 2.7 ? 'auto' : 'none';
+                    const index =
+                        Number(
+                            slide.dataset.carouselIndex
+                        );
 
-                    if (ad < nearestDistance) {
+                    const d =
+                        absoluteIndex - phase;
+
+                    const ad =
+                        Math.abs(d);
+
+                    const x =
+                        center + d * spacing;
+
+                    const curve =
+                        Math.min(
+                            1,
+                            ad / 2.35
+                        );
+
+                    const sign =
+                        d === 0
+                            ? 0
+                            : d < 0
+                                ? -1
+                                : 1;
+
+                    const scale =
+                        1 -
+                        Math.min(
+                            0.22,
+                            curve * 0.12
+                        );
+
+                    const rotateY =
+                        sign *
+                        Math.min(
+                            30,
+                            curve * 25
+                        );
+
+                    const rotateZ =
+                        sign *
+                        Math.min(
+                            3.2,
+                            curve * 2.8
+                        );
+
+                    const y =
+                        Math.min(
+                            24,
+                            curve * curve * 20
+                        );
+
+                    const z =
+                        Math.round(
+                            110 - curve * 65
+                        );
+
+                    const opacity =
+                        Math.max(
+                            0.55,
+                            1 -
+                            Math.max(
+                                0,
+                                curve - 0.78
+                            ) *
+                            0.85
+                        );
+
+                    slide.style.left =
+                        `${x}px`;
+
+                    slide.style.top =
+                        "50%";
+
+                    slide.style.width =
+                        `${cardWidth}px`;
+
+                    slide.style.transform =
+                        `translate3d(
+                            -50%,
+                            calc(-50% + ${y}px),
+                            ${z}px
+                        )
+                        scale(${scale})
+                        rotateY(${rotateY}deg)
+                        rotateZ(${rotateZ}deg)`;
+
+                    slide.style.opacity =
+                        String(opacity);
+
+                    slide.style.zIndex =
+                        String(
+                            1000 -
+                            Math.round(ad * 30)
+                        );
+
+                    slide.style.pointerEvents =
+                        ad < 2.7
+                            ? "auto"
+                            : "none";
+
+                    if (
+                        ad <
+                        nearestDistance
+                    ) {
+
                         nearestDistance = ad;
+
                         nearestIndex = index;
                     }
                 });
-
-                if (current) current.textContent = `${nearestIndex + 1} / ${count}`;
-                dots.forEach((dot, i) => {
-                    const active = i === nearestIndex;
-                    dot.classList.toggle('is-active', active);
-                    dot.setAttribute('aria-current', active ? 'true' : 'false');
-                });
             };
 
-            const speed = () => window.innerWidth <= 600 ? 1.08 : window.innerWidth <= 980 ? 1.02 : 0.96;
+
+            /*
+             * SLOWED DOWN A LITTLE
+             *
+             * Old:
+             * mobile 1.08
+             * tablet 1.02
+             * desktop 0.96
+             *
+             * New:
+             * mobile 0.94
+             * tablet 0.88
+             * desktop 0.82
+             */
+            const speed = () =>
+                window.innerWidth <= 600
+                    ? 0.94
+                    : window.innerWidth <= 980
+                        ? 0.88
+                        : 0.82;
+
 
             const animate = (now) => {
-                raf = requestAnimationFrame(animate);
-                const dt = Math.min(0.04, Math.max(0, (now - last) / 1000));
+
+                raf =
+                    requestAnimationFrame(
+                        animate
+                    );
+
+                const dt =
+                    Math.min(
+                        0.04,
+                        Math.max(
+                            0,
+                            (now - last) / 1000
+                        )
+                    );
+
                 last = now;
+
                 if (!dragging) {
+
                     let s = speed();
-                    if (hover || focusInside) s *= 0.58;
-                    phase += s * dt;
+
+                    if (
+                        hover ||
+                        focusInside
+                    ) {
+                        s *= 0.58;
+                    }
+
+                    phase +=
+                        s * dt;
+
                     wrapPhase();
                 }
+
                 render();
             };
+
 
             const nudge = (direction) => {
+
                 phase += direction;
+
                 wrapPhase();
+
                 render();
             };
 
-            const goToDot = (target) => {
-                phase = target;
-                wrapPhase();
-                render();
-            };
 
             const onPointerDown = (event) => {
-                if (event.pointerType === 'mouse' && event.button !== 0) return;
-                if (event.target && event.target.closest('a, button')) return;
+
+                if (
+                    event.pointerType === "mouse" &&
+                    event.button !== 0
+                ) {
+                    return;
+                }
+
+                if (
+                    event.target &&
+                    event.target.closest(
+                        "a, button"
+                    )
+                ) {
+                    return;
+                }
+
                 dragging = true;
-                pointerId = event.pointerId;
-                lastX = event.clientX;
+
+                pointerId =
+                    event.pointerId;
+
+                lastX =
+                    event.clientX;
+
                 draggedDistance = 0;
-                slider.classList.add('is-dragging');
-                try { viewport.setPointerCapture(pointerId); } catch (_) {}
+
+                slider.classList.add(
+                    "is-dragging"
+                );
+
+                try {
+                    viewport.setPointerCapture(
+                        pointerId
+                    );
+                } catch (_) {}
+
                 event.preventDefault();
             };
+
 
             const onPointerMove = (event) => {
-                if (!dragging || event.pointerId !== pointerId) return;
-                const dx = event.clientX - lastX;
-                lastX = event.clientX;
-                draggedDistance += Math.abs(dx);
-                phase -= dx / Math.max(1, spacing);
+
+                if (
+                    !dragging ||
+                    event.pointerId !== pointerId
+                ) {
+                    return;
+                }
+
+                const dx =
+                    event.clientX - lastX;
+
+                lastX =
+                    event.clientX;
+
+                draggedDistance +=
+                    Math.abs(dx);
+
+                phase -=
+                    dx /
+                    Math.max(
+                        1,
+                        spacing
+                    );
+
                 wrapPhase();
+
                 render();
+
                 event.preventDefault();
             };
 
+
             const endDrag = (event) => {
+
                 if (!dragging) return;
-                if (event && pointerId !== null && event.pointerId !== pointerId) return;
+
+                if (
+                    event &&
+                    pointerId !== null &&
+                    event.pointerId !== pointerId
+                ) {
+                    return;
+                }
+
                 dragging = false;
-                slider.classList.remove('is-dragging');
-                try { if (pointerId !== null) viewport.releasePointerCapture(pointerId); } catch (_) {}
+
+                slider.classList.remove(
+                    "is-dragging"
+                );
+
+                try {
+                    if (pointerId !== null) {
+                        viewport.releasePointerCapture(
+                            pointerId
+                        );
+                    }
+                } catch (_) {}
+
                 pointerId = null;
-                last = performance.now();
-                if (draggedDistance < 8) draggedDistance = 0;
+
+                last =
+                    performance.now();
+
+                if (
+                    draggedDistance < 8
+                ) {
+                    draggedDistance = 0;
+                }
             };
 
-            slider.querySelectorAll('[data-slide-url]').forEach((slide) => {
-                slide.addEventListener('click', (event) => {
-                    if (draggedDistance > 8) {
-                        event.preventDefault();
-                        draggedDistance = 0;
-                    }
-                }, true);
-            });
 
-            prev?.addEventListener('click', () => nudge(-1));
-            next?.addEventListener('click', () => nudge(1));
-            dots.forEach((dot) => dot.addEventListener('click', () => goToDot(Number(dot.dataset.productDot) || 0)));
-            slider.addEventListener('keydown', (event) => {
-                if (event.key === 'ArrowLeft') { event.preventDefault(); nudge(-1); }
-                if (event.key === 'ArrowRight') { event.preventDefault(); nudge(1); }
-            });
-            slider.addEventListener('mouseenter', () => { hover = true; });
-            slider.addEventListener('mouseleave', () => { hover = false; });
-            slider.addEventListener('focusin', () => { focusInside = true; });
-            slider.addEventListener('focusout', (event) => { if (!slider.contains(event.relatedTarget)) focusInside = false; });
-            viewport.addEventListener('pointerdown', onPointerDown, { passive: false });
-            viewport.addEventListener('pointermove', onPointerMove, { passive: false });
-            viewport.addEventListener('pointerup', endDrag, { passive: true });
-            viewport.addEventListener('pointercancel', endDrag, { passive: true });
-            viewport.addEventListener('lostpointercapture', endDrag, { passive: true });
+            slider
+                .querySelectorAll(
+                    "[data-slide-url]"
+                )
+                .forEach((slide) => {
+
+                    slide.addEventListener(
+                        "click",
+                        (event) => {
+
+                            if (
+                                draggedDistance >
+                                8
+                            ) {
+
+                                event.preventDefault();
+
+                                draggedDistance =
+                                    0;
+                            }
+                        },
+                        true
+                    );
+                });
+
+
+            prev?.addEventListener(
+                "click",
+                () => nudge(-1)
+            );
+
+            next?.addEventListener(
+                "click",
+                () => nudge(1)
+            );
+
+
+            slider.addEventListener(
+                "keydown",
+                (event) => {
+
+                    if (
+                        event.key ===
+                        "ArrowLeft"
+                    ) {
+
+                        event.preventDefault();
+
+                        nudge(-1);
+                    }
+
+                    if (
+                        event.key ===
+                        "ArrowRight"
+                    ) {
+
+                        event.preventDefault();
+
+                        nudge(1);
+                    }
+                }
+            );
+
+
+            slider.addEventListener(
+                "mouseenter",
+                () => {
+                    hover = true;
+                }
+            );
+
+            slider.addEventListener(
+                "mouseleave",
+                () => {
+                    hover = false;
+                }
+            );
+
+            slider.addEventListener(
+                "focusin",
+                () => {
+                    focusInside = true;
+                }
+            );
+
+            slider.addEventListener(
+                "focusout",
+                (event) => {
+
+                    if (
+                        !slider.contains(
+                            event.relatedTarget
+                        )
+                    ) {
+                        focusInside = false;
+                    }
+                }
+            );
+
+
+            viewport.addEventListener(
+                "pointerdown",
+                onPointerDown,
+                { passive: false }
+            );
+
+            viewport.addEventListener(
+                "pointermove",
+                onPointerMove,
+                { passive: false }
+            );
+
+            viewport.addEventListener(
+                "pointerup",
+                endDrag,
+                { passive: true }
+            );
+
+            viewport.addEventListener(
+                "pointercancel",
+                endDrag,
+                { passive: true }
+            );
+
+            viewport.addEventListener(
+                "lostpointercapture",
+                endDrag,
+                { passive: true }
+            );
+
 
             const onResize = () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => { metrics(); render(); }, 80);
-            };
-            window.addEventListener('resize', onResize, { passive: true });
 
-            slider.querySelectorAll('img').forEach((img) => {
-                img.draggable = false;
-                img.addEventListener('dragstart', (e) => e.preventDefault());
-            });
+                clearTimeout(
+                    resizeTimer
+                );
+
+                resizeTimer =
+                    setTimeout(() => {
+
+                        metrics();
+
+                        render();
+
+                    }, 80);
+            };
+
+
+            window.addEventListener(
+                "resize",
+                onResize,
+                { passive: true }
+            );
+
+
+            slider
+                .querySelectorAll("img")
+                .forEach((img) => {
+
+                    img.draggable = false;
+
+                    img.addEventListener(
+                        "dragstart",
+                        (e) =>
+                            e.preventDefault()
+                    );
+                });
+
 
             metrics();
+
             render();
-            last = performance.now();
-            raf = requestAnimationFrame(animate);
+
+            last =
+                performance.now();
+
+            raf =
+                requestAnimationFrame(
+                    animate
+                );
         });
+
     })();
+
 
     /* =========================================================
        PRODUCT CATEGORY FILTERS
     ========================================================== */
-
 
 });
