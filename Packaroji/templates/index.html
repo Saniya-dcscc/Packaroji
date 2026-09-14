@@ -265,9 +265,9 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
             <img src="{{ url_for('static', filename='images/disposable-packaging-hero.png') }}" alt="Disposable food packaging and food-service products" loading="lazy">
         </div>
         <div class="packaging-visual-copy">
-            <p class="eyebrow">COMPLETE FOOD PACKAGING SOLUTIONS</p>
-            <h2>Food packaging for every business, every meal, and every need.</h2>
-            <p>From takeaway containers and kraft paper packaging to bagasse, bakery boxes, wrapping materials, and delivery bags, Packaroji provides practical food packaging solutions for restaurants, cafés, bakeries, caterers, hotels, and cloud kitchens across Hyderabad.</p>
+            <p class="eyebrow">MORE THAN ONE MATERIAL</p>
+            <h2>Packaging for every part of the food-service experience.</h2>
+            <p>Need a bowl for meals, a cup for drinks, a plate for serving, a box for bakery items or cutlery for takeaway? Packaroji is built around the full range — not just one material or one product type.</p>
         </div>
     </div>
 </section>
@@ -303,27 +303,45 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
 
             <p class="large-copy">
 
-                Packaroji is a Hyderabad-focused disposable food-packaging and food-service business built around one simple idea: businesses should have practical products that work for the way they serve, pack and deliver food.
+                Packaroji is your one-stop solution for all food packaging needs. We proudly serve hotels, restaurants, cafés, caterers, and cloud kitchens across Hyderabad. As a sustainable brand, Packaroji is committed to solving our customers' everyday packaging pain points — making things simpler, greener, and more reliable.
 
             </p>
 
+            <div class="about-points">
 
-            <p>
+                <div class="about-point">
+                    <strong>Made for Food Businesses</strong>
+                    <p>
+                        Packaging options designed for everyday takeaway, delivery,
+                        catering, bakery, and food-service needs.
+                    </p>
+                </div>
 
-                From bags, boxes and pouches to bowls, cups, plates, containers, trays and disposable cutlery, we bring the essentials together in one place — with sustainable options wherever they fit your needs.
+                <div class="about-point">
+                    <strong>Quality You Can Rely On</strong>
+                    <p>
+                        Food-friendly materials and practical packaging designed
+                        for protection, convenience, and dependable use.
+                    </p>
+                </div>
 
-            </p>
+                <div class="about-point">
+                    <strong>Easy Ordering &amp; Customization</strong>
+                    <p>
+                        Find the right packaging, order easily, and customize
+                        products to reflect your brand.
+                    </p>
+                </div>
 
+                <div class="about-point">
+                    <strong>Serving Hyderabad Businesses</strong>
+                    <p>
+                        A convenient packaging partner for restaurants, cafés,
+                        hotels, caterers, bakeries, and cloud kitchens across Hyderabad.
+                    </p>
+                </div>
 
-            <p>
-
-                Need something different?
-
-                You can also send us your exact
-                customization requirements, branding
-                details and reference files.
-
-            </p>
+            </div>
 
         </div>
 
@@ -713,6 +731,93 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
 </section>
 
 
+
+
+<style>
+/* Compact typography — homepage only */
+.home-page .section-heading h1,
+.home-page .section-heading h2,
+.home-page .section-heading h3,
+.home-page .features h2,
+.home-page .packaging-options h2,
+.home-page .packaging-visual-copy h2,
+.home-page .intro h2,
+.home-page .customization-copy h2,
+.home-page .nature-copy h2,
+.home-page .process h2,
+.home-page .cta-card h2 {
+    font-size: clamp(1.55rem, 2.8vw, 2.15rem);
+    line-height: 1.15;
+}
+
+.home-page .section-heading p,
+.home-page .packaging-visual-copy p,
+.home-page .intro p,
+.home-page .customization-copy p,
+.home-page .nature-copy p,
+.home-page .process p,
+.home-page .cta-card p,
+.home-page .feature-card p,
+.home-page .step p {
+    font-size: 0.93rem;
+    line-height: 1.55;
+}
+
+.home-page .section-heading .eyebrow,
+.home-page .intro .eyebrow,
+.home-page .nature-copy .eyebrow,
+.home-page .customization-copy .eyebrow,
+.home-page .cta-card .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+}
+
+.home-page .feature-card h3,
+.home-page .step h3,
+.home-page .impact-list strong {
+    font-size: 0.98rem;
+    line-height: 1.25;
+}
+
+.home-page .large-copy {
+    font-size: 1.05rem;
+    line-height: 1.55;
+}
+
+.home-page .about-points {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1rem;
+}
+
+.home-page .about-point strong {
+    display: block;
+    font-size: 0.98rem;
+    line-height: 1.25;
+    margin-bottom: 0.22rem;
+}
+
+.home-page .about-point p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.home-page .product-card-content h3 {
+    font-size: 1rem;
+    line-height: 1.15;
+}
+
+.home-page .product-carousel-count {
+    font-size: 0.82rem;
+}
+
+.home-page .packaging-options-browse .btn,
+.home-page .cta-actions .btn,
+.home-page .customization-actions .btn {
+    font-size: 0.9rem;
+}
+</style>
 
 {% endblock %}
 
