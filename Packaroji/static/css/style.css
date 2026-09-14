@@ -7361,7 +7361,7 @@ option,
 .home-page .homepage-product-carousel {
     width: min(100%, 1220px);
     margin: 24px auto 0;
-    padding: 0 48px 42px;
+    padding: 0 48px 0;
     box-sizing: border-box;
 }
 
@@ -7489,11 +7489,6 @@ option,
     font-size: 25px;
 }
 
-.home-page .homepage-product-carousel .product-carousel-controls {
-    left: 48px;
-    right: 48px;
-    bottom: 0;
-}
 
 .home-page .homepage-product-carousel.is-dragging,
 .home-page .homepage-product-carousel.is-dragging * {
@@ -7517,7 +7512,7 @@ option,
     .home-page .homepage-product-carousel {
         padding-left: 40px;
         padding-right: 40px;
-        padding-bottom: 40px;
+        padding-bottom: 0;
     }
     .home-page .homepage-product-carousel .product-carousel-viewport {
         height: 315px;
@@ -7632,12 +7627,6 @@ option,
     font-size: 24px;
     line-height: 1;
 }
-.home-page .homepage-product-carousel .product-carousel-controls {
-    bottom: 0;
-}
-.home-page .homepage-product-carousel .product-carousel-count {
-    min-width: 48px;
-}
 @media (max-width: 980px) {
     .home-page .homepage-product-carousel .product-carousel-slide { width: 235px; height: 315px; }
     .home-page .homepage-product-carousel .product-image-wrap { height: 205px !important; min-height: 205px; }
@@ -7660,7 +7649,7 @@ option,
 .home-page .homepage-product-carousel {
     width: min(100%, 1180px);
     margin: 0 auto;
-    padding: 0 42px 34px;
+    padding: 0 42px 0;
 }
 .home-page .homepage-product-carousel .product-carousel-viewport {
     height: 325px;
@@ -7747,14 +7736,6 @@ option,
     color: #fff;
     font-size: 20px;
     line-height: 1;
-}
-.home-page .homepage-product-carousel .product-carousel-controls {
-    position: relative;
-    bottom: auto;
-    margin-top: 8px;
-}
-.home-page .homepage-product-carousel .product-carousel-count {
-    min-width: 48px;
 }
 
 @media (max-width: 980px) {
@@ -8614,10 +8595,6 @@ h3 { font-size: 1.15rem; }
 }
 .home-page .homepage-product-carousel .product-carousel-arrow.product-carousel-prev { left: 12px; }
 .home-page .homepage-product-carousel .product-carousel-arrow.product-carousel-next { right: 12px; }
-.home-page .homepage-product-carousel .product-carousel-controls {
-    left: 0 !important;
-    right: 0 !important;
-}
 .avatar-pupil {
     transform: none !important;
 }
