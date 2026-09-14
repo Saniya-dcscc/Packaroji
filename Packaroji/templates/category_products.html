@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}{{ category_name }} | Packaroji{% endblock %}
+{% block description %}{{ category_description }} Packaroji supplies disposable food packaging and food-service products in Hyderabad, Telangana, India.{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"CollectionPage",
+  "name":{{ category_name|tojson }},
+  "description":{{ category_description|tojson }},
+  "url":{{ request.base_url|tojson }},
+  "isPartOf":{"@type":"WebSite","name":"Packaroji","url":{{ request.url_root|tojson }}}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="category-page">
+  {% if is_collection %}
+  <section class="collection-page-compact collection-{{ collection_kind }}">
+    <div class="container">
+      <div class="collection-visual-intro">
+        <aside class="collection-side-heading" aria-label="Collection heading">
+          {% if collection_kind == 'layer2' %}
+            <span>Aluminium</span>
+            <span>Kraft Paper</span>
+            <span>Sugarcane Bagasse</span>
+          {% elif collection_kind == 'layer1' %}
+            <span>Food Wrapping</span>
+          {% elif collection_kind == 'layer3' %}
+            <span>Takeout &amp; Delivery</span>
+          {% elif collection_kind == 'branding' %}
+            <span>Branding Options</span>
+          {% else %}
+            <span>{{ material_name|default(category_name) }}</span>
+          {% endif %}
+        </aside>
+
+        <div class="collection-photo-placeholder" aria-label="Photo placeholder">
+          <div class="collection-photo-placeholder-inner">
+            <span>PHOTO SPACE</span>
+            <small>Image to be added</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="collection-subheading-wrap">
+        <p class="collection-subheading">{{ category_description }}</p>
+      </div>
+
+      {% if collection_kind == 'layer2' %}
+        <div class="collection-option-stack" aria-label="Main portion packaging options">
+          {% for material in layer2_materials %}
+            <a class="collection-option-link" href="{{ url_for('layer2_material_page', material_slug=material.slug) }}">
+              <span class="collection-option-label">{{ material.name }}</span>
+              <span class="collection-option-note">View products</span>
+              <span class="collection-option-arrow" aria-hidden="true">→</span>
+            </a>
+          {% endfor %}
+        </div>
+      {% elif collection_kind == 'layer2-material' %}
+        <div class="catalogue-product-grid" aria-label="{{ category_name }} products">
+          {% for product in products %}
+          <article class="catalogue-product-card">
+            <a href="{{ url_for('product_detail', slug=product.slug) }}" class="catalogue-product-image-link" aria-label="View {{ product.name }}">
+              <div class="catalogue-product-image">
+                <img src="{{ url_for('static', filename='images/' ~ product.image) }}" alt="{{ product.name }}" loading="lazy">
+              </div>
+            </a>
+            <div class="catalogue-product-content">
+              <span class="catalogue-product-category">{{ product.category }}</span>
+              {% if product.brandable %}<span class="catalogue-brand-badge">Branding</span>{% endif %}
+              <h3><a href="{{ url_for('product_detail', slug=product.slug) }}">{{ product.name }}</a></h3>
+              <p>{{ product.description }}</p>
+              {% if product.size_note %}<small class="catalogue-size-note">{{ product.size_note }}</small>{% endif %}
+              <div class="catalogue-product-actions">
+                <button type="button" class="btn btn-product catalogue-add-btn" data-product-slug="{{ product.slug }}">Add to Cart</button>
+                <a href="{{ url_for('order_page', product=product.slug) }}" class="btn btn-customize">Customize</a>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="collection-product-option-stack" aria-label="{{ category_name }} product options">
+          {% for product in products %}
+            <a class="collection-product-option" href="{{ url_for('product_detail', slug=product.slug) }}">
+              <span>{{ product.name }}</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="collection-bottom-actions">
+        <a href="{{ url_for('order_page') }}" class="btn btn-secondary">Request Custom Packaging</a>
+        <a href="{{ url_for('products') }}" class="collection-back-link">Back to Products →</a>
+      </div>
+    </div>
+  </section>
+  {% else %}
+  <section class="category-page-hero">
+    <div class="container">
+      <div class="category-page-icon">{{ category_icon }}</div>
+      <p class="eyebrow">PACKAROJI • DISPOSABLE FOOD PACKAGING &amp; FOOD-SERVICE</p>
+      <h1>{{ category_name }}</h1>
+      <p>{{ category_description }}</p>
+      <div class="category-page-actions">
+        {% if not is_all_products %}<a href="{{ url_for('products') }}" class="btn btn-primary">View All Products →</a>{% endif %}
+        <a href="{{ url_for('order_page') }}" class="btn btn-secondary">Request Custom Packaging</a>
+      </div>
+    </div>
+  </section>
+
+  {% if products %}
+  <section class="category-products-section">
+    <div class="container">
+      <div class="catalogue-product-grid">
+        {% for product in products %}
+        <article class="catalogue-product-card">
+          <a href="{{ url_for('product_detail', slug=product.slug) }}" class="catalogue-product-image-link" aria-label="View {{ product.name }}">
+            <div class="catalogue-product-image">
+              <img src="{{ url_for('static', filename='images/' ~ product.image) }}" alt="{{ product.name }}" loading="lazy">
+            </div>
+          </a>
+          <div class="catalogue-product-content">
+            <span class="catalogue-product-category">{{ product.category }}</span>
+            <h3><a href="{{ url_for('product_detail', slug=product.slug) }}">{{ product.name }}</a></h3>
+            <p>{{ product.description }}</p>
+            <div class="catalogue-product-actions">
+              <button type="button" class="btn btn-product catalogue-add-btn" data-product-slug="{{ product.slug }}">Add to Cart</button>
+              <a href="{{ url_for('order_page', product=product.slug) }}" class="btn btn-customize">Customize</a>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+  {% endif %}
+</section>
+
+{% if is_collection and collection_kind == 'layer2-material' %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.catalogue-add-btn').forEach(function (button) {
+    button.addEventListener('click', function () {
+      const slug = button.dataset.productSlug;
+      if (!slug) return;
+      button.disabled = true;
+      fetch('{{ url_for("add_to_cart") }}', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({product: slug, quantity: 1})
+      })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        if (data.success) {
+          window.PackarojiCursor && window.PackarojiCursor.flash('happy');
+          document.querySelectorAll('.cart-badge').forEach(function (badge) {
+            badge.textContent = data.cart_count;
+          });
+          button.textContent = 'Added ✓';
+          setTimeout(function () { button.textContent = 'Add to Cart'; }, 1200);
+        } else {
+          alert(data.message || 'Could not add the product to cart.');
+        }
+      })
+      .catch(function () { alert('Could not add the product to cart.'); })
+      .finally(function () { button.disabled = false; });
+    });
+  });
+});
+</script>
+{% endif %}
+{% endblock %}
