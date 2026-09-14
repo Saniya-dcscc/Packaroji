@@ -2,12 +2,6 @@
 
 {% block title %}
 Packaroji | Disposable Food Packaging & Food-Service Products in Hyderabad
-<style>
-.home-page .about-points{display:grid;gap:.8rem;margin-top:1rem;}
-.home-page .about-point strong{display:block;font-size:.98rem;line-height:1.25;margin-bottom:.2rem;}
-.home-page .about-point p{margin:0;font-size:.9rem;line-height:1.48;}
-</style>
-
 {% endblock %}
 
 {% block description %}
@@ -83,8 +77,8 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
 
     <div class="container split">
 
-
-        <div>
+        <!-- LEFT SIDE: ABOUT HEADING + POINTS -->
+        <div class="about-left">
 
             <p class="eyebrow">
                 ABOUT PACKAROJI
@@ -95,40 +89,55 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
                 Smarter choice.
             </h2>
 
-        </div>
-
-
-        <div>
-
-            <p class="large-copy">
-
-                Packaroji is your one-stop solution for all food packaging needs. We proudly serve hotels, restaurants, cafés, caterers, and cloud kitchens across Hyderabad. As a sustainable brand, Packaroji is committed to solving our customers' everyday packaging pain points — making things simpler, greener, and more reliable.
-
-            </p>
-
             <div class="about-points">
 
                 <div class="about-point">
                     <strong>Made for Food Businesses</strong>
-                    <p>Packaging options designed for everyday takeaway, delivery, catering, bakery, and food-service needs.</p>
+                    <p>
+                        Packaging options designed for everyday takeaway, delivery,
+                        catering, bakery, and food-service needs.
+                    </p>
                 </div>
 
                 <div class="about-point">
                     <strong>Quality You Can Rely On</strong>
-                    <p>Food-friendly materials and practical packaging designed for protection, convenience, and dependable use.</p>
+                    <p>
+                        Food-friendly materials and practical packaging designed for
+                        protection, convenience, and dependable use.
+                    </p>
                 </div>
 
                 <div class="about-point">
                     <strong>Easy Ordering &amp; Customization</strong>
-                    <p>Find the right packaging, order easily, and customize products to reflect your brand.</p>
+                    <p>
+                        Find the right packaging, order easily, and customize products
+                        to reflect your brand.
+                    </p>
                 </div>
 
                 <div class="about-point">
                     <strong>Serving Hyderabad Businesses</strong>
-                    <p>A convenient packaging partner for restaurants, cafés, hotels, caterers, bakeries, and cloud kitchens across Hyderabad.</p>
+                    <p>
+                        A convenient packaging partner for restaurants, cafés, hotels,
+                        caterers, bakeries, and cloud kitchens across Hyderabad.
+                    </p>
                 </div>
 
             </div>
+
+        </div>
+
+        <!-- RIGHT SIDE: COMPANY INTRODUCTION -->
+        <div class="about-right">
+
+            <p class="large-copy">
+                Packaroji is your one-stop solution for all food packaging needs. We
+                proudly serve hotels, restaurants, cafés, caterers, and cloud kitchens
+                across Hyderabad. As a sustainable brand, Packaroji is committed to
+                solving our customers' everyday packaging pain points — making things
+                simpler, greener, and more reliable.
+            </p>
+
         </div>
 
     </div>
@@ -153,15 +162,16 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
         <div class="section-heading center">
 
             <p class="eyebrow">
-                WHY PACKAROJI
+                WHY PACKAROJI ?
             </p>
 
             <h2>
-                Food packaging for every business, every meal, and every need.
+               Smart packaging for growing food businesses
             </h2>
 
             <p>
-                From takeaway containers and kraft paper packaging to bagasse, bakery boxes, wrapping materials, and delivery bags, Packaroji provides practical food packaging solutions for restaurants, cafés, bakeries, caterers, hotels, and cloud kitchens across Hyderabad.
+              From takeaway containers and kraft packaging to bagasse and delivery bags, 
+          Packaroji offers practical food-packaging solutions with quality, easy ordering, and customization for businesses across Hyderabad.
             </p>
 
         </div>
@@ -339,12 +349,14 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
             <img src="{{ url_for('static', filename='images/disposable-packaging-hero.png') }}" alt="Disposable food packaging and food-service products" loading="lazy">
         </div>
         <div class="packaging-visual-copy">
-            <p class="eyebrow">PACKAGING DESIGNED AROUND YOUR NEEDS</p>
-            <h2>The right format for every stage of food service.</h2>
-            <p>From wrapping and portion packaging to bakery boxes, containers, trays, pouches, and carry bags, Packaroji brings together a wide range of formats for packing, protecting, presenting, and delivering food. Choose the material, shape, size, and format that best fits your product and everyday operation.</p>
+            <p class="eyebrow">MORE THAN ONE MATERIAL</p>
+            <h2>Packaging for every part of the food-service experience.</h2>
+            <p>Need a bowl for meals, a cup for drinks, a plate for serving, a box for bakery items or cutlery for takeaway? Packaroji is built around the full range — not just one material or one product type.</p>
         </div>
     </div>
 </section>
+
+
 
 
 <!-- =====================================================
@@ -359,22 +371,26 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
         <div class="customization-copy">
 
             <p class="eyebrow">
-                CUSTOM BRANDING &amp; PRINTING
+                NEED SOMETHING UNIQUE?
             </p>
 
 
             <h2>
-                Bring your brand into every order with packaging tailored to your business.
+                Make the packaging yours.
             </h2>
 
 
             <p>
-                Add your logo, colours, artwork, or custom prints to selected food packaging and takeaway products.
+                Want your logo, specific dimensions,
+                colours, printing or a completely
+                customized packaging requirement?
             </p>
 
 
             <p>
-                Packaroji makes it simple to create packaging that feels distinctly your own, helping you maintain a consistent brand identity from the first order to the final delivery.
+                Send us your exact requirements and
+                upload your logo, artwork, design or
+                reference files.
             </p>
 
         </div>
@@ -719,6 +735,28 @@ in Hyderabad. Explore packaging products, disposable cutlery or request customiz
 </section>
 
 
+
+<style>
+/* About Packaroji: keep heading + points together on the left, company intro on the right. */
+.home-page .about-left .about-points {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 1.2rem;
+}
+
+.home-page .about-left .about-point strong {
+    display: block;
+    font-size: 0.98rem;
+    line-height: 1.3;
+    margin-bottom: 0.22rem;
+}
+
+.home-page .about-left .about-point p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+</style>
 
 {% endblock %}
 
