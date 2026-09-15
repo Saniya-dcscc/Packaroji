@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found | Packaroji{% endblock %}
+
+{% block content %}
+
+<section class="error-page">
+
+    <div class="error-content">
+
+        <div class="error-number">404</div>
+
+        <span class="eyebrow">OOPS!</span>
+
+        <h1>We couldn't find that page.</h1>
+
+        <p>
+            The page you're looking for may have moved, been removed,
+            or the link might be incorrect.
+        </p>
+
+        <div class="error-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                Go Home
+            </a>
+
+            <a href="{{ url_for('products') }}" class="btn btn-secondary">
+                Explore Products
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
+
+<style>
+
+.error-page {
+    min-height: 75vh;
+    display: grid;
+    place-items: center;
+    padding: 70px 20px;
+    background: #f8f6ef;
+    text-align: center;
+}
+
+.error-content {
+    width: min(650px, 100%);
+}
+
+.error-number {
+    color: #315c3b;
+    font-size: clamp(90px, 18vw, 180px);
+    line-height: .85;
+    font-weight: 900;
+    letter-spacing: -8px;
+    margin-bottom: 25px;
+    opacity: .13;
+}
+
+.eyebrow {
+    display: inline-block;
+    color: #6d765f;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.error-content h1 {
+    margin: 0;
+    color: #17271c;
+    font-size: clamp(30px, 5vw, 48px);
+    line-height: 1.1;
+}
+
+.error-content p {
+    max-width: 520px;
+    margin: 18px auto 0;
+    color: #70766e;
+    line-height: 1.7;
+}
+
+.error-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 22px;
+    border-radius: 10px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: .2s ease;
+}
+
+.btn-primary {
+    background: #315c3b;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #24482e;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #fff;
+    color: #315c3b;
+    border: 1px solid #ccd5c9;
+}
+
+.btn-secondary:hover {
+    border-color: #315c3b;
+}
+
+@media (max-width: 500px) {
+
+    .error-page {
+        padding: 50px 15px;
+    }
+
+    .error-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+{% endblock %}
