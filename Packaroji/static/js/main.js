@@ -968,37 +968,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                 ? -1
                                 : 1;
 
-                    const scale =
-                        1 -
-                        Math.min(
-                            0.22,
-                            curve * 0.12
-                        );
-
-                    const rotateY =
-                        sign *
-                        Math.min(
-                            30,
-                            curve * 25
-                        );
-
-                    const rotateZ =
-                        sign *
-                        Math.min(
-                            3.2,
-                            curve * 2.8
-                        );
-
-                    const y =
-                        Math.min(
-                            24,
-                            curve * curve * 20
-                        );
-
-                    const z =
-                        Math.round(
-                            110 - curve * 65
-                        );
+                    /* Keep every card on one straight, level line. */
+                    const scale = 1;
+                    const rotateY = 0;
+                    const rotateZ = 0;
+                    const y = 0;
+                    const z = 0;
 
                     const opacity =
                         Math.max(
@@ -1066,16 +1041,16 @@ document.addEventListener("DOMContentLoaded", () => {
              * desktop 0.96
              *
              * New:
-             * mobile 0.94
-             * tablet 0.88
-             * desktop 0.82
+             * mobile 0.36
+             * tablet 0.32
+             * desktop 0.28
              */
             const speed = () =>
                 window.innerWidth <= 600
-                    ? 0.94
+                    ? 0.36
                     : window.innerWidth <= 980
-                        ? 0.88
-                        : 0.82;
+                        ? 0.32
+                        : 0.28;
 
 
             const animate = (now) => {
