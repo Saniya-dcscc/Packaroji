@@ -1,0 +1,276 @@
+/* =========================================================
+   PACKAROJI HOME — BUILT HERO
+   No screenshot backgrounds. Doodles are inline SVG line art.
+========================================================= */
+
+.packaroji-landing {
+  --pl-cream: #f4ead8;
+  --pl-green: #1b5a40;
+  --pl-green-dark: #164b36;
+  --pl-gold: #b77f43;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 650px;
+  background:
+    radial-gradient(circle at 60% 50%, rgba(255,255,255,.48), transparent 34%),
+    linear-gradient(180deg, #f8efdf 0%, var(--pl-cream) 100%);
+}
+
+.packaroji-landing::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 90px;
+  background: linear-gradient(180deg, transparent, rgba(126,91,50,.035));
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pl-inner {
+  position: relative;
+  width: min(1440px, calc(100% - 72px));
+  height: 650px;
+  margin: 0 auto;
+}
+
+/* Hand-drawn decorative packaging marks. */
+.pl-doodles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.pl-doodle {
+  fill: none;
+  stroke: #b4946c;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .74;
+}
+
+.pl-doodle.strokes { stroke-width: 4; opacity: .62; }
+
+.pl-copy {
+  position: absolute;
+  left: 1.5%;
+  top: 18%;
+  width: 45%;
+  z-index: 5;
+}
+
+.pl-kicker {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 0 0 26px;
+  color: var(--pl-green);
+  font-family: var(--font-body), Arial, sans-serif;
+  font-size: clamp(12px, 1.05vw, 17px);
+  font-weight: 800;
+  letter-spacing: .19em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.pl-kicker::before {
+  content: "";
+  width: 54px;
+  height: 2px;
+  flex: none;
+  background: var(--pl-green);
+}
+
+.pl-title {
+  margin: 0 0 25px;
+  color: var(--pl-green-dark);
+  font-family: var(--font-heading), "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(58px, 5.25vw, 86px);
+  font-weight: 700;
+  letter-spacing: -.055em;
+  line-height: .91;
+}
+
+.pl-lead {
+  width: min(620px, 94%);
+  margin: 0;
+  color: #315a47;
+  font-family: var(--font-body), Arial, sans-serif;
+  font-size: clamp(15px, 1.18vw, 19px);
+  font-weight: 500;
+  line-height: 1.48;
+}
+
+.pl-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.pl-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 50px;
+  padding: 0 25px;
+  border-radius: 999px;
+  color: #fff;
+  font-family: var(--font-body), Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(45,45,28,.10);
+  transition: transform .18s ease, filter .18s ease;
+}
+
+.pl-action:hover { transform: translateY(-2px); filter: brightness(1.04); }
+.pl-primary { background: var(--pl-green); }
+.pl-secondary { background: var(--pl-gold); }
+
+/* Mascot remains the existing Packaroji artwork; only its pupils are live. */
+.pl-mascot {
+  position: absolute;
+  left: 68%;
+  top: 54%;
+  width: min(39%, 540px);
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  filter: drop-shadow(0 22px 16px rgba(82,56,28,.16));
+  pointer-events: none;
+}
+
+.pl-mascot-base {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  mix-blend-mode: multiply;
+}
+
+.pl-eye-cover {
+  position: absolute;
+  width: 11.1%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff;
+  z-index: 2;
+}
+
+.pl-eye-cover.left  { left: 39.2%; top: 49.4%; }
+.pl-eye-cover.right { left: 64.0%; top: 46.0%; }
+
+.pl-pupil {
+  position: absolute;
+  z-index: 3;
+  width: 5.2%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #332822;
+  box-shadow: 0 0 0 1px rgba(38,30,25,.05);
+  transform: translate3d(0,0,0);
+  will-change: transform;
+}
+
+.pl-pupil::after {
+  content: "";
+  position: absolute;
+  width: 28%;
+  aspect-ratio: 1;
+  right: 10%;
+  top: 8%;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.pl-pupil.left  { left: 42.15%; top: 52.1%; }
+.pl-pupil.right { left: 66.9%; top: 48.7%; }
+
+.packaroji-trust {
+  position: relative;
+  z-index: 10;
+  min-height: 88px;
+  background: #fbf8f0;
+  border-top: 1px solid rgba(29,81,57,.08);
+  border-bottom: 1px solid rgba(29,81,57,.08);
+}
+
+.packaroji-trust-inner {
+  width: min(1280px, calc(100% - 48px));
+  min-height: 88px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  align-items: center;
+}
+
+.packaroji-trust-item {
+  min-height: 52px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  color: #19563d;
+  font-family: var(--font-body), Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: left;
+  border-right: 1px solid #ded6c9;
+}
+
+.packaroji-trust-item:last-child { border-right: 0; }
+.packaroji-trust-icon { width: 28px; height: 28px; flex: none; display: grid; place-items: center; }
+.packaroji-trust-icon svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 1200px) and (min-width: 901px) {
+  .pl-inner { width: min(1180px, calc(100% - 48px)); }
+  .pl-copy { width: 48%; top: 16%; }
+  .pl-title { font-size: clamp(52px, 5.6vw, 70px); }
+  .pl-lead { font-size: 15px; }
+  .pl-mascot { left: 72%; width: 39%; }
+}
+
+@media (max-width: 900px) {
+  .packaroji-landing { min-height: 760px; }
+  .pl-inner { width: min(720px, calc(100% - 36px)); height: 760px; }
+  .pl-copy { left: 2%; top: 8%; width: 96%; }
+  .pl-kicker { font-size: 11px; margin-bottom: 20px; }
+  .pl-title { font-size: clamp(48px, 10vw, 68px); }
+  .pl-lead { width: 94%; font-size: 14px; }
+  .pl-actions { margin-top: 20px; }
+  .pl-action { min-height: 46px; font-size: 13px; padding: 0 20px; }
+  .pl-mascot { left: 53%; top: 69%; width: min(66%, 430px); }
+  .pl-doodle { stroke-width: 3; opacity: .62; }
+  .packaroji-trust-inner { grid-template-columns: repeat(2,1fr); padding: 8px 0; }
+  .packaroji-trust-item { min-height: 62px; padding: 8px 12px; font-size: 11px; }
+  .packaroji-trust-item:nth-child(2) { border-right: 0; }
+  .packaroji-trust-item:nth-child(-n+2) { border-bottom: 1px solid #ded6c9; }
+}
+
+@media (max-width: 520px) {
+  .packaroji-landing { min-height: 700px; }
+  .pl-inner { height: 700px; width: calc(100% - 28px); }
+  .pl-copy { top: 7%; }
+  .pl-kicker { gap: 9px; font-size: 9px; letter-spacing: .14em; }
+  .pl-kicker::before { width: 35px; }
+  .pl-title { font-size: clamp(42px, 12vw, 57px); }
+  .pl-lead { width: 100%; font-size: 13px; }
+  .pl-actions { gap: 8px; }
+  .pl-action { min-height: 43px; padding: 0 15px; font-size: 12px; }
+  .pl-mascot { top: 69%; width: 76%; }
+  .packaroji-trust-item { font-size: 9px; gap: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-action { transition: none; }
+}
