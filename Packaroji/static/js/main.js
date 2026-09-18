@@ -338,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-        HERO MASCOT — RELIABLE EYES FOLLOW CURSOR
+        HERO MASCOT — ORIGINAL PUPILS MOVE ONLY
     ========================================================== */
 
     (() => {
@@ -349,9 +349,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!svg || !leftPupil || !rightPupil) return;
 
+            // Read the exact initial coordinates straight from the original SVG elements
+            const leftCX = parseFloat(leftPupil.getAttribute("cx")) || 458;
+            const leftCY = parseFloat(leftPupil.getAttribute("cy")) || 300;
+            const rightCX = parseFloat(rightPupil.getAttribute("cx")) || 600;
+            const rightCY = parseFloat(rightPupil.getAttribute("cy")) || 289;
+
             const pupils = [
-                { el: leftPupil, cx: 458, cy: 300 },
-                { el: rightPupil, cx: 600, cy: 289 }
+                { el: leftPupil, cx: leftCX, cy: leftCY },
+                { el: rightPupil, cx: rightCX, cy: rightCY }
             ];
 
             let mouseX = window.innerWidth / 2;
@@ -370,10 +376,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     const dx = mx - pupil.cx;
                     const dy = my - pupil.cy;
                     const angle = Math.atan2(dy, dx);
-                    const distance = Math.min(7, Math.max(0, Math.hypot(dx, dy) / 24));
+                    // Tight movement threshold so pupils stay strictly inside their original white socket
+                    const distance = Math.min(5, Math.hypot(dx, dy) / 30);
 
-                    pupil.el.setAttribute("cx", (pupil.cx + Math.cos(angle) * distance).toFixed(2));
-                    pupil.el.setAttribute("cy", (pupil.cy + Math.sin(angle) * distance).toFixed(2));
+                    const targetX = pupil.cx + Math.cos(angle) * distance;
+                    const targetY = pupil.cy + Math.sin(angle) * distance;
+
+                    pupil.el.setAttribute("cx", targetX.toFixed(2));
+                    pupil.el.setAttribute("cy", targetY.toFixed(2));
                 });
             };
 
