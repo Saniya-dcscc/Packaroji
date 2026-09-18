@@ -54,58 +54,339 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
 <!-- =====================================================
      HERO — PACKAROJI INTERACTIVE PRODUCT LANDING
-     Replaces the previous static/cinematic hero.
 ===================================================== -->
 <section class="new-landing-hero" id="home" aria-label="Packaroji landing hero">
   <style>
-    .new-landing-hero{--beige:#f5f0e3;--green:#1c4d36;--green-dark:#123324;--brown:#c88a4a;position:relative;min-height:calc(100vh - 100px);display:flex;align-items:center;overflow:hidden;background:var(--beige);isolation:isolate}
-    .new-landing-media,.new-landing-wash{position:absolute;inset:0;z-index:-2}.new-landing-media{overflow:hidden;background:#f5f0e3;cursor:default}.new-landing-media video{display:none}.new-landing-wash{z-index:-1;background:linear-gradient(90deg,var(--beige) 0%,rgba(245,240,227,.96) 43%,rgba(225,244,227,.28) 70%,rgba(185,226,190,.16) 100%),radial-gradient(ellipse 42% 72% at 92% 50%,rgba(182,226,188,.48) 0%,rgba(182,226,188,.24) 50%,transparent 100%)}
-    .packaroji-product-doodles{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.62}.packaroji-product-doodles svg{width:100%;height:100%;display:block}.packaroji-product-doodles .doodle{fill:none;stroke:#9a7653;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.packaroji-product-doodles .d2,.packaroji-product-doodles .d8,.packaroji-product-doodles .d9{stroke:#b18a62}.packaroji-box-avatar{z-index:3}.new-landing-inner{position:relative;z-index:2}
+    .new-landing-hero {
+      --beige: #f4eee2;
+      --green: #1c4d36;
+      --green-dark: #123324;
+      --brown: #b87b43;
+      --text-dark: #1a2e22;
+      position: relative;
+      background: var(--beige);
+      color: var(--text-dark);
+      padding: 60px 0 0;
+      overflow: hidden;
+    }
 
-    .new-landing-inner{padding:120px 0 100px}.new-landing-copy{max-width:760px}.new-landing-kicker{display:flex;align-items:center;gap:14px;margin:0 0 26px;color:var(--green);font-size:.85rem;font-weight:800;letter-spacing:.18em}.new-landing-kicker:before{content:"";width:48px;height:3px;background:var(--green)}
-    .new-landing-hero h1{margin:0 0 24px;color:#1a2e22;font-family:"Playfair Display",Georgia,serif;font-size:clamp(3rem,7vw,6.5rem);font-weight:700;line-height:.96;letter-spacing:-.055em}.new-landing-hero h1 strong{font:inherit}.packaroji-box-avatar{position:absolute;z-index:3;right:7%;top:50%;width:min(34vw,390px);transform:translateY(-50%);pointer-events:none;filter:drop-shadow(0 22px 25px rgba(82,56,28,.18))}.packaroji-box-avatar img{display:block;width:100%;height:auto}.box-eye-cover{position:absolute;width:12.5%;aspect-ratio:1;border-radius:50%;background:#fffaf0;left:51.9%;top:49.5%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;overflow:visible}.box-eye-cover-right{left:68.1%}.box-eye-pupil{width:42%;aspect-ratio:1;border-radius:50%;background:#2e251e;display:block;position:relative;transform:translate(0,0);transition:transform .10s ease-out}.box-eye-pupil::after{content:"";position:absolute;width:28%;aspect-ratio:1;border-radius:50%;background:#fff;right:8%;top:10%}.new-landing-lead{max-width:680px;margin:0;color:#223b2c;font-size:clamp(1rem,1.7vw,1.35rem);line-height:1.55}.new-landing-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}.new-landing-actions a{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:15px 24px;text-decoration:none;font-weight:800;transition:transform .2s,background .2s}.new-landing-actions a:hover{transform:translateY(-2px)}.new-landing-actions .new-primary{background:var(--green);color:#fff}.new-landing-actions .new-primary:hover{background:var(--green-dark)}.new-landing-actions .new-secondary{background:var(--brown);color:#fff}.new-landing-actions .new-secondary:hover{background:#a06635}
-    .legacy-hero-removed{display:none!important}@media(max-width:900px){.packaroji-box-avatar{right:3%;width:min(38vw,300px);top:59%}.new-landing-inner{padding-bottom:220px}.packaroji-product-doodles{opacity:.48}}
-    @media(max-width:700px){.new-landing-hero{min-height:700px}.new-landing-inner{padding:85px 0 65px}.new-landing-media video{display:none}.new-landing-wash{background:linear-gradient(90deg,rgba(245,240,227,.99),rgba(245,240,227,.92))}.packaroji-box-avatar{right:50%;top:auto;bottom:42px;width:min(58vw,270px);transform:translateX(50%)}.packaroji-product-doodles{opacity:.42}.new-landing-kicker{font-size:.67rem;letter-spacing:.12em}.new-landing-kicker:before{width:32px}}
+    .new-landing-inner {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 30px;
+      padding-bottom: 50px;
+    }
+
+    .new-landing-copy {
+      max-width: 620px;
+    }
+
+    .new-landing-kicker {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 18px;
+      color: var(--text-dark);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .new-landing-kicker:before {
+      content: "";
+      width: 36px;
+      height: 2px;
+      background: var(--text-dark);
+    }
+
+    .new-landing-hero h1 {
+      margin: 0 0 20px;
+      color: var(--green);
+      font-family: "Archivo Black", var(--font-heading), sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+
+    .new-landing-lead {
+      margin: 0 0 28px;
+      color: #3f3a34;
+      font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+      line-height: 1.6;
+    }
+
+    .new-landing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .new-landing-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 12px 24px;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .new-landing-actions a:hover {
+      transform: translateY(-2px);
+    }
+
+    .new-landing-actions .new-primary {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .new-landing-actions .new-primary:hover {
+      background: var(--green-dark);
+    }
+
+    .new-landing-actions .new-secondary {
+      background: var(--brown);
+      color: #fff;
+    }
+
+    .new-landing-actions .new-secondary:hover {
+      background: #9d6533;
+    }
+
+    /* Visual Mascot Container with Contained Background Doodles */
+    .hero-visual-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      min-height: 380px;
+    }
+
+    .packaroji-product-doodles {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    .packaroji-product-doodles svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .packaroji-product-doodles .doodle {
+      fill: none;
+      stroke: #9a7653;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Unified Single Avatar Element */
+    .packaroji-box-avatar {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 320px;
+      transition: transform 0.12s ease-out;
+      will-change: transform;
+      filter: drop-shadow(0 15px 20px rgba(82, 56, 28, 0.12));
+    }
+
+    .packaroji-box-avatar img {
+      display: block;
+      width: 100%;
+      height: auto;
+      user-select: none;
+    }
+
+    /* Floating Contact Action Buttons */
+    .hero-floating-contacts {
+      position: absolute;
+      bottom: 10px;
+      right: 0;
+      display: flex;
+      gap: 10px;
+      z-index: 4;
+    }
+
+    .floating-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      color: var(--text-dark);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .floating-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .floating-btn.call-btn {
+      background: var(--green);
+      color: #ffffff;
+    }
+
+    /* Bottom Value Feature Bar */
+    .hero-value-bar {
+      border-top: 1px solid rgba(28, 77, 54, 0.12);
+      background: rgba(255, 255, 255, 0.35);
+      padding: 18px 0;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .value-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.2;
+    }
+
+    .value-item svg {
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+      stroke: var(--green);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .legacy-hero-removed {
+      display: none !important;
+    }
+
+    @media (max-width: 900px) {
+      .new-landing-hero {
+        padding-top: 30px;
+      }
+
+      .new-landing-inner {
+        grid-template-columns: 1fr;
+        padding-bottom: 40px;
+        text-align: center;
+      }
+
+      .new-landing-copy {
+        margin: 0 auto;
+      }
+
+      .new-landing-kicker {
+        justify-content: center;
+      }
+
+      .new-landing-actions {
+        justify-content: center;
+      }
+
+      .hero-floating-contacts {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        justify-content: center;
+        margin-top: 15px;
+      }
+
+      .value-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .value-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
-  <div class="new-landing-media" aria-hidden="true"></div>
-  <div class="new-landing-wash" aria-hidden="true"></div>
-
-  <div class="packaroji-product-doodles" aria-hidden="true">
-    <svg viewBox="0 0 1200 650" preserveAspectRatio="none">
-      <!-- burger/snack clamshell -->
-      <g class="doodle d1" transform="translate(55 100) rotate(-7)"><path d="M5 28 Q35 2 72 18 L82 46 Q45 58 8 44 Z"/><path d="M8 44 Q43 57 82 46"/><path d="M13 29 Q43 39 75 28"/></g>
-      <!-- fries/snack pouch -->
-      <g class="doodle d2" transform="translate(520 70) rotate(4)"><path d="M7 8 L14 0 M22 10 L24 -2 M38 11 L43 0 M54 13 L61 3"/><path d="M10 13 L58 13 L51 67 Q34 75 17 67 Z"/><path d="M18 26 L51 26 M20 38 L49 38"/></g>
-      <!-- takeaway cup -->
-      <g class="doodle d3" transform="translate(1010 115) rotate(6)"><path d="M15 12 L70 12 L63 78 Q42 87 22 78 Z"/><path d="M22 28 L63 28 M25 43 L60 43 M28 58 L57 58"/><path d="M31 7 Q43 -8 58 7"/></g>
-      <!-- rectangular meal box -->
-      <g class="doodle d4" transform="translate(935 440) rotate(-5)"><path d="M5 24 L52 8 L88 24 L39 40 Z"/><path d="M5 24 L5 57 L39 74 L88 57 L88 24"/><path d="M39 40 L39 74"/><path d="M16 29 L52 18 L76 27"/></g>
-      <!-- bowl/tub -->
-      <g class="doodle d5" transform="translate(480 535) rotate(-3)"><path d="M4 16 Q43 2 82 16 L74 63 Q43 78 12 63 Z"/><path d="M4 16 Q43 30 82 16"/><path d="M19 31 Q43 39 67 31"/></g>
-      <!-- kraft carry bag -->
-      <g class="doodle d6" transform="translate(80 500) rotate(5)"><path d="M15 22 L74 22 L67 82 L22 82 Z"/><path d="M27 22 Q44 -5 61 22"/><path d="M29 42 L62 42 M30 56 L60 56 M32 69 L58 69"/></g>
-      <!-- foil/food tray -->
-      <g class="doodle d7" transform="translate(765 80) rotate(-4)"><path d="M7 28 L68 20 L90 42 L27 52 Z"/><path d="M27 52 L27 72 L90 62 L90 42"/><path d="M7 28 L7 48 L27 72"/></g>
-      <!-- small leaves as eco accents -->
-      <g class="doodle d8" transform="translate(280 560) rotate(-20)"><path d="M5 37 Q25 4 51 7 Q45 34 8 40 Z"/><path d="M8 39 Q28 25 45 12"/></g>
-      <g class="doodle d9" transform="translate(1110 315) rotate(18)"><path d="M5 37 Q25 4 51 7 Q45 34 8 40 Z"/><path d="M8 39 Q28 25 45 12"/></g>
-    </svg>
-  </div>
-
-  <div class="packaroji-box-avatar" id="packarojiBoxAvatar" aria-label="Animated Packaroji packaging box mascot">
-    <img src="{{ url_for('static', filename='images/packaroji-box-avatar-final.png') }}" alt="Packaroji smiling packaging box mascot">
-    <span class="box-eye-cover"><span class="box-eye-pupil"></span></span>
-    <span class="box-eye-cover box-eye-cover-right"><span class="box-eye-pupil"></span></span>
-  </div>
 
   <div class="container new-landing-inner">
     <div class="new-landing-copy">
       <p class="new-landing-kicker">BETTER PACKAGING, LAYER BY LAYER</p>
-      <h1>BUILT TO<br><strong>CARRY BETTER.</strong></h1>
+      <h1>BUILT TO<br>CARRY BETTER.</h1>
       <p class="new-landing-lead">From sugarcane bagasse bowls and aluminum foil containers to heavy-duty SOS kraft bags and custom butter wraps — Packaroji powers restaurants, cafés, cloud kitchens and bakeries with eco-engineered packaging.</p>
       <div class="new-landing-actions">
         <a class="new-primary" href="{{ url_for('products') }}">📦 Explore Products ↓</a>
         <a class="new-secondary" href="{{ url_for('order_page') }}">✨ Custom Branding</a>
+      </div>
+    </div>
+
+    <div class="hero-visual-wrapper">
+      <!-- Background SVG Doodles (Restricted to Mascot Frame) -->
+      <div class="packaroji-product-doodles" aria-hidden="true">
+        <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid meet">
+          <g class="doodle" transform="translate(40, 50) rotate(-8) scale(0.8)"><path d="M5 28 Q35 2 72 18 L82 46 Q45 58 8 44 Z"/><path d="M8 44 Q43 57 82 46"/></g>
+          <g class="doodle" transform="translate(380, 40) rotate(8) scale(0.8)"><path d="M7 8 L14 0 M22 10 L24 -2 M38 11 L43 0"/><path d="M10 13 L58 13 L51 67 Q34 75 17 67 Z"/></g>
+          <g class="doodle" transform="translate(30, 260) rotate(12) scale(0.85)"><path d="M15 22 L74 22 L67 82 L22 82 Z"/><path d="M27 22 Q44 -5 61 22"/></g>
+          <g class="doodle" transform="translate(390, 280) rotate(-10) scale(0.85)"><path d="M15 12 L70 12 L63 78 Q42 87 22 78 Z"/><path d="M22 28 L63 28 M25 43 L60 43"/></g>
+        </svg>
+      </div>
+
+      <!-- Single Mascot Box Avatar -->
+      <div class="packaroji-box-avatar" id="packarojiBoxAvatar" aria-label="Packaroji packaging mascot">
+        <img src="{{ url_for('static', filename='images/packaroji-box-avatar-final.png') }}" alt="Packaroji smiling packaging box mascot">
+      </div>
+
+      <!-- Floating Action Buttons -->
+      <div class="hero-floating-contacts">
+        <a href="https://wa.me/{{ business.phone }}" class="floating-btn whatsapp-btn" target="_blank" rel="noopener">
+          💬 WhatsApp
+        </a>
+        <a href="tel:{{ business.phone }}" class="floating-btn call-btn">
+          📞 Call
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Value Feature Bar -->
+  <div class="hero-value-bar">
+    <div class="container">
+      <div class="value-grid">
+        <div class="value-item">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span>Eco-Friendly Materials</span>
+        </div>
+        <div class="value-item">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+          <span>Food Safe &amp; Hygienic</span>
+        </div>
+        <div class="value-item">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span>Bulk Orders &amp; Fast Delivery</span>
+        </div>
+        <div class="value-item">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Custom Branding</span>
+        </div>
       </div>
     </div>
   </div>
@@ -113,132 +394,31 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
 <script>
   (() => {
-    const hero = document.querySelector('.new-landing-hero');
     const avatar = document.getElementById('packarojiBoxAvatar');
-    if (!hero || !avatar) return;
-    const pupils = [...avatar.querySelectorAll('.box-eye-pupil')];
-    const eyeCenters = [{x:51.9,y:49.5},{x:68.1,y:49.5}];
-    const maxMove = 6;
-    const updateEyes = (event) => {
+    if (!avatar) return;
+
+    const handlePointerMove = (event) => {
       const rect = avatar.getBoundingClientRect();
-      const scale = Math.max(.75, rect.width / 270);
-      pupils.forEach((pupil,index) => {
-        const eyeX = rect.left + rect.width * eyeCenters[index].x / 100;
-        const eyeY = rect.top + rect.height * eyeCenters[index].y / 100;
-        const dx = event.clientX - eyeX;
-        const dy = event.clientY - eyeY;
-        const distance = Math.hypot(dx,dy) || 1;
-        const move = Math.min(maxMove, maxMove * Math.min(1,distance/(260*scale)));
-        pupil.style.transform = `translate(${(dx/distance)*move}px, ${(dy/distance)*move}px)`;
-      });
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const deltaX = event.clientX - centerX;
+      const deltaY = event.clientY - centerY;
+
+      const moveX = Math.max(-10, Math.min(10, deltaX / 25));
+      const moveY = Math.max(-8, Math.min(8, deltaY / 25));
+
+      avatar.style.transform = `translate(${moveX}px, ${moveY}px)`;
     };
-    const resetEyes = () => pupils.forEach(pupil => pupil.style.transform='translate(0,0)');
-    hero.addEventListener('pointermove',updateEyes,{passive:true});
-    hero.addEventListener('pointerleave',resetEyes);
-    hero.addEventListener('pointerup',resetEyes,{passive:true});
-    hero.addEventListener('pointercancel',resetEyes,{passive:true});
+
+    const resetAvatar = () => {
+      avatar.style.transform = 'translate(0, 0)';
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    window.addEventListener('pointerleave', resetAvatar);
   })();
 </script>
-
-<section class="packaroji-code-hero legacy-hero-removed" id="legacy-home" aria-label="Legacy landing hero">
-  <style>
-    .packaroji-code-hero{
-      --p-beige:#f5f0e3;
-      --p-green:#1c4d36;
-      --p-green-dark:#123324;
-      --p-ink:#1a2e22;
-      position:relative;
-      min-height:calc(100vh - 100px);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      overflow:hidden;
-      background:var(--p-beige);
-      color:var(--p-ink);
-      isolation:isolate;
-    }
-    .packaroji-code-hero .p-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--p-beige)}
-    .packaroji-code-hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center;opacity:.72}
-    .packaroji-code-hero .p-video-left{position:absolute;inset:0 auto 0 0;width:min(62%,900px);background:linear-gradient(90deg,var(--p-beige) 0%,rgba(245,240,227,.98) 45%,rgba(245,240,227,.60) 76%,transparent 100%)}
-    .packaroji-code-hero .p-video-bottom{position:absolute;inset:auto 0 0;width:100%;height:28%;background:linear-gradient(0deg,var(--p-beige),transparent)}
-    .packaroji-code-hero .p-hero-inner{position:relative;z-index:2;width:100%;max-width:1450px;margin:0 auto;padding:64px clamp(20px,5vw,88px) 80px;display:flex;align-items:center;min-height:calc(100vh - 100px)}
-    .packaroji-code-hero .p-copy{max-width:760px}
-    .packaroji-code-hero .p-eyebrow{display:flex;align-items:center;gap:38px;margin-bottom:46px;color:var(--p-green);font-family:var(--font-body);font-size:clamp(14px,1.35vw,20px);font-weight:600;letter-spacing:.18em;text-transform:uppercase}
-    .packaroji-code-hero .p-eyebrow:before{content:"";width:58px;height:2px;background:var(--p-green);flex:0 0 auto}
-    .packaroji-code-hero h1{margin:0 0 34px;font-family:var(--font-heading);font-size:clamp(58px,7vw,108px);font-weight:500;line-height:.96;letter-spacing:-.055em;color:var(--p-ink);max-width:820px}
-    .packaroji-code-hero .p-desc{max-width:780px;margin:0 0 40px;font-family:var(--font-body);font-size:clamp(20px,2vw,29px);font-weight:400;line-height:1.45;letter-spacing:-.02em;color:#3f3a34}
-    .packaroji-code-hero .p-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
-    .packaroji-code-hero .p-primary,.packaroji-code-hero .p-secondary{font-family:var(--font-body);text-decoration:none}
-    .packaroji-code-hero .p-primary{display:inline-flex;align-items:center;gap:9px;background:var(--p-green);color:#fff;padding:17px 27px;border-radius:999px;font-size:18px;font-weight:600;transition:background .2s,transform .2s}
-    .packaroji-code-hero .p-primary:hover{background:var(--p-green-dark);transform:translateY(-2px)}
-    .packaroji-code-hero .p-secondary{display:inline-flex;align-items:center;gap:8px;color:#433a32;font-size:19px;font-weight:600;padding:14px 10px}
-    .packaroji-code-hero .p-secondary:hover{opacity:.65}
-    @media(max-width:900px){
-      .packaroji-code-hero{min-height:calc(100vh - 92px)}
-      .packaroji-code-hero .p-hero-inner{min-height:calc(100vh - 92px);padding:70px 24px 60px;align-items:flex-end}
-      .packaroji-code-hero .p-copy{max-width:700px}
-      .packaroji-code-hero .p-video-left{width:100%;background:linear-gradient(90deg,rgba(245,240,227,.98),rgba(245,240,227,.78) 70%,rgba(245,240,227,.40))}
-    }
-    @media(max-width:600px){
-      .packaroji-code-hero .p-hero-inner{padding:55px 18px 45px}
-      .packaroji-code-hero .p-eyebrow{gap:15px;margin-bottom:28px;font-size:11px;letter-spacing:.14em}
-      .packaroji-code-hero .p-eyebrow:before{width:34px}
-      .packaroji-code-hero h1{font-size:clamp(50px,14vw,72px);line-height:.96;margin-bottom:24px}
-      .packaroji-code-hero .p-desc{font-size:18px;line-height:1.45;margin-bottom:28px}
-      .packaroji-code-hero .p-primary{font-size:15px;padding:14px 20px}
-      .packaroji-code-hero .p-secondary{font-size:16px}
-      .packaroji-code-hero video{object-position:65% center;opacity:.38}
-    }
-    @media(prefers-reduced-motion:reduce){.packaroji-code-hero video{display:none}}
-  </style>
-
-  <div class="p-video-wrap" aria-hidden="true">
-    <video id="packarojiLandingVideo" muted playsinline preload="auto">
-      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4" type="video/mp4">
-    </video>
-    <div class="p-video-left"></div>
-    <div class="p-video-bottom"></div>
-  </div>
-
-  <div class="p-hero-inner">
-    <div class="p-copy">
-      <div class="p-eyebrow"><span>BETTER PACKAGING, LAYER BY LAYER</span></div>
-      <h1>BUILT TO<br>CARRY BETTER.</h1>
-      <p class="p-desc">From wraps and containers to carry bags and custom branding, Packaroji brings the layers of food packaging together for restaurants, cafés, bakeries, cloud kitchens and takeaway businesses.</p>
-      <div class="p-actions">
-        <a href="{{ url_for('products') }}" class="p-primary"><span aria-hidden="true">📦</span><span>View All Products →</span></a>
-        <a href="{{ url_for('order_page') }}" class="p-secondary"><span aria-hidden="true">✨</span><span>Request Custom Packaging</span></a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      const video=document.getElementById('packarojiLandingVideo');
-      if(!video) return;
-      let prevX=null, seeking=false, targetTime=0, duration=0;
-      const SENSITIVITY=0.8;
-      video.addEventListener('loadedmetadata',()=>{duration=video.duration||0;});
-      function seek(){
-        if(!duration || seeking) return;
-        seeking=true;
-        video.currentTime=Math.max(0,Math.min(duration,targetTime));
-      }
-      video.addEventListener('seeked',()=>{
-        seeking=false;
-        if(Math.abs(video.currentTime-targetTime)>0.025) seek();
-      });
-      window.addEventListener('mousemove',(e)=>{
-        if(prevX===null){prevX=e.clientX;return;}
-        const delta=e.clientX-prevX;
-        prevX=e.clientX;
-        if(!duration || !delta) return;
-        targetTime=Math.max(0,Math.min(duration,targetTime+(delta/window.innerWidth)*SENSITIVITY*duration));
-        seek();
-      },{passive:true});
-    })();
-  </script>
-</section>
 
 
 
@@ -728,17 +908,16 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
 
             <div class="step">
-
                 <span>
                     02
                 </span>
 
                 <h3>
-                    02 · Build your mix
+                    02 · Select &amp; Customize
                 </h3>
 
                 <p>
-                    Select the products and quantities that make up your everyday packaging system.
+                    Choose standard packaging or specify custom sizes, printing, and artwork.
                 </p>
 
             </div>
@@ -751,28 +930,11 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
                 </span>
 
                 <h3>
-                    03 · Customize if needed
+                    03 · Fast Delivery
                 </h3>
 
                 <p>
-                    Add dimensions, branding, printing, artwork or other packaging requirements.
-                </p>
-
-            </div>
-
-
-            <div class="step">
-
-                <span>
-                    04
-                </span>
-
-                <h3>
-                    04 · Get your requirements moving
-                </h3>
-
-                <p>
-                    Submit your requirement and Packaroji can take the next step on availability, quantities and pricing.
+                    Receive your packaging solution delivered straight to your food business.
                 </p>
 
             </div>
@@ -784,122 +946,4 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
 </section>
 
-
-
-<!-- =====================================================
-     CONTACT
-===================================================== -->
-
-<section
-    class="section cta-section"
-    id="contact"
->
-
-    <div class="container cta-card">
-
-
-        <div>
-
-            <p class="eyebrow">
-                READY TO GET STARTED?
-            </p>
-
-
-            <h2>
-                WHAT ARE YOU PACKING NEXT?
-            </h2>
-
-
-            <p>
-                No prices are displayed online.
-                01 · Explore by need, add your required
-                quantities and submit your order.
-                Packaroji will contact you with pricing
-                and availability.
-            </p>
-
-        </div>
-
-
-        <div class="cta-actions">
-
-
-            <a
-                class="btn btn-primary"
-                href="{{ url_for('cart') }}"
-            >
-                View Cart
-            </a>
-
-
-            <a
-                class="btn btn-outline"
-                href="{{ url_for(
-                    'order_page'
-                ) }}"
-            >
-                Want a Customization
-            </a>
-
-
-            <a
-                class="btn btn-outline"
-                href="https://wa.me/{{ business.whatsapp }}"
-                target="_blank"
-                rel="noopener"
-            >
-                WhatsApp Us
-            </a>
-
-
-            <a
-                class="contact-small"
-                href="mailto:{{ business.email }}"
-            >
-                {{ business.email }}
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-{% endblock %}
-
-
-
-{% block scripts %}
-<script>
-(function(){
-  var story=document.getElementById('packaging-story'); if(!story)return;
-  var panels=[].slice.call(story.querySelectorAll('.pkg-copy-panel'));
-  var film=document.getElementById('pkg-story-film');
-  var dots=[].slice.call(story.querySelectorAll('.pkg-dot'));
-  var progress=document.getElementById('pkg-story-progress');
-  var caption=document.getElementById('pkg-story-caption');
-  var label=document.getElementById('pkg-story-label');
-  var captions=['FOOD WRAPPING','MAIN PORTION PACKAGING','TAKEOUT & DELIVERY','BRANDING OPTIONS'];
-  var ticking=false;
-  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-  function ease(v){return v<.5?2*v*v:1-Math.pow(-2*v+2,2)/2}
-  function render(){
-    ticking=false;
-    if(window.innerWidth<=900)return;
-    var max=story.offsetHeight-window.innerHeight;
-    var p=clamp((window.scrollY-story.offsetTop)/Math.max(1,max),0,1);
-    var pos=p*3,step=Math.min(3,Math.floor(pos)),local=pos-step;
-    if(p>=.999){step=3;local=1}
-    panels.forEach(function(el,i){var d=i-step,active=i===step;el.classList.toggle('is-active',active);el.style.opacity=active?1:0;el.style.transform='translateY(calc(-50% + '+(active?0:(d>0?24:-24))+'px))'});
-    if(film && film.readyState >= 1 && Number.isFinite(film.duration)){film.currentTime=p*film.duration;}
-    dots.forEach(function(d,i){d.classList.toggle('is-active',i===step)});
-    if(progress)progress.style.width=(p*100)+'%';
-    if(caption)caption.textContent=captions[step]; if(label)label.textContent='LAYER 0'+(step+1);
-  }
-  function requestRender(){if(!ticking){ticking=true;requestAnimationFrame(render)}}
-  window.addEventListener('scroll',requestRender,{passive:true});window.addEventListener('resize',requestRender);render();
-})();
-</script>
 {% endblock %}
