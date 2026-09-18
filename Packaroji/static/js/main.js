@@ -28,7 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
         NAVIGATION DROPDOWNS
     ========================================================== */
 
-    document.querySelectorAll(".nav-dropdown-toggle").forEach(button => {
+    const dropdownToggles = document.querySelectorAll(".nav-dropdown-toggle");
+
+    dropdownToggles.forEach(button => {
         button.addEventListener("click", event => {
             event.preventDefault();
             event.stopPropagation();
@@ -41,7 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelectorAll(".nav-dropdown").forEach(other => {
                 if (other !== dropdown) {
                     other.classList.remove("open");
-                    other.querySelector(".nav-dropdown-toggle")?.setAttribute("aria-expanded", "false");
+                    const otherBtn = other.querySelector(".nav-dropdown-toggle");
+                    if (otherBtn) otherBtn.setAttribute("aria-expanded", "false");
                 }
             });
 
@@ -50,16 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-
-    /* =========================================================
-        CLOSE DROPDOWNS WHEN CLICKING OUTSIDE
-    ========================================================== */
-
     document.addEventListener("click", event => {
         if (!event.target.closest(".nav-dropdown")) {
             document.querySelectorAll(".nav-dropdown").forEach(dropdown => {
                 dropdown.classList.remove("open");
-                dropdown.querySelector(".nav-dropdown-toggle")?.setAttribute("aria-expanded", "false");
+                const btn = dropdown.querySelector(".nav-dropdown-toggle");
+                if (btn) btn.setAttribute("aria-expanded", "false");
             });
         }
     });
@@ -82,20 +81,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-        CLOSE MOBILE MENU WHEN WINDOW GETS WIDER
+        RESIZE RESET
     ========================================================== */
 
     window.addEventListener("resize", () => {
         if (window.innerWidth > 900 && nav) {
             nav.classList.remove("open");
-            toggle?.setAttribute("aria-expanded", "false");
-            toggle?.setAttribute("aria-label", "Open menu");
+            if (toggle) {
+                toggle.setAttribute("aria-expanded", "false");
+                toggle.setAttribute("aria-label", "Open menu");
+            }
         }
     });
 
 
     /* =========================================================
-        SMOOTH INTERNAL LINKS
+        SMOOTH SCROLLING
     ========================================================== */
 
     document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -119,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-        CART BADGE UPDATE HELPERS
+        CART & TOAST HELPERS
     ========================================================== */
 
     function updateCartBadges(count) {
@@ -165,7 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const quantityInput = document.querySelector(button.dataset.quantityTarget || "#productQuantity");
 
             let quantity = parseInt(quantityInput?.value || "1", 10);
-            if (Number.isNaN(quantity) || quantity < 1) {
+            if (isNaN(quantity) || quantity < 1) {
                 quantity = 1;
             }
 
@@ -198,7 +199,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 updateCartBadges(data.cart_count);
                 showToast(data.message || "Added to cart.");
 
-                window.PackarojiCursor?.flash("happy");
+                if (window.PackarojiCursor && typeof window.PackarojiCursor.flash === "function") {
+                    window.PackarojiCursor.flash("happy");
+                }
 
                 button.textContent = "✓ Added";
                 setTimeout(() => {
@@ -217,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-        QUANTITY VALIDATION
+        QUANTITY & FILE INPUTS
     ========================================================== */
 
     document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -225,15 +228,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const min = parseInt(input.getAttribute("min") || "0", 10);
             let value = parseInt(input.value, 10);
 
-            if (Number.isNaN(value)) return;
+            if (isNaN(value)) return;
             if (value < min) input.value = min;
         });
     });
-
-
-    /* =========================================================
-        FILE UPLOAD FEEDBACK
-    ========================================================== */
 
     document.querySelectorAll('input[type="file"]').forEach(input => {
         input.addEventListener("change", () => {
@@ -263,12 +261,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("keydown", event => {
         if (event.key !== "Escape") return;
 
-        nav?.classList.remove("open");
-        toggle?.setAttribute("aria-expanded", "false");
+        if (nav) nav.classList.remove("open");
+        if (toggle) toggle.setAttribute("aria-expanded", "false");
 
         document.querySelectorAll(".nav-dropdown.open").forEach(dropdown => {
             dropdown.classList.remove("open");
-            dropdown.querySelector(".nav-dropdown-toggle")?.setAttribute("aria-expanded", "false");
+            const btn = dropdown.querySelector(".nav-dropdown-toggle");
+            if (btn) btn.setAttribute("aria-expanded", "false");
         });
 
         document.querySelectorAll(".modal.open").forEach(modal => {
@@ -279,12 +278,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-        SIMPLE CART COUNT INITIALIZATION
+        CART INITIALIZATION
     ========================================================== */
 
-    const serverCartCount = document.body?.dataset?.cartCount;
-    if (serverCartCount !== undefined && serverCartCount !== "") {
-        updateCartBadges(serverCartCount);
+    if (document.body && document.body.dataset && document.body.dataset.cartCount) {
+        updateCartBadges(document.body.dataset.cartCount);
     }
 
 
@@ -335,74 +333,69 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-        HERO MASCOT — ORIGINAL PUPILS MOVE ONLY
+        HERO MASCOT
     ========================================================== */
 
     (() => {
-        const initMascotEyes = () => {
-            const svg = document.getElementById("heroMascot");
-            const leftPupil = document.getElementById("heroLeftPupil");
-            const rightPupil = document.getElementById("heroRightPupil");
+        const svg = document.getElementById("heroMascot");
+        const leftPupil = document.getElementById("heroLeftPupil");
+        const rightPupil = document.getElementById("heroRightPupil");
 
-            if (!svg || !leftPupil || !rightPupil) return;
+        if (!svg || !leftPupil || !rightPupil) return;
 
-            const leftCX = parseFloat(leftPupil.getAttribute("cx")) || 458;
-            const leftCY = parseFloat(leftPupil.getAttribute("cy")) || 300;
-            const rightCX = parseFloat(rightPupil.getAttribute("cx")) || 600;
-            const rightCY = parseFloat(rightPupil.getAttribute("cy")) || 289;
+        const leftCX = parseFloat(leftPupil.getAttribute("cx")) || 458;
+        const leftCY = parseFloat(leftPupil.getAttribute("cy")) || 300;
+        const rightCX = parseFloat(rightPupil.getAttribute("cx")) || 600;
+        const rightCY = parseFloat(rightPupil.getAttribute("cy")) || 289;
 
-            const pupils = [
-                { el: leftPupil, cx: leftCX, cy: leftCY },
-                { el: rightPupil, cx: rightCX, cy: rightCY }
-            ];
+        const pupils = [
+            { el: leftPupil, cx: leftCX, cy: leftCY },
+            { el: rightPupil, cx: rightCX, cy: rightCY }
+        ];
 
-            let mouseX = window.innerWidth / 2;
-            let mouseY = window.innerHeight / 2;
-            let raf = 0;
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let raf = 0;
 
-            const setEyes = () => {
-                raf = 0;
-                const rect = svg.getBoundingClientRect();
-                if (!rect.width || !rect.height) return;
+        const setEyes = () => {
+            raf = 0;
+            const rect = svg.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
 
-                const mx = (mouseX - rect.left) * (860 / rect.width);
-                const my = (mouseY - rect.top) * (590 / rect.height);
+            const mx = (mouseX - rect.left) * (860 / rect.width);
+            const my = (mouseY - rect.top) * (590 / rect.height);
 
-                pupils.forEach(pupil => {
-                    const dx = mx - pupil.cx;
-                    const dy = my - pupil.cy;
-                    const angle = Math.atan2(dy, dx);
-                    const distance = Math.min(5, Math.hypot(dx, dy) / 30);
+            pupils.forEach(pupil => {
+                const dx = mx - pupil.cx;
+                const dy = my - pupil.cy;
+                const angle = Math.atan2(dy, dx);
+                const distance = Math.min(5, Math.hypot(dx, dy) / 30);
 
-                    const targetX = pupil.cx + Math.cos(angle) * distance;
-                    const targetY = pupil.cy + Math.sin(angle) * distance;
+                const targetX = pupil.cx + Math.cos(angle) * distance;
+                const targetY = pupil.cy + Math.sin(angle) * distance;
 
-                    pupil.el.setAttribute("cx", targetX.toFixed(2));
-                    pupil.el.setAttribute("cy", targetY.toFixed(2));
-                });
-            };
-
-            const requestUpdate = () => {
-                if (!raf) raf = requestAnimationFrame(setEyes);
-            };
-
-            const trackPointer = event => {
-                mouseX = event.clientX;
-                mouseY = event.clientY;
-                requestUpdate();
-            };
-
-            window.addEventListener("pointermove", trackPointer, { passive: true });
-            window.addEventListener("resize", requestUpdate, { passive: true });
-            requestUpdate();
+                pupil.el.setAttribute("cx", targetX.toFixed(2));
+                pupil.el.setAttribute("cy", targetY.toFixed(2));
+            });
         };
 
-        initMascotEyes();
+        const requestUpdate = () => {
+            if (!raf) raf = requestAnimationFrame(setEyes);
+        };
+
+        window.addEventListener("pointermove", event => {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+            requestUpdate();
+        }, { passive: true });
+
+        window.addEventListener("resize", requestUpdate, { passive: true });
+        requestUpdate();
     })();
 
 
     /* =========================================================
-        PRODUCT CAROUSEL — CONTINUOUS INFINITE 3D ARC
+        PRODUCT CAROUSEL
     ========================================================== */
 
     (() => {
@@ -577,8 +570,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
 
-            prev?.addEventListener("click", () => nudge(-1));
-            next?.addEventListener("click", () => nudge(1));
+            if (prev) prev.addEventListener("click", () => nudge(-1));
+            if (next) next.addEventListener("click", () => nudge(1));
 
             viewport.addEventListener("pointerdown", onPointerDown);
             viewport.addEventListener("pointermove", onPointerMove);
