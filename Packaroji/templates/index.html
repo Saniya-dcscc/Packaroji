@@ -193,56 +193,19 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
       stroke-linejoin: round;
     }
 
-    /* Avatar Container & Dynamic Eye Overlay */
+    /* Avatar Container */
     .packaroji-box-avatar {
       position: relative;
       z-index: 2;
       width: 100%;
-      max-width: 320px;
+      max-width: 360px;
       filter: drop-shadow(0 15px 20px rgba(82, 56, 28, 0.12));
     }
 
-    .packaroji-box-avatar img.avatar-body {
+    .packaroji-box-avatar svg {
       display: block;
       width: 100%;
       height: auto;
-      user-select: none;
-    }
-
-    /* Interactive Pupil Layering */
-    .eyes-container {
-      position: absolute;
-      top: 50.5%;
-      left: 45%;
-      width: 36%;
-      height: 20%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .eye {
-      position: relative;
-      width: 42%;
-      height: 85%;
-      background: #ffffff;
-      border-radius: 50%;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .pupil {
-      width: 48%;
-      height: 48%;
-      background: #231f20;
-      border-radius: 50%;
-      position: absolute;
-      transition: transform 0.05s ease-out;
-      will-change: transform;
     }
 
     /* Bottom Value Feature Bar */
@@ -327,7 +290,7 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
     </div>
 
     <div class="hero-visual-wrapper">
-      <!-- Background SVG Doodles (Restricted to Mascot Frame) -->
+      <!-- Background SVG Doodles -->
       <div class="packaroji-product-doodles" aria-hidden="true">
         <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid meet">
           <g class="doodle" transform="translate(40, 50) rotate(-8) scale(0.8)"><path d="M5 28 Q35 2 72 18 L82 46 Q45 58 8 44 Z"/><path d="M8 44 Q43 57 82 46"/></g>
@@ -337,18 +300,32 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
         </svg>
       </div>
 
-      <!-- Static Mascot Box Avatar with Interactive Eyes Layer -->
-      <div class="packaroji-box-avatar" id="packarojiBoxAvatar" aria-label="Packaroji packaging mascot">
-        <img class="avatar-body" src="{{ url_for('static', filename='images/packaroji-box-avatar-final.png') }}" alt="Packaroji smiling packaging box mascot">
-        
-        <div class="eyes-container">
-          <div class="eye">
-            <div class="pupil"></div>
-          </div>
-          <div class="eye">
-            <div class="pupil"></div>
-          </div>
-        </div>
+      <!-- Mascot SVG Container with Embedded Eye Layers -->
+      <div class="packaroji-box-avatar" aria-label="Packaroji packaging mascot">
+        <svg id="heroMascot" viewBox="0 0 860 590" xmlns="http://www.w3.org/2000/svg">
+          <!-- Main Box Body -->
+          <path d="M180 220 L430 130 L680 220 L680 430 Q680 470 640 480 L220 480 Q180 470 180 430 Z" fill="#d2a679" stroke="#332211" stroke-width="8" stroke-linejoin="round"/>
+          <!-- Box Flaps & Details -->
+          <path d="M180 220 L430 300 L680 220" fill="none" stroke="#332211" stroke-width="8" stroke-linejoin="round"/>
+          <path d="M430 300 L430 480" fill="none" stroke="#332211" stroke-width="8"/>
+          <!-- Smile -->
+          <path d="M400 390 Q430 420 460 390" fill="none" stroke="#332211" stroke-width="8" stroke-linecap="round"/>
+          <!-- Cheeks -->
+          <circle cx="360" cy="375" r="14" fill="#e89888" opacity="0.6"/>
+          <circle cx="500" cy="375" r="14" fill="#e89888" opacity="0.6"/>
+
+          <!-- LEFT EYE ASSEMBLY -->
+          <g class="mascot-eye-left">
+            <circle cx="380" cy="330" r="28" fill="#ffffff" stroke="#332211" stroke-width="6"/>
+            <circle id="heroLeftPupil" cx="380" cy="330" r="11" fill="#20382a"/>
+          </g>
+
+          <!-- RIGHT EYE ASSEMBLY -->
+          <g class="mascot-eye-right">
+            <circle cx="480" cy="330" r="28" fill="#ffffff" stroke="#332211" stroke-width="6"/>
+            <circle id="heroRightPupil" cx="480" cy="330" r="11" fill="#20382a"/>
+          </g>
+        </svg>
       </div>
     </div>
   </div>
@@ -377,44 +354,6 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
     </div>
   </div>
 </section>
-
-<script>
-  (() => {
-    const pupils = document.querySelectorAll('.pupil');
-    if (!pupils.length) return;
-
-    const handlePointerMove = (event) => {
-      pupils.forEach((pupil) => {
-        const eye = pupil.parentElement;
-        const rect = eye.getBoundingClientRect();
-        const eyeCenterX = rect.left + rect.width / 2;
-        const eyeCenterY = rect.top + rect.height / 2;
-
-        const deltaX = event.clientX - eyeCenterX;
-        const deltaY = event.clientY - eyeCenterY;
-        const angle = Math.atan2(deltaY, deltaX);
-
-        const maxDistance = rect.width / 4;
-        const distance = Math.min(Math.hypot(deltaX, deltaY), maxDistance);
-
-        const moveX = Math.cos(angle) * distance;
-        const moveY = Math.sin(angle) * distance;
-
-        pupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
-      });
-    };
-
-    const resetPupils = () => {
-      pupils.forEach((pupil) => {
-        pupil.style.transform = 'translate(0, 0)';
-      });
-    };
-
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    window.addEventListener('pointerleave', resetPupils);
-  })();
-</script>
-
 
 
 <!-- =====================================================
