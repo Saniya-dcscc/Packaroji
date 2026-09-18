@@ -1,6 +1,49 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================================================
+        HELPER FUNCTIONS
+    ========================================================== */
+
+    function closeAllDropdowns(exceptDropdown = null) {
+        document.querySelectorAll(".nav-dropdown.open").forEach(dropdown => {
+            if (dropdown !== exceptDropdown) {
+                dropdown.classList.remove("open");
+                dropdown.querySelector(".nav-dropdown-toggle")?.setAttribute("aria-expanded", "false");
+            }
+        });
+    }
+
+    function updateCartBadges(count) {
+        if (count === undefined || count === null) return;
+
+        document.querySelectorAll(".cart-badge").forEach(element => {
+            element.textContent = String(count);
+            element.classList.add("bump");
+            setTimeout(() => element.classList.remove("bump"), 180);
+        });
+    }
+
+    function showToast(message) {
+        let toast = document.getElementById("packarojiToast");
+
+        if (!toast) {
+            toast = document.createElement("div");
+            toast.id = "packarojiToast";
+            toast.className = "packaroji-js-toast";
+            document.body.appendChild(toast);
+        }
+
+        toast.textContent = message;
+        toast.classList.add("show");
+
+        clearTimeout(toast._hideTimer);
+        toast._hideTimer = setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2500);
+    }
+
+
+    /* =========================================================
         MOBILE NAVIGATION
     ========================================================== */
 
@@ -11,10 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
         toggle.addEventListener("click", () => {
             const isOpen = nav.classList.toggle("open");
             toggle.setAttribute("aria-expanded", String(isOpen));
-            toggle.setAttribute(
-                "aria-label",
-                isOpen ? "Close menu" : "Open menu"
-            );
+            toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
         });
 
         nav.querySelectorAll("a").forEach(link => {
@@ -41,12 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const wasOpen = dropdown.classList.contains("open");
 
-            document.querySelectorAll(".nav-dropdown.open").forEach(other => {
-                if (other !== dropdown) {
-                    other.classList.remove("open");
-                    other.querySelector(".nav-dropdown-toggle")?.setAttribute("aria-expanded", "false");
-                }
-            });
+            // Close other open dropdowns cleanly using helper function
+            closeAllDropdowns(dropdown);
 
             dropdown.classList.toggle("open", !wasOpen);
             button.setAttribute("aria-expanded", String(!wasOpen));
@@ -60,10 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("click", event => {
         if (!event.target.closest(".nav-dropdown")) {
-            document.querySelectorAll(".nav-dropdown.open").forEach(dropdown => {
-                dropdown.classList.remove("open");
-                dropdown.querySelector(".nav-dropdown-toggle")?.setAttribute("aria-expanded", "false");
-            });
+            closeAllDropdowns();
         }
     });
 
@@ -186,45 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-        CART BADGE UPDATE
-    ========================================================== */
-
-    function updateCartBadges(count) {
-        if (count === undefined || count === null) return;
-
-        document.querySelectorAll(".cart-badge").forEach(element => {
-            element.textContent = String(count);
-            element.classList.add("bump");
-            setTimeout(() => element.classList.remove("bump"), 180);
-        });
-    }
-
-
-    /* =========================================================
-        TOAST MESSAGE
-    ========================================================== */
-
-    function showToast(message) {
-        let toast = document.getElementById("packarojiToast");
-
-        if (!toast) {
-            toast = document.createElement("div");
-            toast.id = "packarojiToast";
-            toast.className = "packaroji-js-toast";
-            document.body.appendChild(toast);
-        }
-
-        toast.textContent = message;
-        toast.classList.add("show");
-
-        clearTimeout(toast._hideTimer);
-        toast._hideTimer = setTimeout(() => {
-            toast.classList.remove("show");
-        }, 2500);
-    }
-
-
-    /* =========================================================
         QUANTITY VALIDATION
     ========================================================== */
 
@@ -273,6 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         nav?.classList.remove("open");
         toggle?.setAttribute("aria-expanded", "false");
+        closeAllDropdowns();
 
         document.querySelectorAll(".modal.open").forEach(modal => {
             modal.classList.remove("open");
@@ -349,7 +344,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!svg || !leftPupil || !rightPupil) return;
 
-            // Read the exact initial coordinates straight from the original SVG elements
             const leftCX = parseFloat(leftPupil.getAttribute("cx")) || 458;
             const leftCY = parseFloat(leftPupil.getAttribute("cy")) || 300;
             const rightCX = parseFloat(rightPupil.getAttribute("cx")) || 600;
@@ -376,7 +370,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     const dx = mx - pupil.cx;
                     const dy = my - pupil.cy;
                     const angle = Math.atan2(dy, dx);
-                    // Tight movement threshold so pupils stay strictly inside their original white socket
                     const distance = Math.min(5, Math.hypot(dx, dy) / 30);
 
                     const targetX = pupil.cx + Math.cos(angle) * distance;
