@@ -193,57 +193,56 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
       stroke-linejoin: round;
     }
 
-    /* Unified Single Avatar Element */
+    /* Avatar Container & Dynamic Eye Overlay */
     .packaroji-box-avatar {
       position: relative;
       z-index: 2;
       width: 100%;
       max-width: 320px;
-      transition: transform 0.12s ease-out;
-      will-change: transform;
       filter: drop-shadow(0 15px 20px rgba(82, 56, 28, 0.12));
     }
 
-    .packaroji-box-avatar img {
+    .packaroji-box-avatar img.avatar-body {
       display: block;
       width: 100%;
       height: auto;
       user-select: none;
     }
 
-    /* Floating Contact Action Buttons */
-    .hero-floating-contacts {
+    /* Interactive Pupil Layering */
+    .eyes-container {
       position: absolute;
-      bottom: 10px;
-      right: 0;
+      top: 50.5%;
+      left: 45%;
+      width: 36%;
+      height: 20%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
       display: flex;
-      gap: 10px;
-      z-index: 4;
-    }
-
-    .floating-btn {
-      display: inline-flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
-      padding: 8px 18px;
-      border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .eye {
+      position: relative;
+      width: 42%;
+      height: 85%;
       background: #ffffff;
-      color: var(--text-dark);
-      transition: transform 0.2s, box-shadow 0.2s;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .floating-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-    }
-
-    .floating-btn.call-btn {
-      background: var(--green);
-      color: #ffffff;
+    .pupil {
+      width: 48%;
+      height: 48%;
+      background: #231f20;
+      border-radius: 50%;
+      position: absolute;
+      transition: transform 0.05s ease-out;
+      will-change: transform;
     }
 
     /* Bottom Value Feature Bar */
@@ -280,10 +279,6 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
       stroke-linejoin: round;
     }
 
-    .legacy-hero-removed {
-      display: none !important;
-    }
-
     @media (max-width: 900px) {
       .new-landing-hero {
         padding-top: 30px;
@@ -305,14 +300,6 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
       .new-landing-actions {
         justify-content: center;
-      }
-
-      .hero-floating-contacts {
-        position: relative;
-        bottom: auto;
-        right: auto;
-        justify-content: center;
-        margin-top: 15px;
       }
 
       .value-grid {
@@ -350,19 +337,18 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
         </svg>
       </div>
 
-      <!-- Single Mascot Box Avatar -->
+      <!-- Static Mascot Box Avatar with Interactive Eyes Layer -->
       <div class="packaroji-box-avatar" id="packarojiBoxAvatar" aria-label="Packaroji packaging mascot">
-        <img src="{{ url_for('static', filename='images/packaroji-box-avatar-final.png') }}" alt="Packaroji smiling packaging box mascot">
-      </div>
-
-      <!-- Floating Action Buttons -->
-      <div class="hero-floating-contacts">
-        <a href="https://wa.me/{{ business.phone }}" class="floating-btn whatsapp-btn" target="_blank" rel="noopener">
-          💬 WhatsApp
-        </a>
-        <a href="tel:{{ business.phone }}" class="floating-btn call-btn">
-          📞 Call
-        </a>
+        <img class="avatar-body" src="{{ url_for('static', filename='images/packaroji-box-avatar-final.png') }}" alt="Packaroji smiling packaging box mascot">
+        
+        <div class="eyes-container">
+          <div class="eye">
+            <div class="pupil"></div>
+          </div>
+          <div class="eye">
+            <div class="pupil"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -394,29 +380,38 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
 <script>
   (() => {
-    const avatar = document.getElementById('packarojiBoxAvatar');
-    if (!avatar) return;
+    const pupils = document.querySelectorAll('.pupil');
+    if (!pupils.length) return;
 
     const handlePointerMove = (event) => {
-      const rect = avatar.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
+      pupils.forEach((pupil) => {
+        const eye = pupil.parentElement;
+        const rect = eye.getBoundingClientRect();
+        const eyeCenterX = rect.left + rect.width / 2;
+        const eyeCenterY = rect.top + rect.height / 2;
 
-      const deltaX = event.clientX - centerX;
-      const deltaY = event.clientY - centerY;
+        const deltaX = event.clientX - eyeCenterX;
+        const deltaY = event.clientY - eyeCenterY;
+        const angle = Math.atan2(deltaY, deltaX);
 
-      const moveX = Math.max(-10, Math.min(10, deltaX / 25));
-      const moveY = Math.max(-8, Math.min(8, deltaY / 25));
+        const maxDistance = rect.width / 4;
+        const distance = Math.min(Math.hypot(deltaX, deltaY), maxDistance);
 
-      avatar.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        const moveX = Math.cos(angle) * distance;
+        const moveY = Math.sin(angle) * distance;
+
+        pupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      });
     };
 
-    const resetAvatar = () => {
-      avatar.style.transform = 'translate(0, 0)';
+    const resetPupils = () => {
+      pupils.forEach((pupil) => {
+        pupil.style.transform = 'translate(0, 0)';
+      });
     };
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    window.addEventListener('pointerleave', resetAvatar);
+    window.addEventListener('pointerleave', resetPupils);
   })();
 </script>
 
