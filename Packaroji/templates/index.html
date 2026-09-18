@@ -1,0 +1,1107 @@
+{% extends "base.html" %}
+
+{% block title %}
+Packaroji | Food Packaging Solutions for Restaurants, Bakeries & Cloud Kitchens
+{% endblock %}
+
+{% block description %}
+Packaroji provides food packaging solutions for restaurants, cafés, bakeries, cloud kitchens, caterers and takeaway businesses. Explore packaging by product, material, food application and packaging layer—from wraps and containers to protection, carrying and custom branding.
+{% endblock %}
+
+
+{% block head %}
+
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=IBM+Plex+Mono:wght@500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+<!-- =====================================================
+     SEO / STRUCTURED DATA
+===================================================== -->
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Packaroji",
+    "description": "Disposable food packaging, food-service products and cutlery solutions for takeaway, delivery and food businesses in Hyderabad.",
+    "url": "{{ request.url_root }}",
+    "telephone": "{{ business.phone }}",
+    "email": "{{ business.email }}",
+
+    "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Hyderabad",
+        "addressRegion": "Telangana",
+        "addressCountry": "IN"
+    },
+
+    "areaServed": {
+        "@type": "City",
+        "name": "Hyderabad"
+    },
+
+    "brand": {
+        "@type": "Brand",
+        "name": "Packaroji"
+    }
+}
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =====================================================
+     HERO — PACKAROJI INTERACTIVE PRODUCT LANDING
+     Replaces the previous static/cinematic hero.
+===================================================== -->
+<section class="new-landing-hero" id="home" aria-label="Packaroji landing hero">
+<style>
+/* =========================================================
+   PACKAROJI LANDING — matched to the supplied reference
+   ========================================================= */
+.new-landing-hero{
+    --hero:#f5eddf;
+    --green:#19563d;
+    --ink:#174b38;
+    --gold:#c58a49;
+    position:relative;
+    height:345px;
+    min-height:345px;
+    overflow:visible;
+    isolation:isolate;
+    background:var(--hero);
+}
+.new-landing-hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:radial-gradient(circle at 50% 48%,rgba(255,255,255,.28),transparent 48%);
+}
+.new-landing-inner{
+    position:relative;
+    z-index:4;
+    width:calc(100% - 100px);
+    max-width:1200px;
+    height:100%;
+    margin:0 auto;
+    padding:0;
+    display:flex;
+    align-items:flex-start;
+}
+.new-landing-copy{
+    width:465px;
+    max-width:465px;
+    padding-top:79px;
+}
+.new-landing-kicker{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 13px;
+    color:var(--green);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.18em;
+    line-height:1;
+}
+.new-landing-kicker::before{
+    content:"";
+    width:29px;
+    height:2px;
+    flex:none;
+    background:var(--green);
+}
+.new-landing-hero h1{
+    margin:0 0 12px;
+    color:var(--ink);
+    font-family:"Playfair Display",Georgia,serif;
+    font-size:44px;
+    font-weight:700;
+    line-height:.91;
+    letter-spacing:-.045em;
+}
+.new-landing-hero h1 strong{font-weight:700}
+.new-landing-lead{
+    width:440px;
+    max-width:100%;
+    margin:0;
+    color:#315846;
+    font-size:10.7px;
+    font-weight:500;
+    line-height:1.43;
+}
+.new-landing-actions{
+    display:flex;
+    gap:9px;
+    margin-top:14px;
+}
+.new-landing-actions a{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    height:31px;
+    padding:0 16px;
+    border-radius:999px;
+    text-decoration:none;
+    font-size:9px;
+    font-weight:800;
+    white-space:nowrap;
+    box-shadow:0 4px 10px rgba(55,64,49,.08);
+}
+.new-landing-actions .new-primary{background:var(--green);color:#fff}
+.new-landing-actions .new-secondary{background:var(--gold);color:#fff}
+
+/* doodles — deliberately positioned like the reference */
+.packaroji-product-doodles{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    overflow:hidden;
+}
+.packaroji-product-doodles img{
+    position:absolute;
+    display:block;
+    width:auto;
+    height:auto;
+    opacity:.72;
+}
+.d-burger{left:28px;top:27px;width:73px}
+.d-fries{left:365px;top:52px;width:45px}
+.d-clam{right:177px;top:39px;width:76px}
+.d-cup{right:215px;top:113px;width:47px}
+.d-container{right:172px;top:207px;width:62px}
+.d-bowl{left:365px;bottom:28px;width:61px}
+.d-leaf-left{left:35px;bottom:46px;width:33px}
+.d-leaf-right{right:100px;top:126px;width:34px}
+.d-stroke1{left:300px;top:45px;width:15px}
+.d-stroke2{right:166px;top:22px;width:30px}
+
+/* main mascot */
+.packaroji-box-avatar{
+    position:absolute;
+    z-index:3;
+    left:55.7%;
+    top:61%;
+    width:198px;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    filter:drop-shadow(0 10px 10px rgba(82,56,28,.16));
+}
+.packaroji-box-avatar img{display:block;width:100%;height:auto;border-radius:2px}
+.box-eye-pupil{
+    position:absolute;
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    background:#2f251f;
+    left:40.8%;
+    top:43.1%;
+    box-shadow:0 0 0 1px rgba(46,37,30,.04);
+    transition:transform .08s ease-out;
+}
+.box-eye-pupil:after{
+    content:"";
+    position:absolute;
+    width:4px;height:4px;border-radius:50%;
+    background:#fff;right:2px;top:1px;
+}
+.box-eye-pupil.right{left:58.3%;top:40.8%}
+
+/* phone mockup shown in the supplied reference */
+.packaroji-phone{
+    position:absolute;
+    z-index:8;
+    right:29px;
+    top:28px;
+    width:132px;
+    height:365px;
+    padding:7px;
+    border:4px solid #171717;
+    border-radius:25px;
+    background:#101010;
+    box-shadow:0 9px 20px rgba(38,32,24,.23);
+}
+.packaroji-phone::before{
+    content:"";
+    position:absolute;
+    z-index:5;
+    left:50%;top:5px;
+    width:48px;height:12px;
+    transform:translateX(-50%);
+    border-radius:0 0 9px 9px;
+    background:#111;
+}
+.phone-screen{
+    position:relative;
+    width:100%;height:100%;
+    overflow:hidden;
+    border-radius:18px;
+    background:#f5eddf;
+    font-family:"DM Sans",Arial,sans-serif;
+}
+.phone-top{height:20px;background:#f5eddf;color:#26362d;font-size:6px;font-weight:700;padding:5px 7px 0;display:flex;justify-content:space-between}
+.phone-nav{height:31px;background:rgba(255,255,255,.94);display:flex;align-items:center;padding:0 7px;gap:4px;border-bottom:1px solid #e7ddcd}
+.phone-logo{width:17px;height:17px;object-fit:contain}
+.phone-brand{font-family:"Playfair Display",serif;font-size:8px;color:#19563d;font-weight:700;line-height:1}
+.phone-menu{margin-left:auto;color:#19563d;font-size:9px}
+.phone-copy{padding:27px 9px 0;color:#174b38}
+.phone-kicker{font-size:5px;font-weight:800;letter-spacing:.14em;margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.phone-kicker::before{content:"";width:11px;height:1px;background:#19563d}
+.phone-copy h3{font-family:"Playfair Display",serif;font-size:17px;line-height:.9;margin:0 0 8px;color:#174b38}
+.phone-copy p{font-size:5.2px;line-height:1.35;color:#315846;margin:0 0 9px}
+.phone-buttons{display:flex;flex-direction:column;gap:5px}
+.phone-buttons span{height:18px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:5px;font-weight:800;color:#fff;background:#19563d}
+.phone-buttons span:last-child{background:#c58a49}
+.phone-doodle{position:absolute;right:7px;top:58px;width:25px;opacity:.55}
+.phone-box{position:absolute;right:17px;bottom:48px;width:55px;filter:drop-shadow(0 5px 4px rgba(82,56,28,.15))}
+.phone-contact{position:absolute;left:7px;right:7px;bottom:8px;display:flex;gap:4px}
+.phone-contact span{flex:1;height:16px;border-radius:10px;background:#e7f3e9;color:#15804e;font-size:5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.phone-contact span:last-child{background:#19563d;color:#fff}
+
+/* trust strip */
+.packaroji-trust{
+    position:relative;
+    z-index:5;
+    height:86px;
+    background:#faf7ef;
+    border-top:1px solid rgba(29,81,57,.08);
+    border-bottom:1px solid rgba(29,81,57,.08);
+}
+.packaroji-trust-inner{
+    width:calc(100% - 100px);
+    max-width:1200px;
+    height:100%;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    align-items:center;
+}
+.packaroji-trust-item{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    color:var(--green);
+    font-weight:800;
+    font-size:8px;
+    line-height:1.15;
+    text-align:left;
+    padding:0 18px;
+    border-right:1px solid #ded6c9;
+}
+.packaroji-trust-item:last-child{border-right:0}
+.packaroji-trust-icon{width:25px;height:25px;display:grid;place-items:center;flex:none}
+.packaroji-trust-icon svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* home page should use the contact controls inside the phone */
+body.home-page .floating-actions{display:none!important}
+
+@media(max-width:900px){
+    .new-landing-hero{height:auto;min-height:600px}
+    .new-landing-inner{width:calc(100% - 36px);height:auto;min-height:600px}
+    .new-landing-copy{width:min(62%,460px);padding-top:55px}
+    .new-landing-hero h1{font-size:clamp(35px,7vw,44px)}
+    .new-landing-lead{font-size:10px}
+    .packaroji-box-avatar{left:53%;top:54%;width:175px}
+    .packaroji-phone{right:8px;top:24px;transform:scale(.88);transform-origin:top right}
+    .d-clam{right:160px}.d-cup{right:170px}.d-container{right:145px}
+}
+@media(max-width:650px){
+    .new-landing-hero{min-height:690px}
+    .new-landing-inner{min-height:690px;display:block}
+    .new-landing-copy{width:100%;max-width:100%;padding-top:48px;padding-right:10px}
+    .new-landing-hero h1{font-size:40px}
+    .new-landing-lead{width:92%;font-size:10px}
+    .new-landing-actions a{font-size:9px;padding:0 13px}
+    .packaroji-box-avatar{left:47%;top:auto;bottom:80px;width:190px}
+    .packaroji-phone{right:5px;top:315px;transform:scale(.72);transform-origin:top right}
+    .packaroji-product-doodles{opacity:.62}
+    .packaroji-trust{height:auto}
+    .packaroji-trust-inner{width:calc(100% - 20px);grid-template-columns:repeat(2,1fr);padding:8px 0}
+    .packaroji-trust-item{min-height:55px;font-size:8px;padding:8px 7px}
+    .packaroji-trust-item:nth-child(2){border-right:0}
+    .packaroji-trust-item:nth-child(-n+2){border-bottom:1px solid #ded6c9}
+}
+</style>
+
+<div class="packaroji-product-doodles" aria-hidden="true">
+    <img class="d-burger" src="{{ url_for('static', filename='images/doodles/doodle_burger.png') }}" alt="">
+    <img class="d-fries" src="{{ url_for('static', filename='images/doodles/doodle_fries.png') }}" alt="">
+    <img class="d-clam" src="{{ url_for('static', filename='images/doodles/doodle_clamshell.png') }}" alt="">
+    <img class="d-cup" src="{{ url_for('static', filename='images/doodles/doodle_cup.png') }}" alt="">
+    <img class="d-container" src="{{ url_for('static', filename='images/doodles/doodle_container.png') }}" alt="">
+    <img class="d-bowl" src="{{ url_for('static', filename='images/doodles/doodle_bowl.png') }}" alt="">
+    <img class="d-leaf-left" src="{{ url_for('static', filename='images/doodles/doodle_leaf_left.png') }}" alt="">
+    <img class="d-leaf-right" src="{{ url_for('static', filename='images/doodles/doodle_leaf_right.png') }}" alt="">
+    <img class="d-stroke1" src="{{ url_for('static', filename='images/doodles/doodle_small_stroke1.png') }}" alt="">
+    <img class="d-stroke2" src="{{ url_for('static', filename='images/doodles/doodle_small_stroke2.png') }}" alt="">
+</div>
+
+<div class="packaroji-box-avatar" id="packarojiBoxAvatar" aria-label="Packaroji packaging box mascot">
+    <img src="{{ url_for('static', filename='images/packaroji-box-preview-crop.jpg') }}" alt="Packaroji smiling packaging box mascot">
+    <span class="box-eye-pupil" id="boxEyeLeft"></span>
+    <span class="box-eye-pupil right" id="boxEyeRight"></span>
+</div>
+
+<div class="packaroji-phone" aria-label="Packaroji mobile website preview">
+    <div class="phone-screen">
+        <div class="phone-top"><span>9:41</span><span>● ● ▰</span></div>
+        <div class="phone-nav">
+            <img class="phone-logo" src="{{ url_for('static', filename='images/packaroji-logo.png') }}" alt="">
+            <span class="phone-brand">Packaroji</span>
+            <span class="phone-menu">☰</span>
+        </div>
+        <img class="phone-doodle" src="{{ url_for('static', filename='images/doodles/doodle_bowl.png') }}" alt="">
+        <div class="phone-copy">
+            <div class="phone-kicker">BETTER PACKAGING,<br>LAYER BY LAYER</div>
+            <h3>BUILT TO<br>CARRY BETTER.</h3>
+            <p>From sugarcane bagasse bowls and aluminum foil containers to heavy-duty SOS kraft bags and custom butter wraps — Packaroji powers restaurants, cafés, cloud kitchens and bakeries with eco-engineered packaging.</p>
+            <div class="phone-buttons"><span>📦 Explore Products ↓</span><span>✨ Custom Branding</span></div>
+        </div>
+        <img class="phone-box" src="{{ url_for('static', filename='images/packaroji-box-preview-crop.jpg') }}" alt="">
+        <div class="phone-contact"><span>● WhatsApp</span><span>Call</span></div>
+    </div>
+</div>
+
+<div class="new-landing-inner">
+    <div class="new-landing-copy">
+        <p class="new-landing-kicker">BETTER PACKAGING, LAYER BY LAYER</p>
+        <h1>BUILT TO<br><strong>CARRY BETTER.</strong></h1>
+        <p class="new-landing-lead">From sugarcane bagasse bowls and aluminum foil containers to heavy-duty SOS kraft bags and custom butter wraps — Packaroji powers restaurants, cafés, cloud kitchens and bakeries with eco-engineered packaging.</p>
+        <div class="new-landing-actions">
+            <a class="new-primary" href="{{ url_for('products') }}">📦 Explore Products ↓</a>
+            <a class="new-secondary" href="{{ url_for('order_page') }}">✨ Custom Branding</a>
+        </div>
+    </div>
+</div>
+</section>
+
+<section class="packaroji-trust" aria-label="Packaroji benefits">
+    <div class="packaroji-trust-inner">
+        <div class="packaroji-trust-item">
+            <span class="packaroji-trust-icon"><svg viewBox="0 0 24 24"><path d="M12 21c0-7 2-12 8-17-1 8-5 13-8 17Z"/><path d="M12 21c0-5-2-9-6-12"/></svg></span>
+            <span>Eco-Friendly<br>Materials</span>
+        </div>
+        <div class="packaroji-trust-item">
+            <span class="packaroji-trust-icon"><svg viewBox="0 0 24 24"><path d="M12 21s8-4 8-10V5l-8-3-8 3v6c0 6 8 10 8 10Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg></span>
+            <span>Food Safe<br>&amp; Hygienic</span>
+        </div>
+        <div class="packaroji-trust-item">
+            <span class="packaroji-trust-icon"><svg viewBox="0 0 24 24"><path d="M3 7h11v10H3z"/><path d="M14 10h4l3 3v4h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
+            <span>Bulk Orders<br>&amp; Fast Delivery</span>
+        </div>
+        <div class="packaroji-trust-item">
+            <span class="packaroji-trust-icon"><svg viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></span>
+            <span>Custom<br>Branding</span>
+        </div>
+    </div>
+</section>
+
+<script>
+(()=>{
+    const hero=document.querySelector('.new-landing-hero');
+    const avatar=document.getElementById('packarojiBoxAvatar');
+    if(!hero||!avatar)return;
+    const pupils=[...avatar.querySelectorAll('.box-eye-pupil')];
+    const centers=[{x:48.8,y:49.2},{x:67.1,y:47.5}];
+    const move=(e)=>{
+        const r=avatar.getBoundingClientRect();
+        pupils.forEach((p,i)=>{
+            const ex=r.left+r.width*centers[i].x/100;
+            const ey=r.top+r.height*centers[i].y/100;
+            const dx=e.clientX-ex,dy=e.clientY-ey,d=Math.hypot(dx,dy)||1;
+            const m=Math.min(4,Math.hypot(dx,dy)/42);
+            p.style.transform=`translate(${dx/d*m}px,${dy/d*m}px)`;
+        });
+    };
+    const reset=()=>pupils.forEach(p=>p.style.transform='translate(0,0)');
+    hero.addEventListener('pointermove',move,{passive:true});
+    hero.addEventListener('pointerleave',reset);
+    hero.addEventListener('pointercancel',reset,{passive:true});
+})();
+</script>
+
+<!-- =====================================================
+     ABOUT PACKAROJI
+===================================================== -->
+
+<section
+    class="section intro"
+    id="about"
+>
+
+    <div class="container split">
+
+        <div class="about-left">
+
+            <p class="eyebrow">
+                ABOUT PACKAROJI
+            </p>
+
+            <h2>
+                Packaging is more than a product.
+                It is a complete system.
+            </h2>
+
+            <div class="about-points">
+
+                <div class="about-point">
+                    <strong>Built around real food businesses</strong>
+                    <p>
+                        Packaging designed around the way food businesses actually serve, pack, carry and deliver food.
+                    </p>
+                </div>
+
+                <div class="about-point">
+                    <strong>Choose by application</strong>
+                    <p>
+                        Choose formats and materials based on the food, portion, handling, delivery and presentation requirements.
+                    </p>
+                </div>
+
+                <div class="about-point">
+                    <strong>Standard or custom</strong>
+                    <p>
+                        Start with standard packaging or tell us your required size, format, printing or branding needs.
+                    </p>
+                </div>
+
+                <div class="about-point">
+                    <strong>A growing packaging partner</strong>
+                    <p>
+                        Built to support growing food businesses with practical packaging choices across multiple categories and materials.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="about-right">
+
+            <p class="large-copy">
+                Packaroji brings food packaging together as a connected system rather than a list of individual products. From the first layer that wraps your food to the container that holds it and the bag that carries it to the customer, each packaging choice plays a role. We help food businesses explore practical options across formats, materials, applications and custom branding—so packaging can work as hard as the food inside it.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<div class="pkg-material-ticker" aria-label="Packaroji packaging materials">
+  <div class="pkg-material-track">
+    <span>Bagasse</span><b>✳</b><span>Kraft paper</span><b>✳</b><span>Food-safe wraps</span><b>✳</b><span>Custom branding</span><b>✳</b><span>Built for takeaway</span><b>✳</b>
+    <span>Bagasse</span><b>✳</b><span>Kraft paper</span><b>✳</b><span>Food-safe wraps</span><b>✳</b><span>Custom branding</span><b>✳</b><span>Built for takeaway</span><b>✳</b>
+  </div>
+</div>
+
+
+
+<!-- =====================================================
+     WHY PACKAROJI
+===================================================== -->
+
+<section class="section features">
+
+    <div class="container">
+
+
+        <div class="section-heading center">
+
+            <p class="eyebrow">
+                WHY PACKAROJI ?
+            </p>
+
+            <h2>
+               Food packaging built around the whole journey
+            </h2>
+
+            <p>
+              From food wraps and kraft packaging to bagasse, aluminium containers, boxes and carry bags, Packaroji brings together the packaging layers businesses need for takeaway, delivery and food service.
+            </p>
+
+        </div>
+
+        <div class="feature-grid">
+
+
+
+
+            <article class="feature-card">
+
+                <span>
+                    📦
+                </span>
+
+                <h3>
+                    Wrap • Pack • Protect • Carry
+                </h3>
+
+                <p>
+                    Build your packaging journey layer by layer—from wrapping and containment to protection and the final customer handoff.
+                </p>
+
+            </article>
+
+
+
+
+            <article class="feature-card">
+
+                <span>
+                    🧾
+                </span>
+
+                <h3>
+                    Choose by food
+                </h3>
+
+                <p>
+                    Explore packaging for meals, bakery products, snacks, takeaway, delivery, catering and other food-service applications.
+                </p>
+
+            </article>
+
+
+
+
+            <article class="feature-card">
+
+                <span>
+                    💬
+                </span>
+
+                <h3>
+                    Choose by material
+                </h3>
+
+                <p>
+                    Compare practical options across kraft paper, sugarcane bagasse, aluminium, paper and other food-packaging formats.
+                </p>
+
+            </article>
+
+
+
+
+            <article class="feature-card">
+
+                <span>
+                    🌿
+                </span>
+
+                <h3>
+                    Custom when you need it
+                </h3>
+
+                <p>
+                    Move beyond standard packaging with custom sizes, printing, branding and packaging requirements.
+                </p>
+
+            </article>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     FEATURED PRODUCTS
+===================================================== -->
+<section class="section packaging-options" id="packaging-options">
+  <div class="container">
+    <div class="section-heading center category-heading">
+      <p class="eyebrow">EXPLORE OUR RANGE</p>
+      <h2>Find the right packaging layer.</h2>
+      <p>Start with the layer you need, then explore the products, materials and formats behind it.</p>
+    </div>
+
+    <div class="product-carousel homepage-product-carousel" data-product-carousel tabindex="0" aria-label="Packaroji product collections carousel">
+      <button class="product-carousel-arrow product-carousel-prev" type="button" aria-label="Previous collection" data-product-prev>‹</button>
+      <div class="product-carousel-viewport" data-product-viewport>
+        <div class="product-carousel-track" data-product-track>
+          <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='food-wrapping') }}">
+            <a href="{{ url_for('product_collection_page', collection_slug='food-wrapping') }}" class="product-slide-link" aria-label="Food Wrapping">
+              <div class="product-slide-visual">
+                <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-foil.jpg') }}" alt="Food Wrapping" loading="eager"></div>
+              </div>
+              <div class="product-card-content"><h3>Food<br>Wrapping</h3><span class="slide-arrow">→</span></div>
+            </a>
+          </article>
+
+          <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='main-portion-packaging') }}">
+            <a href="{{ url_for('product_collection_page', collection_slug='main-portion-packaging') }}" class="product-slide-link" aria-label="Main Portion Packaging">
+              <div class="product-slide-visual">
+                <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-bagasse.jpg') }}" alt="Main Portion Packaging" loading="eager"></div>
+              </div>
+              <div class="product-card-content"><h3>Main Portion<br>Packaging</h3><span class="slide-arrow">→</span></div>
+            </a>
+          </article>
+
+          <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='takeout-delivery') }}">
+            <a href="{{ url_for('product_collection_page', collection_slug='takeout-delivery') }}" class="product-slide-link" aria-label="Takeout and Delivery">
+              <div class="product-slide-visual">
+                <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-bags.jpg') }}" alt="Takeout and Delivery" loading="eager"></div>
+              </div>
+              <div class="product-card-content"><h3>Takeout &amp;<br>Delivery</h3><span class="slide-arrow">→</span></div>
+            </a>
+          </article>
+
+          <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='branding') }}">
+            <a href="{{ url_for('product_collection_page', collection_slug='branding') }}" class="product-slide-link" aria-label="Branding Options — Full Catalogue">
+              <div class="product-slide-visual">
+                <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-branding.jpg') }}" alt="Branding Options — Full Catalogue" loading="eager"></div>
+              </div>
+              <div class="product-card-content"><h3>Branding<br>Options</h3><span class="slide-arrow">→</span></div>
+            </a>
+          </article>
+        </div>
+      </div>
+      <button class="product-carousel-arrow product-carousel-next" type="button" aria-label="Next collection" data-product-next>›</button>
+    </div>
+
+    <div class="packaging-options-browse">
+      <a href="{{ url_for('products') }}" class="btn btn-secondary">Browse all products →</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- =====================================================
+     PACKAGING VISUAL
+===================================================== -->
+<section class="section packaging-visual-section">
+    <div class="container packaging-visual">
+        <div class="packaging-visual-image">
+            <img src="{{ url_for('static', filename='images/disposable-packaging-hero.png') }}" alt="Disposable food packaging and food-service products" loading="lazy">
+        </div>
+        <div class="packaging-visual-copy">
+            <p class="eyebrow">PACKAGING DESIGNED END TO END</p>
+            <h2>ONE FOOD BUSINESS. MANY PACKAGING LAYERS.</h2>
+            <p>Your packaging is experienced as one journey. Packaroji connects wrapping, containers, protection, carrying and branding into a packaging system designed around takeaway and delivery—from the kitchen to the customer’s hands.</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     CUSTOMIZATION
+===================================================== -->
+
+<section class="section customization-section">
+
+    <div class="container customization-card">
+
+
+        <div class="customization-copy">
+
+            <p class="eyebrow">
+                NEED SOMETHING UNIQUE?
+            </p>
+
+
+            <h2>
+                Make the packaging yours.
+            </h2>
+
+
+            <p>
+                Want your logo, specific dimensions,
+                colours, printing or a completely
+                customized packaging requirement?
+            </p>
+
+
+            <p>
+                Send us your exact requirements and
+                upload your logo, artwork, design or
+                reference files.
+            </p>
+
+        </div>
+
+
+        <div class="customization-actions">
+
+            <a
+                class="btn btn-primary"
+                href="{{ url_for('order_page') }}"
+            >
+                Want a Customization →
+            </a>
+
+
+            <span>
+                Your customization details stay
+                attached to the product in your cart.
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SUSTAINABILITY
+===================================================== -->
+
+<section
+    class="section nature-section"
+    id="sustainability"
+>
+
+    <div class="container nature-grid">
+
+
+        <div class="nature-image"></div>
+
+
+        <div class="nature-copy">
+
+            <p class="eyebrow">
+                OUR PURPOSE
+            </p>
+
+
+            <h2>
+                Better packaging starts with the right choice.
+            </h2>
+
+
+            <p>
+                There is no single packaging material that fits every food, business or delivery journey. We focus on helping businesses understand the application first, then choose a suitable format and material.
+            </p>
+
+
+            <p>
+                Explore kraft, sugarcane bagasse, aluminium, paper and other formats across wraps, containers, boxes, trays and bags.
+            </p>
+
+
+            <div class="impact-list">
+
+
+                <div>
+
+                    <b>
+                        01
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Choose the right layer
+                        </strong>
+
+                        <small>
+                            Start with what the food needs: wrapping, containment, protection or carrying.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <b>
+                        02
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Match the material
+                        </strong>
+
+                        <small>
+                            Consider the food, heat, moisture, grease, handling and delivery conditions when selecting a format.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+                <div>
+
+                    <b>
+                        03
+                    </b>
+
+                    <span>
+
+                        <strong>
+                            Make it your brand
+                        </strong>
+
+                        <small>
+                            When the standard option is not enough, explore custom sizes, printing, branding and other requirements.
+                        </small>
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section class="section process">
+
+    <div class="container">
+
+
+        <div class="section-heading center">
+
+            <p class="eyebrow">
+                HOW IT WORKS
+            </p>
+
+            <h2>
+                From requirement to packaging system
+            </h2>
+
+            <p>
+                Whether you need one product or a complete packaging mix, the process starts with understanding what your food business needs.
+            </p>
+
+        </div>
+
+
+        <div class="steps">
+
+
+            <div class="step">
+
+                <span>
+                    01
+                </span>
+
+                <h3>
+                    01 · Explore by need
+                </h3>
+
+                <p>
+                    Browse products by packaging layer, food application, category or material.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    02
+                </span>
+
+                <h3>
+                    02 · Build your mix
+                </h3>
+
+                <p>
+                    Select the products and quantities that make up your everyday packaging system.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    03
+                </span>
+
+                <h3>
+                    03 · Customize if needed
+                </h3>
+
+                <p>
+                    Add dimensions, branding, printing, artwork or other packaging requirements.
+                </p>
+
+            </div>
+
+
+            <div class="step">
+
+                <span>
+                    04
+                </span>
+
+                <h3>
+                    04 · Get your requirements moving
+                </h3>
+
+                <p>
+                    Submit your requirement and Packaroji can take the next step on availability, quantities and pricing.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section
+    class="section cta-section"
+    id="contact"
+>
+
+    <div class="container cta-card">
+
+
+        <div>
+
+            <p class="eyebrow">
+                READY TO GET STARTED?
+            </p>
+
+
+            <h2>
+                WHAT ARE YOU PACKING NEXT?
+            </h2>
+
+
+            <p>
+                No prices are displayed online.
+                01 · Explore by need, add your required
+                quantities and submit your order.
+                Packaroji will contact you with pricing
+                and availability.
+            </p>
+
+        </div>
+
+
+        <div class="cta-actions">
+
+
+            <a
+                class="btn btn-primary"
+                href="{{ url_for('cart') }}"
+            >
+                View Cart
+            </a>
+
+
+            <a
+                class="btn btn-outline"
+                href="{{ url_for(
+                    'order_page'
+                ) }}"
+            >
+                Want a Customization
+            </a>
+
+
+            <a
+                class="btn btn-outline"
+                href="https://wa.me/{{ business.whatsapp }}"
+                target="_blank"
+                rel="noopener"
+            >
+                WhatsApp Us
+            </a>
+
+
+            <a
+                class="contact-small"
+                href="mailto:{{ business.email }}"
+            >
+                {{ business.email }}
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+(function(){
+  var hero=document.getElementById("home"), avatar=document.getElementById("packarojiBoxAvatar");
+  var pupils=[document.getElementById("boxEyeLeft"),document.getElementById("boxEyeRight")];
+  if(!hero||!avatar||pupils.some(function(x){return !x})) return;
+  function move(x,y){
+    var r=avatar.getBoundingClientRect();
+    var nx=(x-(r.left+r.width*.50))/(r.width*.5);
+    var ny=(y-(r.top+r.height*.48))/(r.height*.5);
+    nx=Math.max(-1,Math.min(1,nx)); ny=Math.max(-1,Math.min(1,ny));
+    pupils[0].style.transform='translate('+((nx*5).toFixed(1))+'px,'+((ny*4).toFixed(1))+'px)';
+    pupils[1].style.transform='translate('+((nx*5).toFixed(1))+'px,'+((ny*4).toFixed(1))+'px)';
+  }
+  hero.addEventListener('pointermove',function(e){move(e.clientX,e.clientY)},{passive:true});
+  hero.addEventListener('pointerleave',function(){pupils.forEach(function(p){p.style.transform='translate(0,0)'})});
+})();
+</script>
+<script>
+(function(){
+  var story=document.getElementById('packaging-story'); if(!story)return;
+  var panels=[].slice.call(story.querySelectorAll('.pkg-copy-panel'));
+  var film=document.getElementById('pkg-story-film');
+  var dots=[].slice.call(story.querySelectorAll('.pkg-dot'));
+  var progress=document.getElementById('pkg-story-progress');
+  var caption=document.getElementById('pkg-story-caption');
+  var label=document.getElementById('pkg-story-label');
+  var captions=['FOOD WRAPPING','MAIN PORTION PACKAGING','TAKEOUT & DELIVERY','BRANDING OPTIONS'];
+  var ticking=false;
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+  function ease(v){return v<.5?2*v*v:1-Math.pow(-2*v+2,2)/2}
+  function render(){
+    ticking=false;
+    if(window.innerWidth<=900)return;
+    var max=story.offsetHeight-window.innerHeight;
+    var p=clamp((window.scrollY-story.offsetTop)/Math.max(1,max),0,1);
+    var pos=p*3,step=Math.min(3,Math.floor(pos)),local=pos-step;
+    if(p>=.999){step=3;local=1}
+    panels.forEach(function(el,i){var d=i-step,active=i===step;el.classList.toggle('is-active',active);el.style.opacity=active?1:0;el.style.transform='translateY(calc(-50% + '+(active?0:(d>0?24:-24))+'px))'});
+    if(film && film.readyState >= 1 && Number.isFinite(film.duration)){film.currentTime=p*film.duration;}
+    dots.forEach(function(d,i){d.classList.toggle('is-active',i===step)});
+    if(progress)progress.style.width=(p*100)+'%';
+    if(caption)caption.textContent=captions[step]; if(label)label.textContent='LAYER 0'+(step+1);
+  }
+  function requestRender(){if(!ticking){ticking=true;requestAnimationFrame(render)}}
+  window.addEventListener('scroll',requestRender,{passive:true});window.addEventListener('resize',requestRender);render();
+})();
+</script>
+{% endblock %}
