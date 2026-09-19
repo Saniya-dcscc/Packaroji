@@ -724,12 +724,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       HOMEPAGE PRODUCT CAROUSEL — CONTINUOUS INFINITE ROW
-       Matches the reference recording:
-       - 4 full cards on desktop + partial cards at both edges
-       - smooth continuous horizontal movement
-       - drag / touch / arrow controls
-       - seamless looping
+       HOMEPAGE COLLECTION CAROUSEL — RECORDING MATCH
+       Five cards visible on desktop, straight row, continuous loop.
+       Cursor steering works over cards + gaps; drag works anywhere.
     ========================================================== */
     (() => {
         const sliders = document.querySelectorAll('.homepage-product-carousel[data-product-carousel]');
@@ -743,12 +740,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const next = slider.querySelector('[data-product-next]');
             if (!viewport || !track || originals.length < 2) return;
 
-            const templates = originals.map((el) => el.cloneNode(true));
-            const count = templates.length;
+            const count = originals.length;
+            const templates = originals.map((slide) => slide.cloneNode(true));
 
-            // Build enough repeated copies so the loop never exposes an end.
+            // Enough copies to guarantee a seamless row while moving in either direction.
             track.innerHTML = '';
-            for (let copy = 0; copy < 7; copy++) {
+            for (let copy = -3; copy <= 3; copy++) {
                 templates.forEach((template, index) => {
                     const slide = template.cloneNode(true);
                     slide.dataset.carouselIndex = String(index);
@@ -757,18 +754,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
 
-            let cardWidth = 290;
-            let gap = 34;
-            let step = cardWidth + gap;
             let offset = 0;
+            let cardWidth = 285;
+            let gap = 28;
+            let step = cardWidth + gap;
             let lastTime = performance.now();
-            let raf = 0;
+            let currentSpeed = 14;
+            let pointerInside = false;
+            let pointerBias = 0;
             let dragging = false;
             let pointerId = null;
             let lastX = 0;
             let dragDistance = 0;
-            let pointerInside = false;
-            let pointerBias = 0;
+            let raf = 0;
             let resizeTimer = 0;
 
             const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -776,144 +774,125 @@ document.addEventListener("DOMContentLoaded", () => {
             function measure() {
                 const w = viewport.clientWidth;
 
+                // The recording shows roughly five cards across desktop with a small
+                // partial card at either edge. Keep that visual rhythm responsively.
                 if (w >= 1200) {
-                    // Reference desktop: ~290px cards with ~34px gaps.
-                    cardWidth = clamp(w * 0.176, 275, 305);
-                    gap = clamp(w * 0.021, 30, 36);
-                } else if (w >= 900) {
-                    cardWidth = clamp(w * 0.28, 245, 285);
+                    cardWidth = clamp(w * 0.175, 235, 285);
                     gap = 28;
+                } else if (w >= 900) {
+                    cardWidth = clamp(w * 0.205, 205, 250);
+                    gap = 24;
                 } else if (w >= 600) {
-                    cardWidth = clamp(w * 0.43, 220, 260);
-                    gap = 22;
+                    cardWidth = clamp(w * 0.30, 180, 220);
+                    gap = 20;
                 } else {
-                    cardWidth = clamp(w * 0.78, 235, 285);
+                    cardWidth = clamp(w * 0.72, 165, 205);
                     gap = 16;
                 }
 
                 step = cardWidth + gap;
-                slider.style.setProperty('--carousel-card-width', `${cardWidth}px`);
-                slider.style.setProperty('--carousel-gap', `${gap}px`);
-
-                // Keep the visual start centered: one partial card before the
-                // first full card, matching the reference composition.
-                const desiredLeft = w >= 1200 ? Math.max(18, (w - (4 * cardWidth + 3 * gap)) / 2 - cardWidth * 0.5)
-                                               : Math.max(12, (w - cardWidth) / 2 - cardWidth * 0.5);
-
-                // Put the middle repeated cycle into view.
-                const middleCycle = 3 * count * step;
-                offset = -middleCycle + desiredLeft;
-                render(false);
-            }
-
-            function render(animate = true) {
-                track.style.transform = `translate3d(${offset}px, 0, 0)`;
-                if (!animate) track.style.transition = 'none';
+                viewport.style.setProperty('--carousel-card-width', `${cardWidth}px`);
+                viewport.style.setProperty('--carousel-gap', `${gap}px`);
+                track.style.setProperty('--carousel-card-width', `${cardWidth}px`);
+                track.style.setProperty('--carousel-gap', `${gap}px`);
             }
 
             function normalize() {
                 const cycle = count * step;
                 if (!cycle) return;
+                while (offset <= -cycle) offset += cycle;
+                while (offset >= cycle) offset -= cycle;
+            }
 
-                // Keep the track around the middle copies.
-                while (offset > -2 * cycle) offset -= cycle;
-                while (offset < -5 * cycle) offset += cycle;
+            function render() {
+                const cycle = count * step;
+                // Place the first visible card slightly off the left edge, matching the
+                // reference recording rather than centering only four cards.
+                const edge = Math.min(52, Math.max(22, cardWidth * 0.18));
+                const base = -2 * cycle - edge;
+                track.style.transform = `translate3d(${base + offset}px,0,0)`;
             }
 
             function autoSpeed() {
-                if (window.innerWidth <= 600) return -17;
-                if (window.innerWidth <= 980) return -20;
-                return -24;
+                if (window.innerWidth <= 600) return 8;
+                if (window.innerWidth <= 980) return 10;
+                return 12;
             }
 
-            function setPointerBias(clientX) {
+            function desiredSpeed() {
+                if (!pointerInside || dragging) return autoSpeed();
+                // Cursor position controls direction gently. The middle remains slow;
+                // the far edges steer more noticeably without becoming too fast.
+                return pointerBias * 22;
+            }
+
+            function animate(now) {
+                raf = requestAnimationFrame(animate);
+                const dt = Math.min(0.04, Math.max(0, (now - lastTime) / 1000));
+                lastTime = now;
+                if (dragging) return;
+
+                const desired = desiredSpeed();
+                const smoothing = 1 - Math.exp(-dt * 3.5);
+                currentSpeed += (desired - currentSpeed) * smoothing;
+                offset += currentSpeed * dt;
+                normalize();
+                render();
+            }
+
+            function setBias(clientX) {
                 const rect = viewport.getBoundingClientRect();
                 if (!rect.width) return;
                 pointerBias = clamp(((clientX - rect.left) / rect.width) * 2 - 1, -1, 1);
                 pointerInside = true;
             }
 
-            function animate(now) {
-                raf = requestAnimationFrame(animate);
-
-                const dt = Math.min(0.04, Math.max(0, (now - lastTime) / 1000));
-                lastTime = now;
-
-                if (dragging) return;
-
-                let speed = autoSpeed();
-
-                // When the mouse is over the slider, allow subtle steering,
-                // while keeping the carousel moving continuously.
-                if (pointerInside) {
-                    speed += pointerBias * 5;
-                }
-
-                offset += speed * dt;
-                normalize();
-                track.style.transform = `translate3d(${offset}px, 0, 0)`;
-            }
-
-            function nudge(direction) {
-                offset += direction * step;
-                normalize();
-                track.style.transition = 'transform 420ms cubic-bezier(.22,.61,.36,1)';
-                track.style.transform = `translate3d(${offset}px, 0, 0)`;
-                window.setTimeout(() => {
-                    track.style.transition = 'none';
-                }, 430);
-            }
-
             function onPointerMove(event) {
                 if (dragging) {
                     if (event.pointerId !== pointerId) return;
-
                     const dx = event.clientX - lastX;
                     lastX = event.clientX;
                     dragDistance += Math.abs(dx);
                     offset += dx;
                     normalize();
-
-                    track.style.transform = `translate3d(${offset}px, 0, 0)`;
+                    render();
                     event.preventDefault();
                     return;
                 }
-
-                setPointerBias(event.clientX);
+                setBias(event.clientX);
             }
 
             function onPointerDown(event) {
                 if (event.pointerType === 'mouse' && event.button !== 0) return;
-
                 dragging = true;
                 pointerId = event.pointerId;
                 lastX = event.clientX;
                 dragDistance = 0;
-                track.style.transition = 'none';
-
+                currentSpeed = 0;
                 slider.classList.add('is-dragging');
-
-                try {
-                    viewport.setPointerCapture(pointerId);
-                } catch (_) {}
-
+                try { viewport.setPointerCapture(pointerId); } catch (_) {}
                 event.preventDefault();
             }
 
             function endDrag(event) {
                 if (!dragging) return;
                 if (event && pointerId !== null && event.pointerId !== pointerId) return;
-
                 dragging = false;
                 slider.classList.remove('is-dragging');
-
-                try {
-                    if (pointerId !== null) viewport.releasePointerCapture(pointerId);
-                } catch (_) {}
-
+                currentSpeed = autoSpeed();
+                try { if (pointerId !== null) viewport.releasePointerCapture(pointerId); } catch (_) {}
                 pointerId = null;
             }
 
+            function nudge(direction) {
+                offset += direction * step;
+                normalize();
+                render();
+                currentSpeed = 0;
+            }
+
+            // Prevent a click after an actual drag, while keeping normal single-click
+            // navigation on every card.
             slider.querySelectorAll('[data-slide-url]').forEach((slide) => {
                 slide.addEventListener('click', (event) => {
                     if (dragDistance > 8) {
@@ -927,15 +906,17 @@ document.addEventListener("DOMContentLoaded", () => {
             prev?.addEventListener('click', () => nudge(1));
             next?.addEventListener('click', () => nudge(-1));
 
-            slider.addEventListener('pointerenter', (event) => setPointerBias(event.clientX));
+            slider.addEventListener('pointerenter', (event) => setBias(event.clientX));
             slider.addEventListener('pointermove', onPointerMove, { passive: false });
             slider.addEventListener('pointerleave', () => {
                 if (!dragging) {
                     pointerInside = false;
                     pointerBias = 0;
+                    currentSpeed = autoSpeed();
                 }
             });
 
+            // The entire carousel viewport is draggable — cards and gaps included.
             viewport.addEventListener('pointerdown', onPointerDown, { passive: false });
             viewport.addEventListener('pointerup', endDrag, { passive: true });
             viewport.addEventListener('pointercancel', endDrag, { passive: true });
@@ -958,18 +939,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(measure, 100);
+                resizeTimer = setTimeout(() => {
+                    measure();
+                    normalize();
+                    render();
+                }, 80);
             }, { passive: true });
 
             measure();
-
-            track.style.transition = 'none';
-            if (!raf) {
-                raf = requestAnimationFrame(animate);
-            }
+            render();
+            currentSpeed = autoSpeed();
+            lastTime = performance.now();
+            if (!raf) raf = requestAnimationFrame(animate);
         });
     })();
-
 
     /* =========================================================
        PRODUCT CATEGORY FILTERS
