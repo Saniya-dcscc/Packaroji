@@ -25,7 +25,8 @@
         style.textContent = [
             "#packaging-layers .pkg-layer-film-video{object-fit:contain!important;object-position:center center!important;width:100%!important;height:100%!important;transform:none!important;scale:1!important;}",
             "#packaging-layers .pkg-layer-film{background:#111!important;}",
-            "@media(max-width:800px){#packaging-layers .pkg-layer-film-video{object-fit:contain!important;object-position:center center!important;}}"] .join("");
+            "@media(max-width:800px){#packaging-layers .pkg-layer-film-video{object-fit:contain!important;object-position:center center!important;}}"
+        ].join("");
         document.head.appendChild(style);
     }
 
@@ -41,18 +42,18 @@
         var hint = story.querySelector(".pkg-layer-scroll-hint");
         var videoPath = "/static/WhatsApp%20Video%202026-09-23%20at%2021.35.50.mp4";
         var starts = [0, 2, 4, 6];
-        var ends = [2, 4, 6, 7];
+        var ends = [2, 4, 6, 10];
         var step = -1;
         var locked = false;
         var animationFrame = 0;
-        var duration = 7;
+        var duration = 10;
 
         function clamp(value, min, max) {
             return Math.max(min, Math.min(max, value));
         }
 
         function setTime(value) {
-            var maxTime = Number.isFinite(film.duration) && film.duration > 0 ? film.duration - 0.03 : 7;
+            var maxTime = Number.isFinite(film.duration) && film.duration > 0 ? film.duration - 0.03 : 10;
             try { film.currentTime = clamp(value, 0, Math.max(0, maxTime)); } catch (_) {}
         }
 
@@ -80,12 +81,9 @@
             stopPlayback();
             var start = starts[index];
             var end = Math.min(ends[index], Number.isFinite(film.duration) && film.duration > 0 ? film.duration : ends[index]);
-            var from = reverse ? end : start;
             var to = reverse ? start : end;
-            var startedAt = null;
             var finished = false;
-
-            setTime(from);
+            setTime(reverse ? end : start);
 
             function finish() {
                 if (finished) return;
@@ -95,23 +93,12 @@
                 if (done) done();
             }
 
-            function monitor(timestamp) {
-                if (finished) return;
-                if (startedAt === null) startedAt = timestamp;
-                var reached = reverse ? film.currentTime <= to + 0.04 : film.currentTime >= to - 0.04;
-                if (reached || film.ended) {
-                    finish();
-                    return;
-                }
-                animationFrame = window.requestAnimationFrame(monitor);
-            }
-
             if (reverse) {
                 var reverseStart = null;
                 function reverseFrame(timestamp) {
                     if (finished) return;
                     if (reverseStart === null) reverseStart = timestamp;
-                    var ratio = clamp((timestamp - reverseStart) / 700, 0, 1);
+                    var ratio = clamp((timestamp - reverseStart) / 900, 0, 1);
                     setTime(end - (end - start) * ratio);
                     if (ratio >= 1) finish();
                     else animationFrame = window.requestAnimationFrame(reverseFrame);
@@ -136,6 +123,15 @@
                     animationFrame = window.requestAnimationFrame(fallbackFrame);
                 });
             }
+
+            function monitor() {
+                if (finished) return;
+                if (film.currentTime >= end - 0.04 || film.ended) {
+                    finish();
+                    return;
+                }
+                animationFrame = window.requestAnimationFrame(monitor);
+            }
             animationFrame = window.requestAnimationFrame(monitor);
         }
 
@@ -148,13 +144,11 @@
             if (!isPinned()) return;
             var direction = event.deltaY > 0 ? 1 : event.deltaY < 0 ? -1 : 0;
             if (!direction) return;
-
             if (locked) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 return;
             }
-
             if (direction > 0) {
                 if (step >= 3) return;
                 event.preventDefault();
@@ -165,7 +159,6 @@
                 playSegment(step, false, function () { locked = false; });
                 return;
             }
-
             if (step < 0) return;
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -188,7 +181,6 @@
         film.preload = "auto";
         film.load();
         film.addEventListener("loadedmetadata", function () {
-            if (Number.isFinite(film.duration) && film.duration > 0) duration = film.duration;
             setTime(0);
         });
 
