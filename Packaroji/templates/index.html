@@ -74,146 +74,11 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
       <p class="new-landing-lead">From sugarcane bagasse bowls and aluminum foil containers to heavy-duty SOS kraft bags and custom butter wraps — Packaroji powers restaurants, cafés, cloud kitchens and bakeries with eco-engineered packaging.</p>
       <div class="new-landing-actions">
         <a class="new-primary" href="{{ url_for('products') }}">📦 Explore Products ↓</a>
-        <a class="new-secondary" href="{{ url_for('order_page') }}">✨ Custom Branding</a>
+        <a class="new-secondary" href="{{ url_for('home') }}#contact">✨ Custom Branding</a>
       </div>
     </div>
   </div>
 </section>
-<script>
-  (() => {
-    const hero = document.querySelector('.new-landing-hero');
-    const video = document.getElementById('cursorHeadVideo');
-    if (!hero || !video) return;
-    let duration = 0, previousX = null, targetTime = 0, seeking = false;
-    const sensitivity = .8;
-    video.addEventListener('loadedmetadata', () => {
-      duration = video.duration || 0;
-      targetTime = video.currentTime || 0;
-    });
-    const seekToLatestFrame = () => {
-      if (!duration || seeking) return;
-      seeking = true;
-      if (typeof video.fastSeek === 'function') video.fastSeek(targetTime);
-      else video.currentTime = targetTime;
-    };
-    video.addEventListener('seeked', () => {
-      seeking = false;
-      if (Math.abs(video.currentTime - targetTime) > .04) seekToLatestFrame();
-    });
-    hero.addEventListener('pointermove', event => {
-      if (!duration) return;
-      if (previousX === null) { previousX = event.clientX; return; }
-      const delta = event.clientX - previousX;
-      previousX = event.clientX;
-      targetTime = Math.max(0, Math.min(duration - .04, targetTime + (delta / window.innerWidth) * sensitivity * duration));
-      seekToLatestFrame();
-    }, { passive: true });
-    hero.addEventListener('pointerleave', () => { previousX = null; });
-  })();
-</script>
-
-<section class="packaroji-code-hero legacy-hero-removed" id="legacy-home" aria-label="Legacy landing hero">
-  <style>
-    .packaroji-code-hero{
-      --p-beige:#f5f0e3;
-      --p-green:#1c4d36;
-      --p-green-dark:#123324;
-      --p-ink:#1a2e22;
-      position:relative;
-      min-height:calc(100vh - 100px);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      overflow:hidden;
-      background:var(--p-beige);
-      color:var(--p-ink);
-      isolation:isolate;
-    }
-    .packaroji-code-hero .p-video-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:var(--p-beige)}
-    .packaroji-code-hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% center;opacity:.72}
-    .packaroji-code-hero .p-video-left{position:absolute;inset:0 auto 0 0;width:min(62%,900px);background:linear-gradient(90deg,var(--p-beige) 0%,rgba(245,240,227,.98) 45%,rgba(245,240,227,.60) 76%,transparent 100%)}
-    .packaroji-code-hero .p-video-bottom{position:absolute;inset:auto 0 0;width:100%;height:28%;background:linear-gradient(0deg,var(--p-beige),transparent)}
-    .packaroji-code-hero .p-hero-inner{position:relative;z-index:2;width:100%;max-width:1450px;margin:0 auto;padding:64px clamp(20px,5vw,88px) 80px;display:flex;align-items:center;min-height:calc(100vh - 100px)}
-    .packaroji-code-hero .p-copy{max-width:760px}
-    .packaroji-code-hero .p-eyebrow{display:flex;align-items:center;gap:38px;margin-bottom:46px;color:var(--p-green);font-family:var(--font-body);font-size:clamp(14px,1.35vw,20px);font-weight:600;letter-spacing:.18em;text-transform:uppercase}
-    .packaroji-code-hero .p-eyebrow:before{content:"";width:58px;height:2px;background:var(--p-green);flex:0 0 auto}
-    .packaroji-code-hero h1{margin:0 0 34px;font-family:var(--font-heading);font-size:clamp(58px,7vw,108px);font-weight:500;line-height:.96;letter-spacing:-.055em;color:var(--p-ink);max-width:820px}
-    .packaroji-code-hero .p-desc{max-width:780px;margin:0 0 40px;font-family:var(--font-body);font-size:clamp(20px,2vw,29px);font-weight:400;line-height:1.45;letter-spacing:-.02em;color:#3f3a34}
-    .packaroji-code-hero .p-actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
-    .packaroji-code-hero .p-primary,.packaroji-code-hero .p-secondary{font-family:var(--font-body);text-decoration:none}
-    .packaroji-code-hero .p-primary{display:inline-flex;align-items:center;gap:9px;background:var(--p-green);color:#fff;padding:17px 27px;border-radius:999px;font-size:18px;font-weight:600;transition:background .2s,transform .2s}
-    .packaroji-code-hero .p-primary:hover{background:var(--p-green-dark);transform:translateY(-2px)}
-    .packaroji-code-hero .p-secondary{display:inline-flex;align-items:center;gap:8px;color:#433a32;font-size:19px;font-weight:600;padding:14px 10px}
-    .packaroji-code-hero .p-secondary:hover{opacity:.65}
-    @media(max-width:900px){
-      .packaroji-code-hero{min-height:calc(100vh - 92px)}
-      .packaroji-code-hero .p-hero-inner{min-height:calc(100vh - 92px);padding:70px 24px 60px;align-items:flex-end}
-      .packaroji-code-hero .p-copy{max-width:700px}
-      .packaroji-code-hero .p-video-left{width:100%;background:linear-gradient(90deg,rgba(245,240,227,.98),rgba(245,240,227,.78) 70%,rgba(245,240,227,.40))}
-    }
-    @media(max-width:600px){
-      .packaroji-code-hero .p-hero-inner{padding:55px 18px 45px}
-      .packaroji-code-hero .p-eyebrow{gap:15px;margin-bottom:28px;font-size:11px;letter-spacing:.14em}
-      .packaroji-code-hero .p-eyebrow:before{width:34px}
-      .packaroji-code-hero h1{font-size:clamp(50px,14vw,72px);line-height:.96;margin-bottom:24px}
-      .packaroji-code-hero .p-desc{font-size:18px;line-height:1.45;margin-bottom:28px}
-      .packaroji-code-hero .p-primary{font-size:15px;padding:14px 20px}
-      .packaroji-code-hero .p-secondary{font-size:16px}
-      .packaroji-code-hero video{object-position:65% center;opacity:.38}
-    }
-    @media(prefers-reduced-motion:reduce){.packaroji-code-hero video{display:none}}
-  </style>
-
-  <div class="p-video-wrap" aria-hidden="true">
-    <video id="packarojiLandingVideo" muted playsinline preload="auto">
-      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4" type="video/mp4">
-    </video>
-    <div class="p-video-left"></div>
-    <div class="p-video-bottom"></div>
-  </div>
-
-  <div class="p-hero-inner">
-    <div class="p-copy">
-      <div class="p-eyebrow"><span>BETTER PACKAGING, LAYER BY LAYER</span></div>
-      <h1>BUILT TO<br>CARRY BETTER.</h1>
-      <p class="p-desc">From wraps and containers to carry bags and custom branding, Packaroji brings the layers of food packaging together for restaurants, cafés, bakeries, cloud kitchens and takeaway businesses.</p>
-      <div class="p-actions">
-        <a href="{{ url_for('products') }}" class="p-primary"><span aria-hidden="true">📦</span><span>View All Products →</span></a>
-        <a href="{{ url_for('order_page') }}" class="p-secondary"><span aria-hidden="true">✨</span><span>Request Custom Packaging</span></a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      const video=document.getElementById('packarojiLandingVideo');
-      if(!video) return;
-      let prevX=null, seeking=false, targetTime=0, duration=0;
-      const SENSITIVITY=0.8;
-      video.addEventListener('loadedmetadata',()=>{duration=video.duration||0;});
-      function seek(){
-        if(!duration || seeking) return;
-        seeking=true;
-        video.currentTime=Math.max(0,Math.min(duration,targetTime));
-      }
-      video.addEventListener('seeked',()=>{
-        seeking=false;
-        if(Math.abs(video.currentTime-targetTime)>0.025) seek();
-      });
-      window.addEventListener('mousemove',(e)=>{
-        if(prevX===null){prevX=e.clientX;return;}
-        const delta=e.clientX-prevX;
-        prevX=e.clientX;
-        if(!duration || !delta) return;
-        targetTime=Math.max(0,Math.min(duration,targetTime+(delta/window.innerWidth)*SENSITIVITY*duration));
-        seek();
-      },{passive:true});
-    })();
-  </script>
-</section>
-
-
-
 <!-- =====================================================
      ABOUT PACKAROJI
 ===================================================== -->
@@ -319,8 +184,6 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
         <div class="feature-grid">
 
 
-
-
             <article class="feature-card">
 
                 <span>
@@ -336,8 +199,6 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
                 </p>
 
             </article>
-
-
 
 
             <article class="feature-card">
@@ -357,8 +218,6 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
             </article>
 
 
-
-
             <article class="feature-card">
 
                 <span>
@@ -374,8 +233,6 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
                 </p>
 
             </article>
-
-
 
 
             <article class="feature-card">
@@ -400,164 +257,6 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
     </div>
 
 </section>
-
-<style id="packaroji-layer-alignment-fix">
-  /* Keep every layer panel in the exact same position while the video scrubs. */
-  #packaging-layers,
-  #packaging-layers * {
-    box-sizing: border-box;
-  }
-
-  #packaging-layers {
-    position: relative;
-    overflow: clip;
-  }
-
-  #packaging-layers .pkg-layer-sticky {
-    position: sticky;
-    top: 0;
-    height: 100svh;
-    min-height: 640px;
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  #packaging-layers .pkg-layer-content {
-    position: relative;
-    z-index: 3;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    display: block;
-  }
-
-  #packaging-layers .pkg-layer-panel {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    padding: clamp(84px, 9vh, 120px) clamp(24px, 5.5vw, 96px) !important;
-    opacity: 0 !important;
-    visibility: hidden;
-    pointer-events: none;
-    transform: translate3d(0, 0, 0) !important;
-    transition: none !important;
-    will-change: opacity;
-  }
-
-  #packaging-layers .pkg-layer-panel.is-active {
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  #packaging-layers .pkg-layer-copy {
-    width: min(48%, 700px);
-    max-width: 700px;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: left;
-    position: relative;
-    z-index: 5;
-  }
-
-  #packaging-layers .pkg-layer-kicker,
-  #packaging-layers .pkg-layer-intro,
-  #packaging-layers .pkg-layer-specs,
-  #packaging-layers .pkg-layer-button {
-    font-family: var(--font-body) !important;
-  }
-
-  #packaging-layers .pkg-layer-kicker {
-    margin: 0 0 24px !important;
-    line-height: 1.35 !important;
-  }
-
-  #packaging-layers .pkg-layer-panel h2 {
-    margin: 0 0 24px !important;
-    font-family: var(--font-heading) !important;
-    font-size: clamp(2.8rem, 5.3vw, 6.2rem) !important;
-    font-weight: 600 !important;
-    line-height: .98 !important;
-    letter-spacing: -.055em !important;
-  }
-
-  #packaging-layers .pkg-layer-intro {
-    max-width: 650px;
-    margin: 0 0 30px !important;
-    font-size: clamp(1rem, 1.25vw, 1.25rem) !important;
-    line-height: 1.55 !important;
-  }
-
-  #packaging-layers .pkg-layer-specs {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px 28px;
-    margin: 0 0 30px !important;
-  }
-
-  #packaging-layers .pkg-layer-specs > div {
-    min-width: 0;
-  }
-
-  #packaging-layers .pkg-layer-specs span,
-  #packaging-layers .pkg-layer-specs strong {
-    font-family: var(--font-body) !important;
-  }
-
-  #packaging-layers .pkg-layer-specs strong {
-    display: block;
-    line-height: 1.35;
-  }
-
-  #packaging-layers .pkg-layer-film {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    overflow: hidden;
-  }
-
-  #packaging-layers .pkg-layer-film-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  @media (max-width: 900px) {
-    #packaging-layers .pkg-layer-panel {
-      align-items: flex-end !important;
-      padding: 92px 24px 54px !important;
-    }
-
-    #packaging-layers .pkg-layer-copy {
-      width: min(100%, 680px);
-      max-width: 100%;
-    }
-
-    #packaging-layers .pkg-layer-panel h2 {
-      font-size: clamp(2.8rem, 10vw, 5.2rem) !important;
-    }
-  }
-
-  @media (max-width: 560px) {
-    #packaging-layers .pkg-layer-panel {
-      padding: 88px 18px 36px !important;
-    }
-
-    #packaging-layers .pkg-layer-specs {
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    #packaging-layers .pkg-layer-panel h2 {
-      font-size: clamp(2.5rem, 12vw, 4.2rem) !important;
-    }
-  }
-</style>
 
 <!-- =====================================================
      PACKAGING LAYERS — SCROLL STORY
@@ -628,7 +327,7 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
             <div><span>CUSTOM</span><strong>Tell us your size, format and branding requirements</strong></div>
             <div><span>BUILT FOR</span><strong>Restaurants, cafés, bakeries and cloud kitchens</strong></div>
           </div>
-          <a class="pkg-layer-button" href="{{ url_for('order_page') }}">Explore customization <span>↗</span></a>
+          <a class="pkg-layer-button" href="{{ url_for('home') }}#contact">Explore customization <span>↗</span></a>
         </div>
       </div>
     </div>
@@ -758,16 +457,10 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
             <a
                 class="btn btn-primary"
-                href="{{ url_for('order_page') }}"
+                href="{{ url_for('home') }}#contact"
             >
                 Want a Customization →
             </a>
-
-
-            <span>
-                Your customization details stay
-                attached to the product in your cart.
-            </span>
 
         </div>
 
@@ -1034,18 +727,8 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
 
             <a
-                class="btn btn-primary"
-                href="{{ url_for('cart') }}"
-            >
-                View Cart
-            </a>
-
-
-            <a
                 class="btn btn-outline"
-                href="{{ url_for(
-                    'order_page'
-                ) }}"
+                href="{{ url_for('home') }}#contact"
             >
                 Want a Customization
             </a>
@@ -1144,15 +827,28 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
     const time = scrollToVideoTime(p);
     setVideoTime(time);
 
-    /*
-     * Show only one text panel at a time.
-     * The previous crossfade left two layer texts visible together,
-     * which caused the alignment and mixed-text problem during Layer 2.
-     */
-    const activeIndex = time < 2 ? 0 : time < 5 ? 1 : time < 7 ? 2 : 3;
-    const opacities = [0, 0, 0, 0];
-    opacities[activeIndex] = 1;
-    const yOffsets = [0, 0, 0, 0];
+    let opacities = [0,0,0,0];
+    let yOffsets = [0,8,8,8];
+    if (time < 2) {
+      opacities[0] = 1;
+    } else if (time < 3) {
+      const t = ease(clamp(time - 2, 0, 1));
+      opacities[0] = 1 - t; opacities[1] = t;
+      yOffsets[0] = -t * 5; yOffsets[1] = (1 - t) * 5;
+    } else if (time < 5) {
+      opacities[1] = 1;
+    } else if (time < 7) {
+      const t = ease(clamp(time - 5, 0, 1));
+      opacities[1] = 1 - t; opacities[2] = t;
+      yOffsets[1] = -t * 5; yOffsets[2] = (1 - t) * 5;
+    } else {
+      opacities[3] = 1;
+      if (time < 7.35) {
+        const t = ease(clamp((time - 7) / .35, 0, 1));
+        opacities[2] = 1 - t; opacities[3] = t;
+        yOffsets[2] = -t * 5; yOffsets[3] = (1 - t) * 5;
+      }
+    }
 
     panels.forEach((panel, i) => {
       const opacity = opacities[i];
