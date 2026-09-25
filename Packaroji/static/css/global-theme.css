@@ -1,0 +1,42 @@
+/* Packaroji global theme: typography and core palette only. */
+:root {
+  --color-primary: #1a4325;
+  --color-background: #f9f8f6;
+  --color-text-main: #2d3748;
+  --color-accent: #9dc183;
+  --color-white: #ffffff;
+  --color-border: #e5e9e3;
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", Arial, sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-primary);
+  font-family: var(--font-heading);
+}
+
+p {
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+}
+
+button, input, textarea, select,
+a, nav, nav a {
+  font-family: var(--font-body);
+}
+
+.text-accent,
+.accent-text {
+  color: var(--color-accent) !important;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
+}
