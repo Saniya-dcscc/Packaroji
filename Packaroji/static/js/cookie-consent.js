@@ -138,6 +138,7 @@
             var total = Math.max(1, story.offsetHeight - window.innerHeight);
             var p = clamp(-rect.top / total, 0, 1);
             var current = Math.min(3, Math.max(0, Math.round(p * 4)));
+            if (direction < 0 && p > 0.875) current = 4;
             var next = current + direction;
 
             if (next < 0 || next > 3) return false;
