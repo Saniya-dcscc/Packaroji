@@ -125,15 +125,10 @@
                 1
             );
 
-            var startTime = (duration * layer) / panels.length;
-            var endTime;
-
-            if (layer === panels.length - 1) {
-                endTime = duration;
-            } else {
-                endTime = (duration * (layer + 1)) / panels.length;
-            }
-
+            var starts = [0, 2, 4, 6];
+            var ends = [2, 4, 6, Math.max(6, duration)];
+            var startTime = starts[Math.min(layer, starts.length - 1)];
+            var endTime = ends[Math.min(layer, ends.length - 1)];
             var time = startTime + (endTime - startTime) * localProgress;
 
             setVideoTime(time);
