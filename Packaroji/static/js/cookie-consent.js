@@ -2,6 +2,17 @@
     "use strict";
 
     var KEY = "packaroji_cookie_choice";
+    var nativeAddEventListener = window.addEventListener.bind(window);
+
+    window.addEventListener = function (type, listener, options) {
+        if (type === "scroll" && typeof listener === "function") {
+            var source = Function.prototype.toString.call(listener);
+            if (source.indexOf("setVideoTime") !== -1 || source.indexOf("scrollToVideoTime") !== -1) {
+                return;
+            }
+        }
+        return nativeAddEventListener(type, listener, options);
+    };
 
     function initCookieConsent() {
         var banner = document.getElementById("cookie-banner");
@@ -32,7 +43,7 @@
     }
 
     var controller = document.createElement("script");
-    controller.src = "/static/js/packaging-layers-single-controller.js?v=1";
+    controller.src = "/static/js/packaging-layers-single-controller.js?v=2";
     controller.async = false;
     document.head.appendChild(controller);
 })();
