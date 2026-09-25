@@ -1,10 +1,4 @@
-/* Packaroji packaging-layer scroll boundary fix.
- *
- * The homepage layer animation owns the normal in-range scrubbing. This file
- * only handles the two outside-boundary states, and does so in a trailing
- * requestAnimationFrame so the original renderer cannot immediately overwrite
- * the boundary frame in the same scroll event.
- */
+/* Packaroji packaging-layer scroll boundary fix. */
 (function () {
   "use strict";
 
@@ -14,8 +8,9 @@
     if (!story || !film || story.dataset.boundaryFixReady === "true") return;
     story.dataset.boundaryFixReady = "true";
 
+    const panels = Array.from(story.querySelectorAll(".pkg-layer-panel"));
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-    let duration = Number.isFinite(film.duration) && film.duration > 0 ? film.duration : 10.125;
+    let duration = 10.125;
     let frame = 0;
     let lastBoundary = "";
 
@@ -23,19 +18,24 @@
     film.pause();
 
     function updateDuration() {
-      if (Number.isFinite(film.duration) && film.duration > 0) {
-        duration = film.duration;
-      }
+      if (Number.isFinite(film.duration) && film.duration > 0) duration = film.duration;
     }
 
     function seekSafely(time) {
       const bounded = clamp(Number(time) || 0, 0, duration);
       try {
-        if (typeof film.fastSeek === "function") film.fastSeek(bounded);
-        else film.currentTime = bounded;
-      } catch (_) {
-        try { film.currentTime = bounded; } catch (__) {}
-      }
+        film.currentTime = bounded;
+      } catch (_) {}
+    }
+
+    function normalizeScrollRange() {
+      if (!panels.length) return;
+      // One viewport for the pinned scene plus one viewport of scroll space
+      // per layer. This prevents an oversized section from producing blank
+      // pages after Layer 4 before the next homepage section begins.
+      const targetHeight = Math.max(window.innerHeight * (panels.length + 1), window.innerHeight + 1);
+      story.style.height = `${Math.round(targetHeight)}px`;
+      story.style.minHeight = `${Math.round(targetHeight)}px`;
     }
 
     function getRawProgress() {
@@ -46,6 +46,7 @@
     function enforceBoundary() {
       frame = 0;
       updateDuration();
+      normalizeScrollRange();
 
       const rawProgress = getRawProgress();
       let boundary = "inside";
@@ -57,8 +58,6 @@
         return;
       }
 
-      // Apply each boundary only when entering it. This prevents repeated
-      // seeks on every scroll event and avoids a visible replay/reset.
       if (lastBoundary !== boundary) {
         seekSafely(boundary === "top" ? 0 : duration);
         film.pause();
@@ -73,12 +72,15 @@
 
     film.addEventListener("loadedmetadata", function () {
       updateDuration();
+      normalizeScrollRange();
       scheduleBoundaryCheck();
     }, { passive: true });
 
     window.addEventListener("scroll", scheduleBoundaryCheck, { passive: true });
     window.addEventListener("resize", scheduleBoundaryCheck, { passive: true });
     window.addEventListener("orientationchange", scheduleBoundaryCheck, { passive: true });
+
+    normalizeScrollRange();
     scheduleBoundaryCheck();
   }
 
