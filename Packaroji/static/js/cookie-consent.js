@@ -14,7 +14,18 @@
         return nativeAddEventListener(type, listener, options);
     };
 
+    function loadGlobalTheme() {
+        if (document.querySelector('link[data-packaroji-global-theme]')) return;
+        var stylesheet = document.createElement("link");
+        stylesheet.rel = "stylesheet";
+        stylesheet.href = "/static/css/global-theme.css?v=1";
+        stylesheet.setAttribute("data-packaroji-global-theme", "true");
+        document.head.appendChild(stylesheet);
+    }
+
     function initCookieConsent() {
+        loadGlobalTheme();
+
         var banner = document.getElementById("cookie-banner");
         if (!banner) return;
 
