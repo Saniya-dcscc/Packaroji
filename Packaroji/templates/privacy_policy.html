@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy | Packaroji{% endblock %}
+{% block description %}Packaroji Privacy Policy explaining how Packaroji collects, uses, protects and handles personal information.{% endblock %}
+{% block head %}
+<style>
+.legal-page{padding:72px 0 96px;background:var(--paper)}
+.legal-wrap{max-width:900px;margin:0 auto;padding:0 24px}
+.legal-kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--leaf);font-weight:700}
+.legal-page h1{font-family:var(--font-heading);font-size:clamp(36px,5vw,58px);line-height:1.05;color:var(--forest-dark);margin:10px 0 14px}
+.legal-updated{color:var(--muted);font-size:14px;margin-bottom:42px}
+.legal-page h2{font-family:var(--font-heading);font-size:25px;color:var(--forest-dark);margin:40px 0 12px}
+.legal-page p,.legal-page li{font-size:16px;line-height:1.8;color:var(--ink)}
+.legal-page ul{padding-left:24px}
+.legal-card{background:var(--cream-2);border:1px solid var(--line-light);border-radius:18px;padding:22px 24px;margin:24px 0}
+.legal-page a{color:var(--forest);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:600px){.legal-page{padding:48px 0 70px}.legal-wrap{padding:0 18px}.legal-page h2{font-size:22px}.legal-page p,.legal-page li{font-size:15px}}
+</style>
+{% endblock %}
+{% block content %}
+<main class="legal-page">
+  <div class="legal-wrap">
+    <div class="legal-kicker">Packaroji</div>
+    <h1>Privacy Policy</h1>
+    <div class="legal-updated">Last updated: 20 September 2026</div>
+
+    <p>Packaroji respects your privacy. This Privacy Policy explains what personal information we collect through this website, why we use it, how we protect it, and the choices available to you.</p>
+
+    <div class="legal-card"><strong>In short:</strong> We use information you provide to create and secure accounts, verify email addresses with OTPs, process enquiries and orders, provide customer support, and operate the Packaroji website.</div>
+
+    <h2>1. Information we collect</h2>
+    <p>Depending on how you use the website, we may collect information you provide directly, including:</p>
+    <ul>
+      <li>Your name and email address when you create an account.</li>
+      <li>Your phone number when you provide it for an account, enquiry or order.</li>
+      <li>Order information such as customer name, business name, phone number, email, delivery address, items and notes.</li>
+      <li>Files or customization information you choose to upload with a customization request.</li>
+      <li>Information you send to Packaroji through contact or support interactions.</li>
+    </ul>
+    <p>Our authentication system stores a password hash rather than your plain-text password. Email verification uses a time-limited OTP.</p>
+
+    <h2>2. How we use information</h2>
+    <ul>
+      <li>Create and manage your Packaroji account.</li>
+      <li>Send email OTPs and account-related messages.</li>
+      <li>Process and manage orders, enquiries and customization requests.</li>
+      <li>Provide customer support and respond to communications.</li>
+      <li>Maintain website security, prevent misuse and troubleshoot technical problems.</li>
+      <li>Meet applicable legal or regulatory requirements.</li>
+    </ul>
+
+    <h2>3. Information sharing</h2>
+    <p>Packaroji does not sell your personal information. We may disclose information when necessary to operate the service, such as to service providers that support hosting, email delivery or other website functions, or when disclosure is required by law.</p>
+
+    <h2>4. Email verification and account security</h2>
+    <p>When you create an account, Packaroji may send a one-time verification code to the email address you provide. Verification codes are time-limited and subject to attempt limits. Account password-reset messages are also sent to the account email address when requested.</p>
+
+    <h2>5. Orders and customer information</h2>
+    <p>If you place an order or submit a customization request, the information you provide is used to handle that request, communicate with you and maintain the related order record. Please provide only information that is necessary for your request.</p>
+
+    <h2>6. Cookies and similar technologies</h2>
+    <p>Packaroji may use essential browser storage or cookies needed for functions such as maintaining a login session, protecting account flows and retaining shopping-cart state. Our <a href="{{ url_for('cookie_policy') }}">Cookie Policy</a> explains these technologies in more detail.</p>
+
+    <h2>7. Data retention</h2>
+    <p>We retain information for as long as reasonably necessary for the purposes described in this policy, including maintaining accounts, completing orders, resolving disputes, maintaining security and meeting legal obligations. Retention periods can vary depending on the type of information and the purpose.</p>
+
+    <h2>8. Security</h2>
+    <p>Packaroji uses reasonable technical and organizational measures to protect information. No internet transmission or storage system can be guaranteed to be completely secure, so please use a unique password and keep your account credentials confidential.</p>
+
+    <h2>9. Your choices and requests</h2>
+    <p>You can contact Packaroji if you want to ask about the personal information associated with your account or request correction or deletion where applicable. We may need to verify your identity before completing a request.</p>
+
+    <h2>10. Changes to this policy</h2>
+    <p>We may update this Privacy Policy when our website, services or legal requirements change. The updated version will be posted on this page with a revised “Last updated” date.</p>
+
+    <h2>11. Contact Packaroji</h2>
+    <p>For privacy questions or requests, contact us at <a href="mailto:{{ business.email }}">{{ business.email }}</a> or call <a href="tel:{{ business.phone|replace(' ','')|replace('-','') }}">{{ business.phone }}</a>.</p>
+  </div>
+</main>
+{% endblock %}
