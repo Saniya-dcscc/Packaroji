@@ -1,7 +1,6 @@
 (function () {
     "use strict";
 
-    /* Existing cookie-consent behavior. */
     var KEY = "packaroji_cookie_choice";
     var banner = document.getElementById("cookie-banner");
 
@@ -9,7 +8,6 @@
         var saved = null;
         try { saved = window.localStorage.getItem(KEY); } catch (_) {}
         if (!saved) banner.hidden = false;
-
         banner.querySelectorAll("[data-cookie-choice]").forEach(function (button) {
             button.addEventListener("click", function () {
                 var choice = button.getAttribute("data-cookie-choice") || "accept";
@@ -19,27 +17,18 @@
         });
     }
 
-    /* Force the uploaded video's original frame; do not allow later CSS to crop it. */
     function preserveVideoFrame() {
         var style = document.getElementById("packaroji-video-frame-fix");
-        if (!style) {
-            style = document.createElement("style");
-            style.id = "packaroji-video-frame-fix";
-            style.textContent = [
-                "#packaging-layers .pkg-layer-film-video{object-fit:contain!important;object-position:center center!important;width:100%!important;height:100%!important;transform:none!important;scale:1!important;}",
-                "#packaging-layers .pkg-layer-film{background:#111!important;}",
-                "@media(max-width:800px){#packaging-layers .pkg-layer-film-video{object-fit:contain!important;opacity:1!important;filter:none!important;}}"
-            ].join("");
-            document.head.appendChild(style);
-        }
+        if (style) return;
+        style = document.createElement("style");
+        style.id = "packaroji-video-frame-fix";
+        style.textContent = [
+            "#packaging-layers .pkg-layer-film-video{object-fit:contain!important;object-position:center center!important;width:100%!important;height:100%!important;transform:none!important;scale:1!important;}",
+            "#packaging-layers .pkg-layer-film{background:#111!important;}",
+            "@media(max-width:800px){#packaging-layers .pkg-layer-film-video{object-fit:contain!important;object-position:center center!important;}}"] .join("");
+        document.head.appendChild(style);
     }
 
-    /*
-     * PACKAGING LAYERS
-     * One wheel gesture = one layer and one fixed video segment:
-     * 1: 0-2s, 2: 2-4s, 3: 4-6s, 4: 6-10s.
-     * No continuous scroll scrubbing is used.
-     */
     function initPackagingLayerVideo() {
         var story = document.getElementById("packaging-layers");
         var film = document.getElementById("pkgLayerFilm");
@@ -52,129 +41,111 @@
         var hint = story.querySelector(".pkg-layer-scroll-hint");
         var videoPath = "/static/WhatsApp%20Video%202026-09-23%20at%2021.35.50.mp4";
         var starts = [0, 2, 4, 6];
-        var ends = [2, 4, 6, 10];
-        var duration = 10;
+        var ends = [2, 4, 6, 7];
         var step = -1;
         var locked = false;
-        var frame = 0;
+        var animationFrame = 0;
+        var duration = 7;
 
         function clamp(value, min, max) {
             return Math.max(min, Math.min(max, value));
         }
 
-        function safeEnd(index) {
-            var actual = Number.isFinite(duration) && duration > 0 ? duration : 10;
-            return Math.min(ends[index], Math.max(starts[index], actual - 0.04));
-        }
-
         function setTime(value) {
-            var actual = Number.isFinite(duration) && duration > 0 ? duration : 10;
-            var safe = clamp(value, 0, Math.max(0, actual - 0.04));
-            try { film.currentTime = safe; } catch (_) {}
+            var maxTime = Number.isFinite(film.duration) && film.duration > 0 ? film.duration - 0.03 : 7;
+            try { film.currentTime = clamp(value, 0, Math.max(0, maxTime)); } catch (_) {}
         }
 
-        function renderLayer(index) {
-            var active = clamp(index, 0, 3);
-            panels.forEach(function (panel, panelIndex) {
-                var visible = panelIndex === active;
+        function stopPlayback() {
+            if (animationFrame) window.cancelAnimationFrame(animationFrame);
+            animationFrame = 0;
+            film.pause();
+        }
+
+        function renderLayer(activeIndex) {
+            panels.forEach(function (panel, index) {
+                var visible = index === activeIndex;
+                panel.classList.toggle("is-active", visible);
                 panel.style.opacity = visible ? "1" : "0";
                 panel.style.visibility = visible ? "visible" : "hidden";
                 panel.style.transform = "none";
                 panel.style.zIndex = visible ? "10" : "1";
-                panel.classList.toggle("is-active", visible);
                 panel.setAttribute("aria-hidden", visible ? "false" : "true");
             });
-            if (progress) progress.style.transform = "scaleX(" + ((active + 1) / 4) + ")";
-            if (hint) hint.style.opacity = step >= 0 ? "0" : "1";
+            if (progress) progress.style.transform = "scaleX(" + (activeIndex < 0 ? 0 : (activeIndex + 1) / 4) + ")";
+            if (hint) hint.style.opacity = activeIndex < 0 ? "1" : "0";
         }
 
-        function cancelAnimation() {
-            if (frame) window.cancelAnimationFrame(frame);
-            frame = 0;
-            film.pause();
-        }
-
-        function playForward(index, done) {
-            cancelAnimation();
+        function playSegment(index, reverse, done) {
+            stopPlayback();
             var start = starts[index];
-            var end = safeEnd(index);
+            var end = Math.min(ends[index], Number.isFinite(film.duration) && film.duration > 0 ? film.duration : ends[index]);
+            var from = reverse ? end : start;
+            var to = reverse ? start : end;
+            var startedAt = null;
             var finished = false;
-            var fallbackStart = null;
-            setTime(start);
+
+            setTime(from);
 
             function finish() {
                 if (finished) return;
                 finished = true;
-                if (frame) window.cancelAnimationFrame(frame);
-                frame = 0;
-                film.pause();
-                setTime(end);
+                stopPlayback();
+                setTime(to);
                 if (done) done();
             }
 
             function monitor(timestamp) {
                 if (finished) return;
-                if (film.currentTime >= end - 0.035 || film.ended) {
+                if (startedAt === null) startedAt = timestamp;
+                var reached = reverse ? film.currentTime <= to + 0.04 : film.currentTime >= to - 0.04;
+                if (reached || film.ended) {
                     finish();
                     return;
                 }
-                if (fallbackStart !== null) {
-                    var ratio = clamp((timestamp - fallbackStart) / 2000, 0, 1);
-                    setTime(start + (end - start) * ratio);
-                    if (ratio >= 1) {
-                        finish();
-                        return;
-                    }
-                }
-                frame = window.requestAnimationFrame(monitor);
+                animationFrame = window.requestAnimationFrame(monitor);
             }
 
-            var promise = null;
-            try { promise = film.play(); } catch (_) {}
-            if (promise && typeof promise.catch === "function") {
-                promise.catch(function () {
-                    fallbackStart = performance.now();
+            if (reverse) {
+                var reverseStart = null;
+                function reverseFrame(timestamp) {
+                    if (finished) return;
+                    if (reverseStart === null) reverseStart = timestamp;
+                    var ratio = clamp((timestamp - reverseStart) / 700, 0, 1);
+                    setTime(end - (end - start) * ratio);
+                    if (ratio >= 1) finish();
+                    else animationFrame = window.requestAnimationFrame(reverseFrame);
+                }
+                animationFrame = window.requestAnimationFrame(reverseFrame);
+                return;
+            }
+
+            var playResult = null;
+            try { playResult = film.play(); } catch (_) {}
+            if (playResult && typeof playResult.catch === "function") {
+                playResult.catch(function () {
+                    var fallbackStart = null;
+                    function fallbackFrame(timestamp) {
+                        if (finished) return;
+                        if (fallbackStart === null) fallbackStart = timestamp;
+                        var ratio = clamp((timestamp - fallbackStart) / Math.max(1, (end - start) * 1000), 0, 1);
+                        setTime(start + (end - start) * ratio);
+                        if (ratio >= 1) finish();
+                        else animationFrame = window.requestAnimationFrame(fallbackFrame);
+                    }
+                    animationFrame = window.requestAnimationFrame(fallbackFrame);
                 });
             }
-            frame = window.requestAnimationFrame(monitor);
+            animationFrame = window.requestAnimationFrame(monitor);
         }
 
-        function playReverse(index, done) {
-            cancelAnimation();
-            var start = starts[index];
-            var end = safeEnd(index);
-            var began = null;
-            var finished = false;
-            setTime(end);
-
-            function finish() {
-                if (finished) return;
-                finished = true;
-                if (frame) window.cancelAnimationFrame(frame);
-                frame = 0;
-                film.pause();
-                setTime(start);
-                if (done) done();
-            }
-
-            function reverse(timestamp) {
-                if (finished) return;
-                if (began === null) began = timestamp;
-                var ratio = clamp((timestamp - began) / 900, 0, 1);
-                setTime(end - (end - start) * ratio);
-                if (ratio >= 1) finish();
-                else frame = window.requestAnimationFrame(reverse);
-            }
-            frame = window.requestAnimationFrame(reverse);
-        }
-
-        function storyIsPinned() {
+        function isPinned() {
             var rect = story.getBoundingClientRect();
             return rect.top <= 3 && rect.bottom >= window.innerHeight - 3;
         }
 
-        function handleWheel(event) {
-            if (!storyIsPinned()) return;
+        function onWheel(event) {
+            if (!isPinned()) return;
             var direction = event.deltaY > 0 ? 1 : event.deltaY < 0 ? -1 : 0;
             if (!direction) return;
 
@@ -191,7 +162,7 @@
                 locked = true;
                 step += 1;
                 renderLayer(step);
-                playForward(step, function () { locked = false; });
+                playSegment(step, false, function () { locked = false; });
                 return;
             }
 
@@ -200,32 +171,29 @@
             event.stopImmediatePropagation();
             locked = true;
             var current = step;
-            playReverse(current, function () {
+            playSegment(current, true, function () {
                 step = current - 1;
-                renderLayer(Math.max(0, step));
+                renderLayer(step);
+                setTime(step < 0 ? 0 : starts[Math.max(0, step)]);
                 locked = false;
             });
         }
 
-        var source = film.querySelector("source");
-        if (source) source.setAttribute("src", videoPath);
-        film.setAttribute("src", videoPath);
+        film.src = videoPath;
         film.muted = true;
         film.defaultMuted = true;
         film.setAttribute("muted", "");
         film.setAttribute("playsinline", "");
         film.setAttribute("webkit-playsinline", "");
         film.preload = "auto";
-        film.pause();
         film.load();
-
         film.addEventListener("loadedmetadata", function () {
             if (Number.isFinite(film.duration) && film.duration > 0) duration = film.duration;
             setTime(0);
         });
 
-        window.addEventListener("wheel", handleWheel, { capture: true, passive: false });
-        renderLayer(0);
+        window.addEventListener("wheel", onWheel, { capture: true, passive: false });
+        renderLayer(-1);
         setTime(0);
     }
 
