@@ -181,15 +181,22 @@
         film.setAttribute("webkit-playsinline", "");
         film.preload = "auto";
         film.addEventListener("play", function () {
-            if (completed) film.pause();
+            film.pause();
         });
+        film.addEventListener("playing", function () {
+            film.pause();
+        });
+        film.pause();
         film.load();
+        film.pause();
         film.addEventListener("loadedmetadata", function () {
+            film.pause();
             setTime(0);
         });
 
         window.addEventListener("wheel", onWheel, { capture: true, passive: false });
         renderLayer(-1);
+        film.pause();
         setTime(0);
     }
 
