@@ -37,6 +37,7 @@
         window.__packarojiDiscreteLayerController = true;
         preserveVideoFrame();
 
+        var filmFrame = film.closest(".pkg-layer-film") || film.parentElement;
         var panels = Array.from(story.querySelectorAll(".pkg-layer-panel"));
         var progress = story.querySelector(".pkg-layer-progress span");
         var hint = story.querySelector(".pkg-layer-scroll-hint");
@@ -60,6 +61,14 @@
             if (animationFrame) window.cancelAnimationFrame(animationFrame);
             animationFrame = 0;
             film.pause();
+        }
+
+        function setFilmVisible(visible) {
+            if (!filmFrame) return;
+            filmFrame.style.visibility = visible ? "visible" : "hidden";
+            filmFrame.style.opacity = visible ? "1" : "0";
+            filmFrame.style.pointerEvents = visible ? "auto" : "none";
+            filmFrame.setAttribute("aria-hidden", visible ? "false" : "true");
         }
 
         function renderLayer(activeIndex) {
@@ -115,6 +124,7 @@
 
         function resetBeforeLeavingBackwards() {
             stopPlayback();
+            setFilmVisible(true);
             locked = false;
             completed = false;
             step = -1;
@@ -127,6 +137,7 @@
             stopPlayback();
             setTime(10);
             film.pause();
+            setFilmVisible(false);
         }
 
         function onWheel(event) {
@@ -138,6 +149,10 @@
                 event.stopImmediatePropagation();
                 return;
             }
+            if (completed && direction < 0) {
+                completed = false;
+                setFilmVisible(true);
+            }
             if (direction > 0) {
                 if (step >= 3) {
                     finishStoryForward();
@@ -146,6 +161,7 @@
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 completed = false;
+                setFilmVisible(true);
                 locked = true;
                 step += 1;
                 renderLayer(step);
@@ -162,6 +178,7 @@
             event.preventDefault();
             event.stopImmediatePropagation();
             completed = false;
+            setFilmVisible(true);
             locked = true;
             var current = step;
             playSegment(current, true, function () {
@@ -196,6 +213,7 @@
 
         window.addEventListener("wheel", onWheel, { capture: true, passive: false });
         renderLayer(-1);
+        setFilmVisible(true);
         film.pause();
         setTime(0);
     }
