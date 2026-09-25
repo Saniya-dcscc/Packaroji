@@ -120,21 +120,7 @@
          FONTS
     ====================================================== -->
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
-        rel="stylesheet"
-    >
+    <!-- Local, consistent typography: no external font downloads required -->
 
 
     <!-- =====================================================
@@ -149,14 +135,10 @@
         ) }}"
     >
 
-    <!-- Packaroji landing/header typography from approved landing code -->
-    <link rel="stylesheet" href="https://db.onlinewebfonts.com/c/5ac3fe7c6abd2f62067f266d89671492?family=HelveticaNowDisplay-Medium" type="text/css">
-    <link rel="stylesheet" href="https://db.onlinewebfonts.com/c/1aa3377e489837a26d019bba501e779d?family=HelveticaNowDisplayW01-Rg" type="text/css">
-
     <style>
       :root{
-        --font-heading:'HelveticaNowDisplay-Medium','Helvetica Neue',Arial,sans-serif;
-        --font-body:'HelveticaNowDisplayW01-Rg','Helvetica Neue',Arial,sans-serif;
+        --font-heading:Georgia, "Times New Roman", serif;
+        --font-body:Georgia, "Times New Roman", serif;
       }
       .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(28,77,54,.10)}
       .site-header .topbar{font-family:var(--font-body)}
@@ -172,6 +154,43 @@
       .site-header .nav-cart{font-weight:500}
       @media(max-width:1200px){.site-header .main-nav{gap:11px;font-size:14px}.site-header .nav-auth-combined{font-size:15px;padding:9px 13px}.site-header .nav-wrap{gap:12px}}
       @media(max-width:900px){.site-header .main-nav{font-size:14px}.site-header .brand small{font-size:8px}.site-header .nav-wrap{min-height:68px}}
+    </style>
+
+    <!-- Final typography override: keeps the entire site on one classic serif family -->
+    <style id="packaroji-classic-serif">
+      :root {
+        --font-heading: Georgia, "Times New Roman", serif !important;
+        --font-body: Georgia, "Times New Roman", serif !important;
+      }
+
+      body,
+      body p,
+      body li,
+      body label,
+      body input,
+      body textarea,
+      body button,
+      body a,
+      body span,
+      body small,
+      body strong,
+      body h1,
+      body h2,
+      body h3,
+      body h4,
+      body h5,
+      body h6 {
+        font-family: Georgia, "Times New Roman", serif !important;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 700;
+      }
     </style>
 
 
