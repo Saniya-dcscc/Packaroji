@@ -40,13 +40,11 @@
         var panels = Array.from(story.querySelectorAll(".pkg-layer-panel"));
         var progress = story.querySelector(".pkg-layer-progress span");
         var hint = story.querySelector(".pkg-layer-scroll-hint");
-        var videoPath = "/static/WhatsApp%20Video%202026-09-23%20at%2021.35.50.mp4";
         var starts = [0, 2, 4, 6];
         var ends = [2, 4, 6, 10];
         var step = -1;
         var locked = false;
         var animationFrame = 0;
-        var duration = 10;
 
         function clamp(value, min, max) {
             return Math.max(min, Math.min(max, value));
@@ -81,9 +79,13 @@
             stopPlayback();
             var start = starts[index];
             var end = Math.min(ends[index], Number.isFinite(film.duration) && film.duration > 0 ? film.duration : ends[index]);
+            var from = reverse ? end : start;
             var to = reverse ? start : end;
             var finished = false;
-            setTime(reverse ? end : start);
+            var animationStart = null;
+            var playbackMilliseconds = 1200;
+
+            setTime(from);
 
             function finish() {
                 if (finished) return;
@@ -93,46 +95,16 @@
                 if (done) done();
             }
 
-            if (reverse) {
-                var reverseStart = null;
-                function reverseFrame(timestamp) {
-                    if (finished) return;
-                    if (reverseStart === null) reverseStart = timestamp;
-                    var ratio = clamp((timestamp - reverseStart) / 900, 0, 1);
-                    setTime(end - (end - start) * ratio);
-                    if (ratio >= 1) finish();
-                    else animationFrame = window.requestAnimationFrame(reverseFrame);
-                }
-                animationFrame = window.requestAnimationFrame(reverseFrame);
-                return;
-            }
-
-            var playResult = null;
-            try { playResult = film.play(); } catch (_) {}
-            if (playResult && typeof playResult.catch === "function") {
-                playResult.catch(function () {
-                    var fallbackStart = null;
-                    function fallbackFrame(timestamp) {
-                        if (finished) return;
-                        if (fallbackStart === null) fallbackStart = timestamp;
-                        var ratio = clamp((timestamp - fallbackStart) / Math.max(1, (end - start) * 1000), 0, 1);
-                        setTime(start + (end - start) * ratio);
-                        if (ratio >= 1) finish();
-                        else animationFrame = window.requestAnimationFrame(fallbackFrame);
-                    }
-                    animationFrame = window.requestAnimationFrame(fallbackFrame);
-                });
-            }
-
-            function monitor() {
+            function frame(timestamp) {
                 if (finished) return;
-                if (film.currentTime >= end - 0.04 || film.ended) {
-                    finish();
-                    return;
-                }
-                animationFrame = window.requestAnimationFrame(monitor);
+                if (animationStart === null) animationStart = timestamp;
+                var ratio = clamp((timestamp - animationStart) / playbackMilliseconds, 0, 1);
+                setTime(from + (to - from) * ratio);
+                if (ratio >= 1) finish();
+                else animationFrame = window.requestAnimationFrame(frame);
             }
-            animationFrame = window.requestAnimationFrame(monitor);
+
+            animationFrame = window.requestAnimationFrame(frame);
         }
 
         function isPinned() {
@@ -172,7 +144,6 @@
             });
         }
 
-        film.src = videoPath;
         film.muted = true;
         film.defaultMuted = true;
         film.setAttribute("muted", "");
@@ -191,8 +162,15 @@
 
     function swapLandingHeroImage() {
         var image = document.querySelector(".new-landing-media img");
-        if (image) {
-            image.src = "/static/images/packaging-hero-new.jpg";
+        if (!image) return;
+        image.src = "/static/images/packaging-hero-new.jpg";
+        image.style.visibility = "visible";
+        var style = document.getElementById("packaroji-hero-image-fix");
+        if (!style) {
+            style = document.createElement("style");
+            style.id = "packaroji-hero-image-fix";
+            style.textContent = ".new-landing-hero{background:#f5f0e3!important;}.new-landing-media{z-index:0!important;}.new-landing-inner{position:relative!important;z-index:1!important;} .new-landing-media img{object-fit:cover!important;object-position:center center!important;}";
+            document.head.appendChild(style);
         }
     }
 
