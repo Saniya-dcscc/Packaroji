@@ -1,0 +1,52 @@
+/* Remove the current landing-page photographic/background treatment. */
+.home-page .hero,
+.home-page .hero.hero-template,
+.home-page .hero-template-bg,
+.home-page .hero-template-landing-photo,
+.home-page .hero-template-landing-photo > img,
+.home-page .hero-template-landing-photo > img.landing-trail-back,
+.home-page .hero-template-landing-photo > img.landing-trail-base,
+.home-page .hero-template-landing-photo > img.landing-trail-front,
+.home-page .hero-template-landing-photo > .landing-trail-front-layer,
+.home-page .hero-template-landing-photo > canvas.landing-trail-canvas {
+  background-image: none !important;
+  background: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.home-page .hero-template-landing-photo,
+.home-page .hero-template-landing-photo > img,
+.home-page .hero-template-landing-photo > img.landing-trail-back,
+.home-page .hero-template-landing-photo > img.landing-trail-base,
+.home-page .hero-template-landing-photo > img.landing-trail-front,
+.home-page .hero-template-landing-photo > .landing-trail-front-layer,
+.home-page .hero-template-landing-photo > canvas.landing-trail-canvas {
+  display: none !important;
+}
+
+.home-page .hero,
+.home-page .hero.hero-template {
+  min-height: 560px !important;
+  color: #000000 !important;
+  background: #ffffff !important;
+}
+
+.home-page .hero-overlay,
+.home-page .hero-template::before,
+.home-page .hero-template-doodle,
+.home-page .hero-template-brand {
+  display: none !important;
+}
+
+.home-page .hero-copy,
+.home-page .hero h1,
+.home-page .hero p,
+.home-page .hero .hero-lead,
+.home-page .hero .hero-points {
+  color: #000000 !important;
+}
+
+.home-page .hero h1 span,
+.home-page .hero .eyebrow {
+  color: #214c36 !important;
+}
