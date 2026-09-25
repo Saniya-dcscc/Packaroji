@@ -200,8 +200,14 @@
         film.setAttribute("playsinline", "");
         film.setAttribute("webkit-playsinline", "");
         film.preload = "auto";
+        film.style.setProperty("object-fit", "contain", "important");
+        film.style.setProperty("object-position", "center center", "important");
+        film.style.setProperty("transform", "none", "important");
         film.pause();
         film.load();
+
+        /* The old inline scroll script uses fastSeek for continuous scrubbing. */
+        film.fastSeek = function () {};
 
         film.addEventListener("loadedmetadata", function () {
             if (Number.isFinite(film.duration) && film.duration > 0) duration = film.duration;
