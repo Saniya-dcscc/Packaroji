@@ -30,4 +30,9 @@
     } else {
         initCookieConsent();
     }
+
+    var controller = document.createElement("script");
+    controller.src = "/static/js/packaging-layers-single-controller.js?v=1";
+    controller.async = false;
+    document.head.appendChild(controller);
 })();
