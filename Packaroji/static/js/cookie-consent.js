@@ -44,6 +44,7 @@
         var ends = [2, 4, 6, 10];
         var step = -1;
         var locked = false;
+        var completed = false;
         var animationFrame = 0;
 
         function clamp(value, min, max) {
@@ -115,9 +116,17 @@
         function resetBeforeLeavingBackwards() {
             stopPlayback();
             locked = false;
+            completed = false;
             step = -1;
             renderLayer(-1);
             setTime(0);
+        }
+
+        function finishStoryForward() {
+            completed = true;
+            stopPlayback();
+            setTime(10);
+            film.pause();
         }
 
         function onWheel(event) {
@@ -130,9 +139,13 @@
                 return;
             }
             if (direction > 0) {
-                if (step >= 3) return;
+                if (step >= 3) {
+                    finishStoryForward();
+                    return;
+                }
                 event.preventDefault();
                 event.stopImmediatePropagation();
+                completed = false;
                 locked = true;
                 step += 1;
                 renderLayer(step);
@@ -141,10 +154,6 @@
             }
             if (step < 0) return;
 
-            /*
-             * Once Layer 1 has been reversed, allow the browser to leave the
-             * story naturally. Do not create an empty state before Layer 1.
-             */
             if (step === 0) {
                 resetBeforeLeavingBackwards();
                 return;
@@ -152,6 +161,7 @@
 
             event.preventDefault();
             event.stopImmediatePropagation();
+            completed = false;
             locked = true;
             var current = step;
             playSegment(current, true, function () {
@@ -164,10 +174,15 @@
 
         film.muted = true;
         film.defaultMuted = true;
+        film.autoplay = false;
+        film.removeAttribute("autoplay");
         film.setAttribute("muted", "");
         film.setAttribute("playsinline", "");
         film.setAttribute("webkit-playsinline", "");
         film.preload = "auto";
+        film.addEventListener("play", function () {
+            if (completed) film.pause();
+        });
         film.load();
         film.addEventListener("loadedmetadata", function () {
             setTime(0);
