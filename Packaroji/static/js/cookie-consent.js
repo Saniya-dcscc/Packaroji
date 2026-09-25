@@ -189,9 +189,20 @@
         setTime(0);
     }
 
+    function swapLandingHeroImage() {
+        var image = document.querySelector(".new-landing-media img");
+        if (image) {
+            image.src = "/static/images/packaging-hero-new.jpg";
+        }
+    }
+
     if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initPackagingLayerVideo, { once: true });
+        document.addEventListener("DOMContentLoaded", function () {
+            initPackagingLayerVideo();
+            swapLandingHeroImage();
+        }, { once: true });
     } else {
         initPackagingLayerVideo();
+        swapLandingHeroImage();
     }
 })();
