@@ -112,6 +112,14 @@
             return rect.top <= 3 && rect.bottom >= window.innerHeight - 3;
         }
 
+        function resetBeforeLeavingBackwards() {
+            stopPlayback();
+            locked = false;
+            step = -1;
+            renderLayer(-1);
+            setTime(0);
+        }
+
         function onWheel(event) {
             if (!isPinned()) return;
             var direction = event.deltaY > 0 ? 1 : event.deltaY < 0 ? -1 : 0;
@@ -132,6 +140,16 @@
                 return;
             }
             if (step < 0) return;
+
+            /*
+             * Once Layer 1 has been reversed, allow the browser to leave the
+             * story naturally. Do not create an empty state before Layer 1.
+             */
+            if (step === 0) {
+                resetBeforeLeavingBackwards();
+                return;
+            }
+
             event.preventDefault();
             event.stopImmediatePropagation();
             locked = true;
@@ -139,7 +157,7 @@
             playSegment(current, true, function () {
                 step = current - 1;
                 renderLayer(step);
-                setTime(step < 0 ? 0 : starts[Math.max(0, step)]);
+                setTime(starts[Math.max(0, step)]);
                 locked = false;
             });
         }
