@@ -19,13 +19,13 @@
     function initPackagingVideo() {
         var story = document.getElementById("packaging-layers");
         var film = document.getElementById("pkgLayerFilm");
-        if (!story || !film) return;
+        if (!story || !film || film.dataset.packarojiInitialized === "1") return;
+        film.dataset.packarojiInitialized = "1";
 
+        var correctSrc = "/static/videos/packaroji-burger-box-bag_v2-scroll-8s.mp4?v=2026092523";
         var source = film.querySelector("source");
-        var correctSrc = "/static/videos/packaroji-burger-box-bag_v2-scroll-8s.mp4";
-        if (source && source.getAttribute("src") !== correctSrc) {
-            source.setAttribute("src", correctSrc);
-        }
+        if (source) source.setAttribute("src", correctSrc);
+        film.setAttribute("src", correctSrc);
         film.removeAttribute("autoplay");
         film.removeAttribute("loop");
         film.muted = true;
@@ -133,13 +133,15 @@
             }
         }
 
-        film.addEventListener("loadedmetadata", function () {
+        function markMetadataReady() {
             metadataReady = Number.isFinite(film.duration) && film.duration > 0;
             if (metadataReady) setTime(step < 0 ? 0 : starts[step]);
-        });
+        }
+        film.addEventListener("loadedmetadata", markMetadataReady);
+        film.addEventListener("loadeddata", markMetadataReady);
         film.addEventListener("error", function () {
             metadataReady = false;
-            if (window.console && console.error) console.error("Packaroji packaging video failed to load", film.error);
+            if (window.console && console.error) console.error("Packaroji packaging video failed to load", film.error, correctSrc);
         });
         film.load();
         render(-1);
