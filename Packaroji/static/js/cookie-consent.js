@@ -19,6 +19,21 @@
         });
     }
 
+    /* Force the uploaded video's original frame; do not allow later CSS to crop it. */
+    function preserveVideoFrame() {
+        var style = document.getElementById("packaroji-video-frame-fix");
+        if (!style) {
+            style = document.createElement("style");
+            style.id = "packaroji-video-frame-fix";
+            style.textContent = [
+                "#packaging-layers .pkg-layer-film-video{object-fit:contain!important;object-position:center center!important;width:100%!important;height:100%!important;transform:none!important;scale:1!important;}",
+                "#packaging-layers .pkg-layer-film{background:#111!important;}",
+                "@media(max-width:800px){#packaging-layers .pkg-layer-film-video{object-fit:contain!important;opacity:1!important;filter:none!important;}}"
+            ].join("");
+            document.head.appendChild(style);
+        }
+    }
+
     /*
      * PACKAGING LAYERS
      * One wheel gesture = one layer and one fixed video segment:
@@ -30,6 +45,7 @@
         var film = document.getElementById("pkgLayerFilm");
         if (!story || !film || window.__packarojiDiscreteLayerController) return;
         window.__packarojiDiscreteLayerController = true;
+        preserveVideoFrame();
 
         var panels = Array.from(story.querySelectorAll(".pkg-layer-panel"));
         var progress = story.querySelector(".pkg-layer-progress span");
@@ -200,14 +216,8 @@
         film.setAttribute("playsinline", "");
         film.setAttribute("webkit-playsinline", "");
         film.preload = "auto";
-        film.style.setProperty("object-fit", "contain", "important");
-        film.style.setProperty("object-position", "center center", "important");
-        film.style.setProperty("transform", "none", "important");
         film.pause();
         film.load();
-
-        /* The old inline scroll script uses fastSeek for continuous scrubbing. */
-        film.fastSeek = function () {};
 
         film.addEventListener("loadedmetadata", function () {
             if (Number.isFinite(film.duration) && film.duration > 0) duration = film.duration;
