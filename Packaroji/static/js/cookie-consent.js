@@ -2,152 +2,207 @@
     "use strict";
 
     var KEY = "packaroji_cookie_choice";
-    var banner = document.getElementById("cookie-banner");
-    if (banner) {
+
+    function initCookieConsent() {
+        var banner = document.getElementById("cookie-banner");
+        if (!banner) return;
+
         var saved = null;
-        try { saved = window.localStorage.getItem(KEY); } catch (_) {}
+        try {
+            saved = window.localStorage.getItem(KEY);
+        } catch (_) {}
+
         if (!saved) banner.hidden = false;
+
         banner.querySelectorAll("[data-cookie-choice]").forEach(function (button) {
             button.addEventListener("click", function () {
                 var choice = button.getAttribute("data-cookie-choice") || "accept";
-                try { window.localStorage.setItem(KEY, choice); } catch (_) {}
+                try {
+                    window.localStorage.setItem(KEY, choice);
+                } catch (_) {}
                 banner.hidden = true;
             });
         });
     }
 
-    function initPackagingVideo() {
+    function initPackagingScroll() {
         var story = document.getElementById("packaging-layers");
         var film = document.getElementById("pkgLayerFilm");
-        if (!story || !film || film.dataset.packarojiInitialized === "1") return;
-        film.dataset.packarojiInitialized = "1";
+        if (!story || !film || story.dataset.packarojiScrollV2 === "1") return;
 
-        var correctSrc = "/static/videos/packaroji-burger-box-bag_v2-scroll-8s.mp4?v=2026092523";
-        var source = film.querySelector("source");
-        if (source) source.setAttribute("src", correctSrc);
-        film.setAttribute("src", correctSrc);
-        film.removeAttribute("autoplay");
-        film.removeAttribute("loop");
-        film.muted = true;
-        film.defaultMuted = true;
-        film.setAttribute("muted", "");
-        film.setAttribute("playsinline", "");
-        film.preload = "auto";
+        story.dataset.packarojiScrollV2 = "1";
 
-        var panels = Array.prototype.slice.call(story.querySelectorAll(".pkg-layer-panel"));
-        var frame = film.closest(".pkg-layer-film") || film.parentElement;
-        var step = -1;
-        var busy = false;
+        var panels = Array.prototype.slice.call(
+            story.querySelectorAll(".pkg-layer-panel")
+        );
+        var progress = story.querySelector(".pkg-layer-progress span");
+        var hint = story.querySelector(".pkg-layer-scroll-hint");
+        var filmFrame = film.closest(".pkg-layer-film") || film.parentElement;
+
+        if (!panels.length) return;
+
         var raf = 0;
-        var metadataReady = false;
-        var starts = [0, 2, 4, 6];
-        var ends = [2, 4, 6, 10];
+        var duration = 10;
+        var lastTime = -1;
+        var lastLayer = -1;
 
-        function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
-        function setTime(value) {
-            if (!metadataReady || !Number.isFinite(film.duration) || film.duration <= 0) return;
-            try { film.currentTime = clamp(value, 0, Math.max(0, film.duration - 0.03)); } catch (_) {}
+        function clamp(value, min, max) {
+            return Math.max(min, Math.min(max, value));
         }
-        function stop() {
-            if (raf) cancelAnimationFrame(raf);
-            raf = 0;
-            film.pause();
+
+        function setStoryHeight() {
+            var viewportHeight = Math.max(1, window.innerHeight);
+            var totalHeight = viewportHeight * (panels.length + 1);
+
+            story.style.height = Math.round(totalHeight) + "px";
+            story.style.minHeight = Math.round(totalHeight) + "px";
+            story.style.maxHeight = "none";
         }
-        function render(index) {
-            panels.forEach(function (panel, i) {
-                var active = i === index;
+
+        function updateDuration() {
+            if (Number.isFinite(film.duration) && film.duration > 0) {
+                duration = film.duration;
+            }
+        }
+
+        function setVideoTime(value) {
+            var maxTime = Math.max(0, (duration || 10) - 0.03);
+            var target = clamp(Number(value) || 0, 0, maxTime);
+
+            if (Math.abs(target - lastTime) < 0.008) return;
+            lastTime = target;
+
+            try {
+                film.currentTime = target;
+            } catch (_) {}
+        }
+
+        function renderPanels(layer) {
+            panels.forEach(function (panel, index) {
+                var active = index === layer;
+
                 panel.style.opacity = active ? "1" : "0";
                 panel.style.visibility = active ? "visible" : "hidden";
-                panel.style.transform = "none";
+                panel.style.transform = "translate3d(0, 0, 0)";
                 panel.style.zIndex = active ? "10" : "1";
-                panel.setAttribute("aria-hidden", active ? "false" : "true");
                 panel.classList.toggle("is-active", active);
+                panel.setAttribute("aria-hidden", active ? "false" : "true");
             });
-            var progress = story.querySelector(".pkg-layer-progress span");
-            if (progress) progress.style.transform = "scaleX(" + (index < 0 ? 0 : (index + 1) / 4) + ")";
-            var hint = story.querySelector(".pkg-layer-scroll-hint");
-            if (hint) hint.style.opacity = index < 0 ? "1" : "0";
-            if (frame) {
-                frame.style.visibility = "visible";
-                frame.style.opacity = "1";
+
+            if (progress) {
+                progress.style.transform = "scaleX(" + ((layer + 1) / panels.length) + ")";
             }
-        }
-        function animate(index, reverse, done) {
-            stop();
-            if (!metadataReady) { if (done) done(); return; }
-            var from = reverse ? ends[index] : starts[index];
-            var to = reverse ? starts[index] : ends[index];
-            var begin = null;
-            function tick(timestamp) {
-                if (begin === null) begin = timestamp;
-                var ratio = clamp((timestamp - begin) / 1200, 0, 1);
-                setTime(from + (to - from) * ratio);
-                if (ratio >= 1) {
-                    stop();
-                    setTime(to);
-                    if (done) done();
-                } else {
-                    raf = requestAnimationFrame(tick);
-                }
+
+            if (hint) {
+                hint.style.opacity = layer < 0 ? "1" : "0";
             }
-            raf = requestAnimationFrame(tick);
-        }
-        function pinned() {
-            var rect = story.getBoundingClientRect();
-            return rect.top <= 3 && rect.bottom >= window.innerHeight - 3;
-        }
-        function onWheel(event) {
-            if (!pinned()) return;
-            var direction = event.deltaY > 0 ? 1 : event.deltaY < 0 ? -1 : 0;
-            if (!direction) return;
-            if (busy) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                return;
-            }
-            if (direction > 0) {
-                if (step >= 3) return;
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                busy = true;
-                step += 1;
-                render(step);
-                animate(step, false, function () { busy = false; });
-            } else {
-                if (step <= 0) {
-                    step = 0;
-                    render(0);
-                    setTime(0);
-                    return;
-                }
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                busy = true;
-                var current = step;
-                animate(current, true, function () {
-                    step = current - 1;
-                    render(step);
-                    setTime(starts[step]);
-                    busy = false;
-                });
+
+            if (filmFrame) {
+                filmFrame.style.visibility = "visible";
+                filmFrame.style.opacity = "1";
             }
         }
 
-        function markMetadataReady() {
-            metadataReady = Number.isFinite(film.duration) && film.duration > 0;
-            if (metadataReady) setTime(step < 0 ? 0 : starts[step]);
+        function render() {
+            raf = 0;
+
+            var range = Math.max(1, story.offsetHeight - window.innerHeight);
+            var rect = story.getBoundingClientRect();
+            var progressValue = clamp(-rect.top / range, 0, 1);
+            var segmentSize = 1 / panels.length;
+            var layer = Math.min(
+                panels.length - 1,
+                Math.floor(progressValue / segmentSize)
+            );
+
+            if (progressValue >= 1) {
+                layer = panels.length - 1;
+            }
+
+            var localProgress = clamp(
+                (progressValue - layer * segmentSize) / segmentSize,
+                0,
+                1
+            );
+
+            var startTime = (duration * layer) / panels.length;
+            var endTime;
+
+            if (layer === panels.length - 1) {
+                endTime = duration;
+            } else {
+                endTime = (duration * (layer + 1)) / panels.length;
+            }
+
+            var time = startTime + (endTime - startTime) * localProgress;
+
+            setVideoTime(time);
+
+            if (layer !== lastLayer) {
+                renderPanels(layer);
+                lastLayer = layer;
+            }
+
+            if (progress) {
+                progress.style.transform = "scaleX(" + progressValue + ")";
+            }
+
+            if (hint) {
+                hint.style.opacity = progressValue > 0.02 ? "0" : "1";
+            }
         }
-        film.addEventListener("loadedmetadata", markMetadataReady);
-        film.addEventListener("loadeddata", markMetadataReady);
-        film.addEventListener("error", function () {
-            metadataReady = false;
-            if (window.console && console.error) console.error("Packaroji packaging video failed to load", film.error, correctSrc);
+
+        function requestRender() {
+            if (raf) return;
+            raf = window.requestAnimationFrame(render);
+        }
+
+        film.muted = true;
+        film.defaultMuted = true;
+        film.loop = false;
+        film.pause();
+        film.preload = "auto";
+        film.setAttribute("muted", "");
+        film.setAttribute("playsinline", "");
+        film.setAttribute("webkit-playsinline", "");
+
+        film.addEventListener("loadedmetadata", function () {
+            updateDuration();
+            requestRender();
         });
-        film.load();
-        render(-1);
-        window.addEventListener("wheel", onWheel, { capture: true, passive: false });
+
+        film.addEventListener("loadeddata", function () {
+            updateDuration();
+            requestRender();
+        });
+
+        window.addEventListener("scroll", requestRender, { passive: true });
+        window.addEventListener("resize", function () {
+            setStoryHeight();
+            requestRender();
+        }, { passive: true });
+        window.addEventListener("orientationchange", function () {
+            window.setTimeout(function () {
+                setStoryHeight();
+                requestRender();
+            }, 80);
+        }, { passive: true });
+
+        setStoryHeight();
+        renderPanels(0);
+        lastLayer = 0;
+        setVideoTime(0);
+        requestRender();
     }
 
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initPackagingVideo, { once: true });
-    else initPackagingVideo();
+    function init() {
+        initCookieConsent();
+        initPackagingScroll();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init, { once: true });
+    } else {
+        init();
+    }
 })();
