@@ -1,8 +1,9 @@
 /* Packaroji packaging-layer scroll boundary fix.
  *
- * This module is intentionally standalone. It guards the existing custom
- * scroll implementation against time wrapping and boundary overshoot.
- * Load it after the homepage layer script.
+ * The homepage layer animation owns the normal in-range scrubbing. This file
+ * only handles the two outside-boundary states, and does so in a trailing
+ * requestAnimationFrame so the original renderer cannot immediately overwrite
+ * the boundary frame in the same scroll event.
  */
 (function () {
   "use strict";
@@ -10,47 +11,75 @@
   function init() {
     const story = document.getElementById("packaging-layers");
     const film = document.getElementById("pkgLayerFilm");
-    if (!story || !film) return;
+    if (!story || !film || story.dataset.boundaryFixReady === "true") return;
+    story.dataset.boundaryFixReady = "true";
 
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     let duration = Number.isFinite(film.duration) && film.duration > 0 ? film.duration : 10.125;
+    let frame = 0;
+    let lastBoundary = "";
 
-    film.addEventListener("loadedmetadata", function () {
-      if (Number.isFinite(film.duration) && film.duration > 0) duration = film.duration;
-    });
+    film.loop = false;
+    film.pause();
 
-    function safeSeek(progress) {
-      const boundedProgress = clamp(progress, 0, 1);
-      const boundedTime = clamp(boundedProgress * duration, 0, duration);
-      if (!Number.isFinite(boundedTime)) return;
-      try {
-        if (typeof film.fastSeek === "function") film.fastSeek(boundedTime);
-        else film.currentTime = boundedTime;
-      } catch (_) {
-        try { film.currentTime = boundedTime; } catch (__) {}
+    function updateDuration() {
+      if (Number.isFinite(film.duration) && film.duration > 0) {
+        duration = film.duration;
       }
     }
 
-    // Prevent accidental looping/restarts caused by invalid time assignments.
-    film.loop = false;
-    film.addEventListener("timeupdate", function () {
-      if (film.currentTime < 0) film.currentTime = 0;
-      if (film.currentTime > duration) film.currentTime = duration;
-    });
-
-    // Keep the video on its final frame after leaving downward and at the
-    // first frame after leaving upward; never wrap progress back to zero.
-    function enforceBoundary() {
-      const rect = story.getBoundingClientRect();
-      const scrollRange = Math.max(1, story.offsetHeight - window.innerHeight);
-      const rawProgress = -rect.top / scrollRange;
-      if (rawProgress >= 1) safeSeek(1);
-      else if (rawProgress <= 0) safeSeek(0);
+    function seekSafely(time) {
+      const bounded = clamp(Number(time) || 0, 0, duration);
+      try {
+        if (typeof film.fastSeek === "function") film.fastSeek(bounded);
+        else film.currentTime = bounded;
+      } catch (_) {
+        try { film.currentTime = bounded; } catch (__) {}
+      }
     }
 
-    window.addEventListener("scroll", enforceBoundary, { passive: true });
-    window.addEventListener("resize", enforceBoundary, { passive: true });
-    enforceBoundary();
+    function getRawProgress() {
+      const range = Math.max(1, story.offsetHeight - window.innerHeight);
+      return -story.getBoundingClientRect().top / range;
+    }
+
+    function enforceBoundary() {
+      frame = 0;
+      updateDuration();
+
+      const rawProgress = getRawProgress();
+      let boundary = "inside";
+      if (rawProgress <= 0) boundary = "top";
+      else if (rawProgress >= 1) boundary = "bottom";
+
+      if (boundary === "inside") {
+        lastBoundary = "";
+        return;
+      }
+
+      // Apply each boundary only when entering it. This prevents repeated
+      // seeks on every scroll event and avoids a visible replay/reset.
+      if (lastBoundary !== boundary) {
+        seekSafely(boundary === "top" ? 0 : duration);
+        film.pause();
+        lastBoundary = boundary;
+      }
+    }
+
+    function scheduleBoundaryCheck() {
+      if (frame) return;
+      frame = window.requestAnimationFrame(enforceBoundary);
+    }
+
+    film.addEventListener("loadedmetadata", function () {
+      updateDuration();
+      scheduleBoundaryCheck();
+    }, { passive: true });
+
+    window.addEventListener("scroll", scheduleBoundaryCheck, { passive: true });
+    window.addEventListener("resize", scheduleBoundaryCheck, { passive: true });
+    window.addEventListener("orientationchange", scheduleBoundaryCheck, { passive: true });
+    scheduleBoundaryCheck();
   }
 
   if (document.readyState === "loading") {
