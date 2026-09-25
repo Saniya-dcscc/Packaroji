@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Login / Sign Up | Packaroji{% endblock %}
+{% block meta_description %}Login or create a Packaroji customer account to manage orders, customized packaging and previous purchases.{% endblock %}
+
+{% block content %}
+<section class="auth-page unified-auth-page">
+  <div class="auth-container">
+    <div class="auth-card unified-auth-card">
+      <div class="auth-heading">
+        <div class="auth-brand">
+          <img src="{{ url_for('static', filename='images/packaroji-logo.png') }}" alt="Packaroji logo">
+          <div>Packaroji</div>
+        </div>
+        <p class="auth-eyebrow">PACKAROJI ACCOUNT</p>
+        <h1>Everything for your packaging, in one place.</h1>
+        <p>Sign in to manage orders, or create an account to make future orders faster.</p>
+      </div>
+      {% if error %}
+      <div class="auth-message">{{ error }}</div>
+      {% if needs_verification %}
+      <div class="auth-resend-form">
+        <a href="{{ url_for('verify_otp', email=entered_email or '') }}" class="auth-secondary auth-secondary-link">Enter verification code</a>
+        <form method="POST" action="{{ url_for('resend_verification') }}">
+          <input type="hidden" name="email" value="{{ entered_email or '' }}">
+          <button type="submit" class="auth-secondary">Send a new code</button>
+        </form>
+      </div>
+      {% endif %}
+      {% endif %}
+      {% if success %}<div class="auth-success">{{ success }}</div>{% endif %}
+      <div class="auth-tabs" role="tablist" aria-label="Account access">
+        <button type="button" class="auth-tab {% if (auth_mode or request.args.get('mode')) != 'signup' %}active{% endif %}" data-auth-tab="login">Log In</button>
+        <button type="button" class="auth-tab {% if (auth_mode or request.args.get('mode')) == 'signup' %}active{% endif %}" data-auth-tab="signup">Create Account</button>
+      </div>
+      <div id="auth-login-panel" class="auth-panel {% if (auth_mode or request.args.get('mode')) == 'signup' %}hidden{% endif %}">
+        <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+          <div class="form-group"><label for="login-email">Email Address</label><input type="email" id="login-email" name="email" placeholder="Enter your email" value="{{ entered_email or request.form.get('email', '') }}" autocomplete="email" required></div>
+          <div class="form-group"><label for="login-password">Password</label><div class="password-wrap"><input type="password" id="login-password" name="password" placeholder="Enter your password" autocomplete="current-password" required><button type="button" class="show-password" onclick="togglePassword('login-password', this)">Show</button></div></div>
+          <button type="submit" class="login-btn">Log In</button>
+        </form>
+        <div class="auth-help-links single-link"><a href="{{ url_for('forgot_password') }}">Forgot Password?</a></div>
+      </div>
+      <div id="auth-signup-panel" class="auth-panel {% if (auth_mode or request.args.get('mode')) != 'signup' %}hidden{% endif %}">
+        <form method="POST" action="{{ url_for('signup') }}" class="auth-form">
+          <div class="form-group"><label for="signup-name">Full Name</label><input type="text" id="signup-name" name="name" placeholder="Enter your full name" autocomplete="name" required></div>
+          <div class="form-group"><label for="signup-email">Email Address</label><input type="email" id="signup-email" name="email" placeholder="Enter your email" autocomplete="email" required></div>
+          <div class="form-group"><label for="signup-phone">Phone Number</label><input type="tel" id="signup-phone" name="phone" placeholder="Enter your phone number" autocomplete="tel" required></div>
+          <div class="form-group"><label for="signup-password">Password</label><div class="password-wrap"><input type="password" id="signup-password" name="password" placeholder="Create a password" minlength="6" autocomplete="new-password" required><button type="button" class="show-password" onclick="togglePassword('signup-password', this)">Show</button></div><div class="password-rules" id="signup-password-rules" aria-live="polite"><div data-rule="length">○ At least 6 characters</div><div data-rule="uppercase">○ At least 1 capital letter</div><div data-rule="number">○ At least 1 number</div><div data-rule="special">○ At least 1 special character</div></div></div>
+          <div class="form-group"><label for="signup-confirm">Confirm Password</label><div class="password-wrap"><input type="password" id="signup-confirm" name="confirm_password" placeholder="Confirm your password" minlength="6" autocomplete="new-password" required><button type="button" class="show-password" onclick="togglePassword('signup-confirm', this)">Show</button></div></div>
+          <button type="submit" class="auth-submit">Create Account</button>
+        </form>
+      </div>
+      <div class="auth-trust"><span>✓ Secure password protection</span><span>✓ Forgot-password reset by email</span></div>
+    </div>
+  </div>
+</section>
+
+<style>
+.auth-success {
+    background: #eef7ed;
+    color: #315c3d;
+    border: 1px solid #c9ddc8;
+    border-radius: 12px;
+    padding: 13px 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.auth-resend-form {
+    margin: 10px 0 20px;
+}
+.auth-resend-form .auth-secondary {
+    width: 100%;
+    text-align: center;
+    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.auth-brand{display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 10px}
+.auth-brand img{width:58px;height:58px;object-fit:contain;display:block}
+.auth-brand div{margin-top:5px;color:var(--forest);font-family:var(--font-heading);font-size:22px;font-weight:800;letter-spacing:-.02em}
+.auth-heading{margin-bottom:20px}
+.unified-auth-card{max-width:440px!important;padding:22px!important}
+.unified-auth-card .auth-heading h1{font-size:clamp(24px,3vw,30px)!important;line-height:1.12;margin-bottom:8px}
+.unified-auth-card .auth-heading p:not(.auth-eyebrow){font-size:13px;line-height:1.45}
+.unified-auth-card .auth-form{gap:13px}
+.unified-auth-card .auth-tabs{margin-bottom:17px}
+.password-rules{display:grid;gap:4px;margin-top:7px;font-size:11px;line-height:1.35;color:#7b847d}
+.password-rules .valid{color:#28613f;font-weight:700}
+@media(max-width:560px){.unified-auth-card{max-width:360px!important;padding:18px 16px!important}.unified-auth-card .auth-heading h1{font-size:24px!important}.auth-brand img{width:50px;height:50px}.auth-brand div{font-size:20px}}
+.auth-resend-form{display:grid;gap:8px;margin:10px 0 20px}.auth-secondary-link{display:flex;align-items:center;justify-content:center;text-decoration:none}.auth-resend-form form{margin:0}.auth-resend-form form .auth-secondary{width:100%;cursor:pointer;font-family:inherit;box-sizing:border-box}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function togglePassword(inputId, button) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  button.textContent = showing ? 'Show' : 'Hide';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('[data-auth-tab]');
+  const loginPanel = document.getElementById('auth-login-panel');
+  const signupPanel = document.getElementById('auth-signup-panel');
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    const mode = tab.dataset.authTab;
+    tabs.forEach(t => t.classList.toggle('active', t === tab));
+    loginPanel?.classList.toggle('hidden', mode !== 'login');
+    signupPanel?.classList.toggle('hidden', mode !== 'signup');
+  }));
+
+  const password = document.getElementById('signup-password');
+  const rules = document.getElementById('signup-password-rules');
+  const updatePasswordRules = () => {
+    if (!password || !rules) return;
+    const value = password.value;
+    const checks = {
+      length: value.length >= 6,
+      uppercase: /[A-Z]/.test(value),
+      number: /\d/.test(value),
+      special: /[^A-Za-z0-9]/.test(value)
+    };
+    Object.entries(checks).forEach(([key, ok]) => {
+      const item = rules.querySelector(`[data-rule="${key}"]`);
+      if (item) { item.textContent = `${ok ? '✓' : '○'} ${item.textContent.slice(2)}`; item.classList.toggle('valid', ok); }
+    });
+  };
+  password?.addEventListener('input', updatePasswordRules);
+  updatePasswordRules();
+
+  signupPanel?.querySelector('form')?.addEventListener('submit', (event) => {
+    const value = password?.value || '';
+    if (value.length < 6 || !/[A-Z]/.test(value) || !/\d/.test(value) || !/[^A-Za-z0-9]/.test(value)) {
+      event.preventDefault();
+      password?.focus();
+    }
+  });
+});
+</script>
+{% endblock %}
