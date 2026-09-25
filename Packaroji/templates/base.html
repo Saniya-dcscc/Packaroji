@@ -193,7 +193,6 @@
 
 <body
     class="{% if request.endpoint in ['home', 'index'] %}home-page{% else %}inner-page{% endif %}"
-    data-cart-count="{{ cart_count or 0 }}"
 >
 
 
@@ -406,34 +405,7 @@
             >
                 Contact
             </a>
-
-
-
-            <!-- =================================================
-                 CART
-            ================================================== -->
-
-            <a
-                class="nav-cart"
-                href="{{ url_for('cart') }}"
-                aria-label="Shopping cart"
-            >
-
-                🛒
-                Cart
-
-                <span
-                    class="cart-badge"
-                    aria-label="{{ cart_count or 0 }} items in cart"
-                >
-                    {{ cart_count or 0 }}
-                </span>
-
-            </a>
-
-
-
-            <!-- =================================================
+<!-- =================================================
                  ACCOUNT
             ================================================== -->
 
@@ -483,16 +455,7 @@
                         >
                             👤 My Account
                         </a>
-
-
-                        <a
-                            href="{{ url_for('orders') }}"
-                        >
-                            📦 My Orders
-                        </a>
-
-
-                        <div
+<div
                             class="dropdown-divider"
                         ></div>
 
@@ -682,16 +645,7 @@
             <h4>
                 Customer
             </h4>
-
-
-            <a
-                href="{{ url_for('cart') }}"
-            >
-                🛒 Cart
-            </a>
-
-
-            {% if current_user %}
+{% if current_user %}
 
 
                 <a
@@ -699,16 +653,7 @@
                 >
                     👤 My Account
                 </a>
-
-
-                <a
-                    href="{{ url_for('orders') }}"
-                >
-                    📦 My Orders
-                </a>
-
-
-                <a
+<a
                     href="{{ url_for('logout') }}"
                 >
                     ↪ Log Out
@@ -736,7 +681,7 @@
 
 
             <a
-                href="{{ url_for('order_page') }}"
+                href="{{ url_for('home') }}#contact"
             >
                 ✦ Customization
             </a>
@@ -830,7 +775,7 @@
 <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie notice" hidden>
     <div class="cookie-banner-copy">
         <strong>We use cookies</strong>
-        <p>Packaroji uses essential cookies and browser storage to keep the website working, including account sessions and your cart. <a href="{{ url_for('cookie_policy') }}">Learn more</a></p>
+        <p>Packaroji uses essential cookies and browser storage to keep the website working, to keep the website working and remember your preferences. <a href="{{ url_for('cookie_policy') }}">Learn more</a></p>
     </div>
     <div class="cookie-banner-actions">
         <button type="button" class="cookie-btn cookie-btn-secondary" data-cookie-choice="reject">Reject optional</button>
