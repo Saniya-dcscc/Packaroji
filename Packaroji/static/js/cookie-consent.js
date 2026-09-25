@@ -1,9 +1,7 @@
 (function () {
     "use strict";
 
-    /* =========================================================
-       COOKIE CONSENT — existing behavior
-    ========================================================== */
+    /* Existing cookie-consent behavior. */
     var KEY = "packaroji_cookie_choice";
     var banner = document.getElementById("cookie-banner");
 
@@ -21,19 +19,12 @@
         });
     }
 
-    /* =========================================================
-       PACKAGING LAYERS — DISCRETE FOUR-STEP VIDEO CONTROLLER
-
-       Step 1: layer 1 + video 0–2 seconds
-       Step 2: layer 2 + video 2–4 seconds
-       Step 3: layer 3 + video 4–6 seconds
-       Step 4: layer 4 + video 6–10 seconds
-
-       The old continuous scroll handler is intentionally not used here.
-       One wheel gesture advances exactly one layer, and the next upward
-       gesture reverses exactly one layer. The section remains otherwise
-       unchanged.
-    ========================================================== */
+    /*
+     * PACKAGING LAYERS
+     * One wheel gesture = one layer and one fixed video segment:
+     * 1: 0-2s, 2: 2-4s, 3: 4-6s, 4: 6-10s.
+     * No continuous scroll scrubbing is used.
+     */
     function initPackagingLayerVideo() {
         var story = document.getElementById("packaging-layers");
         var film = document.getElementById("pkgLayerFilm");
@@ -44,114 +35,107 @@
         var progress = story.querySelector(".pkg-layer-progress span");
         var hint = story.querySelector(".pkg-layer-scroll-hint");
         var videoPath = "/static/WhatsApp%20Video%202026-09-23%20at%2021.35.50.mp4";
+        var starts = [0, 2, 4, 6];
+        var ends = [2, 4, 6, 10];
         var duration = 10;
         var step = -1;
         var locked = false;
-        var animationFrame = 0;
-        var segmentStarts = [0, 2, 4, 6];
-        var segmentEnds = [2, 4, 6, 10];
+        var frame = 0;
 
         function clamp(value, min, max) {
             return Math.max(min, Math.min(max, value));
         }
 
-        function getEnd(index) {
-            var actualDuration = Number.isFinite(duration) && duration > 0 ? duration : 10;
-            return Math.min(segmentEnds[index], Math.max(segmentStarts[index], actualDuration - 0.03));
+        function safeEnd(index) {
+            var actual = Number.isFinite(duration) && duration > 0 ? duration : 10;
+            return Math.min(ends[index], Math.max(starts[index], actual - 0.04));
         }
 
-        function setTime(time) {
-            var actualDuration = Number.isFinite(duration) && duration > 0 ? duration : 10;
-            var safeTime = clamp(time, 0, Math.max(0, actualDuration - 0.03));
-            try { film.currentTime = safeTime; } catch (_) {}
+        function setTime(value) {
+            var actual = Number.isFinite(duration) && duration > 0 ? duration : 10;
+            var safe = clamp(value, 0, Math.max(0, actual - 0.04));
+            try { film.currentTime = safe; } catch (_) {}
         }
 
         function renderLayer(index) {
             var active = clamp(index, 0, 3);
-
             panels.forEach(function (panel, panelIndex) {
-                var isActive = panelIndex === active;
-                panel.style.zIndex = isActive ? "10" : "1";
-                panel.style.opacity = isActive ? "1" : "0";
+                var visible = panelIndex === active;
+                panel.style.opacity = visible ? "1" : "0";
+                panel.style.visibility = visible ? "visible" : "hidden";
                 panel.style.transform = "none";
-                panel.classList.toggle("is-active", isActive);
-                panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+                panel.style.zIndex = visible ? "10" : "1";
+                panel.classList.toggle("is-active", visible);
+                panel.setAttribute("aria-hidden", visible ? "false" : "true");
             });
-
             if (progress) progress.style.transform = "scaleX(" + ((active + 1) / 4) + ")";
-            if (hint) hint.style.opacity = active > 0 || step >= 0 ? "0" : "1";
+            if (hint) hint.style.opacity = step >= 0 ? "0" : "1";
         }
 
-        function stopAnimation() {
-            if (animationFrame) window.cancelAnimationFrame(animationFrame);
-            animationFrame = 0;
+        function cancelAnimation() {
+            if (frame) window.cancelAnimationFrame(frame);
+            frame = 0;
             film.pause();
         }
 
         function playForward(index, done) {
-            stopAnimation();
-
-            var start = segmentStarts[index];
-            var end = getEnd(index);
+            cancelAnimation();
+            var start = starts[index];
+            var end = safeEnd(index);
+            var finished = false;
+            var fallbackStart = null;
             setTime(start);
 
-            var finished = false;
             function finish() {
                 if (finished) return;
                 finished = true;
-                if (animationFrame) window.cancelAnimationFrame(animationFrame);
-                animationFrame = 0;
+                if (frame) window.cancelAnimationFrame(frame);
+                frame = 0;
                 film.pause();
                 setTime(end);
                 if (done) done();
             }
 
-            function monitor() {
+            function monitor(timestamp) {
                 if (finished) return;
-                if (film.currentTime >= end - 0.04 || film.ended) {
+                if (film.currentTime >= end - 0.035 || film.ended) {
                     finish();
                     return;
                 }
-                animationFrame = window.requestAnimationFrame(monitor);
+                if (fallbackStart !== null) {
+                    var ratio = clamp((timestamp - fallbackStart) / 2000, 0, 1);
+                    setTime(start + (end - start) * ratio);
+                    if (ratio >= 1) {
+                        finish();
+                        return;
+                    }
+                }
+                frame = window.requestAnimationFrame(monitor);
             }
 
-            var playResult;
-            try { playResult = film.play(); } catch (_) { playResult = null; }
-
-            if (playResult && typeof playResult.catch === "function") {
-                playResult.catch(function () {
-                    /* Muted playback should work, but retain a seek fallback. */
-                    var started = null;
-                    function seekFallback(timestamp) {
-                        if (finished) return;
-                        if (started === null) started = timestamp;
-                        var ratio = clamp((timestamp - started) / 700, 0, 1);
-                        setTime(start + (end - start) * ratio);
-                        if (ratio >= 1) finish();
-                        else animationFrame = window.requestAnimationFrame(seekFallback);
-                    }
-                    animationFrame = window.requestAnimationFrame(seekFallback);
+            var promise = null;
+            try { promise = film.play(); } catch (_) {}
+            if (promise && typeof promise.catch === "function") {
+                promise.catch(function () {
+                    fallbackStart = performance.now();
                 });
             }
-
-            animationFrame = window.requestAnimationFrame(monitor);
+            frame = window.requestAnimationFrame(monitor);
         }
 
         function playReverse(index, done) {
-            stopAnimation();
-
-            var start = segmentStarts[index];
-            var end = getEnd(index);
-            var started = null;
+            cancelAnimation();
+            var start = starts[index];
+            var end = safeEnd(index);
+            var began = null;
             var finished = false;
-
             setTime(end);
 
             function finish() {
                 if (finished) return;
                 finished = true;
-                if (animationFrame) window.cancelAnimationFrame(animationFrame);
-                animationFrame = 0;
+                if (frame) window.cancelAnimationFrame(frame);
+                frame = 0;
                 film.pause();
                 setTime(start);
                 if (done) done();
@@ -159,24 +143,22 @@
 
             function reverse(timestamp) {
                 if (finished) return;
-                if (started === null) started = timestamp;
-                var ratio = clamp((timestamp - started) / 700, 0, 1);
+                if (began === null) began = timestamp;
+                var ratio = clamp((timestamp - began) / 900, 0, 1);
                 setTime(end - (end - start) * ratio);
                 if (ratio >= 1) finish();
-                else animationFrame = window.requestAnimationFrame(reverse);
+                else frame = window.requestAnimationFrame(reverse);
             }
-
-            animationFrame = window.requestAnimationFrame(reverse);
+            frame = window.requestAnimationFrame(reverse);
         }
 
-        function isStoryActive() {
+        function storyIsPinned() {
             var rect = story.getBoundingClientRect();
             return rect.top <= 3 && rect.bottom >= window.innerHeight - 3;
         }
 
         function handleWheel(event) {
-            if (!isStoryActive()) return;
-
+            if (!storyIsPinned()) return;
             var direction = event.deltaY > 0 ? 1 : event.deltaY < 0 ? -1 : 0;
             if (!direction) return;
 
@@ -188,20 +170,16 @@
 
             if (direction > 0) {
                 if (step >= 3) return;
-
                 event.preventDefault();
                 event.stopImmediatePropagation();
                 locked = true;
                 step += 1;
                 renderLayer(step);
-                playForward(step, function () {
-                    locked = false;
-                });
+                playForward(step, function () { locked = false; });
                 return;
             }
 
             if (step < 0) return;
-
             event.preventDefault();
             event.stopImmediatePropagation();
             locked = true;
@@ -230,10 +208,7 @@
             setTime(0);
         });
 
-        /* Capture the wheel gesture before the old inline scroll handler. */
         window.addEventListener("wheel", handleWheel, { capture: true, passive: false });
-
-        /* Keep the first layer visible before the first step is triggered. */
         renderLayer(0);
         setTime(0);
     }
