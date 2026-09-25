@@ -194,6 +194,34 @@
     </style>
 
 
+    <!-- Packaroji reveal-on-scroll animation -->
+    <style id="packaroji-reveal-scroll">
+      .reveal-on-scroll {
+        opacity: 0;
+        transform: translate3d(0, 28px, 0);
+        transition:
+          opacity 700ms ease,
+          transform 700ms cubic-bezier(.22, 1, .36, 1);
+        transition-delay: var(--reveal-delay, 0ms);
+        will-change: opacity, transform;
+      }
+
+      .reveal-on-scroll.reveal-active {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .reveal-on-scroll,
+        .reveal-on-scroll.reveal-active {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+    </style>
+
+
     {% block head %}{% endblock %}
 
 </head>
@@ -897,6 +925,90 @@
 
 
 <script src="{{ url_for('static', filename='js/cookie-consent.js', v=1) }}"></script>
+
+
+<!-- Packaroji reveal-on-scroll JavaScript -->
+<script id="packaroji-reveal-scroll-script">
+  (function () {
+    "use strict";
+
+    function initRevealOnScroll() {
+      if (!("IntersectionObserver" in window)) {
+        document
+          .querySelectorAll(".reveal-on-scroll")
+          .forEach(function (element) {
+            element.classList.add("reveal-active");
+          });
+        return;
+      }
+
+      var revealElements = document.querySelectorAll(
+        [
+          "[data-reveal]",
+          ".reveal-on-scroll",
+          "main > section",
+          "main section",
+          "main article",
+          "main .card",
+          "main [class*=\"card\"]",
+          "main .product-card",
+          "main .category-card",
+          "footer .footer-grid > div"
+        ].join(", ")
+      );
+
+      revealElements.forEach(function (element, index) {
+        if (!element.classList.contains("reveal-on-scroll")) {
+          element.classList.add("reveal-on-scroll");
+        }
+
+        var previousSibling = element.previousElementSibling;
+        var siblingIndex = 0;
+
+        while (previousSibling) {
+          if (
+            previousSibling.matches &&
+            previousSibling.matches("[data-reveal], .reveal-on-scroll")
+          ) {
+            siblingIndex += 1;
+          }
+          previousSibling = previousSibling.previousElementSibling;
+        }
+
+        var delay = Math.min(siblingIndex * 90, 450);
+        element.style.setProperty("--reveal-delay", delay + "ms");
+      });
+
+      var observer = new IntersectionObserver(
+        function (entries, currentObserver) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) {
+              return;
+            }
+
+            entry.target.classList.add("reveal-active");
+            currentObserver.unobserve(entry.target);
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: "0px 0px -40px 0px"
+        }
+      );
+
+      revealElements.forEach(function (element) {
+        observer.observe(element);
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initRevealOnScroll);
+    } else {
+      initRevealOnScroll();
+    }
+  })();
+</script>
+
 
 {% block scripts %}{% endblock %}
 
