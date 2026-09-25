@@ -120,7 +120,21 @@
          FONTS
     ====================================================== -->
 
-    <!-- Local, consistent typography: no external font downloads required -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
 
     <!-- =====================================================
@@ -137,8 +151,8 @@
 
     <style>
       :root{
-        --font-heading:Georgia, "Times New Roman", serif;
-        --font-body:Georgia, "Times New Roman", serif;
+        --font-heading:'Playfair Display',Georgia,serif;
+        --font-body:'Inter',Arial,sans-serif;
       }
       .site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(28,77,54,.10)}
       .site-header .topbar{font-family:var(--font-body)}
@@ -156,71 +170,21 @@
       @media(max-width:900px){.site-header .main-nav{font-size:14px}.site-header .brand small{font-size:8px}.site-header .nav-wrap{min-height:68px}}
     </style>
 
-    <!-- Final typography override: keeps the entire site on one classic serif family -->
-    <style id="packaroji-classic-serif">
-      :root {
-        --font-heading: Georgia, "Times New Roman", serif !important;
-        --font-body: Georgia, "Times New Roman", serif !important;
-      }
 
-      body,
-      body p,
-      body li,
-      body label,
-      body input,
-      body textarea,
-      body button,
-      body a,
-      body span,
-      body small,
-      body strong,
-      body h1,
-      body h2,
-      body h3,
-      body h4,
-      body h5,
-      body h6 {
-        font-family: Georgia, "Times New Roman", serif !important;
-      }
-
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-weight: 700;
-      }
+    <style id="packaroji-typography-reveal">
+      :root{--font-heading:'Playfair Display',Georgia,serif;--font-body:'Inter',Arial,sans-serif}
+      body,body p,body li,body a,body button,body input,body textarea,body label,body span,body small,body strong{font-family:var(--font-body)!important}
+      h1,h2,h3,h4,h5,h6{font-family:var(--font-heading)!important;color:#1A202C}
+      p{color:#4A5568}
+      .accent-text{color:#8A9A5B!important;font-style:italic}
+      html.reveal-ready .reveal-on-scroll{opacity:0;transform:translate3d(0,28px,0);transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1);transition-delay:var(--reveal-delay,0ms);will-change:opacity,transform}
+      html.reveal-ready .reveal-on-scroll.reveal-active{opacity:1;transform:translate3d(0,0,0)}
+      @media(prefers-reduced-motion:reduce){.reveal-on-scroll,.reveal-on-scroll.reveal-active{opacity:1!important;transform:none!important;transition:none!important}}
     </style>
 
-
-    <!-- Packaroji reveal-on-scroll animation -->
-    <style id="packaroji-reveal-scroll">
-      .reveal-on-scroll {
-        opacity: 0;
-        transform: translate3d(0, 28px, 0);
-        transition:
-          opacity 700ms ease,
-          transform 700ms cubic-bezier(.22, 1, .36, 1);
-        transition-delay: var(--reveal-delay, 0ms);
-        will-change: opacity, transform;
-      }
-
-      .reveal-on-scroll.reveal-active {
-        opacity: 1;
-        transform: translate3d(0, 0, 0);
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .reveal-on-scroll,
-        .reveal-on-scroll.reveal-active {
-          opacity: 1;
-          transform: none;
-          transition: none;
-        }
-      }
-    </style>
-
+    <script id="packaroji-reveal-scroll-script">
+      (()=>{function init(){if(!('IntersectionObserver'in window))return;const els=document.querySelectorAll('[data-reveal],main>section:not(#packaging-layers):not(.pkg-layer-story),main article:not(.pkg-layer-panel),footer .footer-grid>div');els.forEach((el,i)=>{el.classList.add('reveal-on-scroll');el.style.setProperty('--reveal-delay',Math.min(i*70,420)+'ms')});document.documentElement.classList.add('reveal-ready');const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('reveal-active');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -40px'});els.forEach(el=>io.observe(el))}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init()})();
+    </script>
 
     {% block head %}{% endblock %}
 
@@ -925,90 +889,6 @@
 
 
 <script src="{{ url_for('static', filename='js/cookie-consent.js', v=1) }}"></script>
-
-
-<!-- Packaroji reveal-on-scroll JavaScript -->
-<script id="packaroji-reveal-scroll-script">
-  (function () {
-    "use strict";
-
-    function initRevealOnScroll() {
-      if (!("IntersectionObserver" in window)) {
-        document
-          .querySelectorAll(".reveal-on-scroll")
-          .forEach(function (element) {
-            element.classList.add("reveal-active");
-          });
-        return;
-      }
-
-      var revealElements = document.querySelectorAll(
-        [
-          "[data-reveal]",
-          ".reveal-on-scroll",
-          "main > section",
-          "main section",
-          "main article",
-          "main .card",
-          "main [class*=\"card\"]",
-          "main .product-card",
-          "main .category-card",
-          "footer .footer-grid > div"
-        ].join(", ")
-      );
-
-      revealElements.forEach(function (element, index) {
-        if (!element.classList.contains("reveal-on-scroll")) {
-          element.classList.add("reveal-on-scroll");
-        }
-
-        var previousSibling = element.previousElementSibling;
-        var siblingIndex = 0;
-
-        while (previousSibling) {
-          if (
-            previousSibling.matches &&
-            previousSibling.matches("[data-reveal], .reveal-on-scroll")
-          ) {
-            siblingIndex += 1;
-          }
-          previousSibling = previousSibling.previousElementSibling;
-        }
-
-        var delay = Math.min(siblingIndex * 90, 450);
-        element.style.setProperty("--reveal-delay", delay + "ms");
-      });
-
-      var observer = new IntersectionObserver(
-        function (entries, currentObserver) {
-          entries.forEach(function (entry) {
-            if (!entry.isIntersecting) {
-              return;
-            }
-
-            entry.target.classList.add("reveal-active");
-            currentObserver.unobserve(entry.target);
-          });
-        },
-        {
-          threshold: 0.12,
-          rootMargin: "0px 0px -40px 0px"
-        }
-      );
-
-      revealElements.forEach(function (element) {
-        observer.observe(element);
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initRevealOnScroll);
-    } else {
-      initRevealOnScroll();
-    }
-  })();
-</script>
-
 
 {% block scripts %}{% endblock %}
 
