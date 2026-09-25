@@ -22,9 +22,7 @@
         if (!story || !film) return;
 
         var source = film.querySelector("source");
-        // The repository contains this uploaded video at static root. The previously
-        // referenced /static/videos/... file does not exist in the repository.
-        var correctSrc = "/static/WhatsApp%20Video%202026-09-23%20at%2021.35.50.mp4";
+        var correctSrc = "/static/videos/packaroji-burger-box-bag_v2-scroll-8s.mp4";
         if (source && source.getAttribute("src") !== correctSrc) {
             source.setAttribute("src", correctSrc);
         }
@@ -48,9 +46,7 @@
         function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
         function setTime(value) {
             if (!metadataReady || !Number.isFinite(film.duration) || film.duration <= 0) return;
-            try {
-                film.currentTime = clamp(value, 0, Math.max(0, film.duration - 0.03));
-            } catch (_) {}
+            try { film.currentTime = clamp(value, 0, Math.max(0, film.duration - 0.03)); } catch (_) {}
         }
         function stop() {
             if (raf) cancelAnimationFrame(raf);
@@ -119,8 +115,6 @@
                 animate(step, false, function () { busy = false; });
             } else {
                 if (step <= 0) {
-                    // Keep Layer 1 visible at the upper boundary instead of rendering
-                    // an empty state while the user scrolls back up.
                     step = 0;
                     render(0);
                     setTime(0);
