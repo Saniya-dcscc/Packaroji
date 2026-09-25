@@ -401,6 +401,164 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
 
 </section>
 
+<style id="packaroji-layer-alignment-fix">
+  /* Keep every layer panel in the exact same position while the video scrubs. */
+  #packaging-layers,
+  #packaging-layers * {
+    box-sizing: border-box;
+  }
+
+  #packaging-layers {
+    position: relative;
+    overflow: clip;
+  }
+
+  #packaging-layers .pkg-layer-sticky {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    min-height: 640px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  #packaging-layers .pkg-layer-content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: block;
+  }
+
+  #packaging-layers .pkg-layer-panel {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: clamp(84px, 9vh, 120px) clamp(24px, 5.5vw, 96px) !important;
+    opacity: 0 !important;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate3d(0, 0, 0) !important;
+    transition: none !important;
+    will-change: opacity;
+  }
+
+  #packaging-layers .pkg-layer-panel.is-active {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  #packaging-layers .pkg-layer-copy {
+    width: min(48%, 700px);
+    max-width: 700px;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left;
+    position: relative;
+    z-index: 5;
+  }
+
+  #packaging-layers .pkg-layer-kicker,
+  #packaging-layers .pkg-layer-intro,
+  #packaging-layers .pkg-layer-specs,
+  #packaging-layers .pkg-layer-button {
+    font-family: var(--font-body) !important;
+  }
+
+  #packaging-layers .pkg-layer-kicker {
+    margin: 0 0 24px !important;
+    line-height: 1.35 !important;
+  }
+
+  #packaging-layers .pkg-layer-panel h2 {
+    margin: 0 0 24px !important;
+    font-family: var(--font-heading) !important;
+    font-size: clamp(2.8rem, 5.3vw, 6.2rem) !important;
+    font-weight: 600 !important;
+    line-height: .98 !important;
+    letter-spacing: -.055em !important;
+  }
+
+  #packaging-layers .pkg-layer-intro {
+    max-width: 650px;
+    margin: 0 0 30px !important;
+    font-size: clamp(1rem, 1.25vw, 1.25rem) !important;
+    line-height: 1.55 !important;
+  }
+
+  #packaging-layers .pkg-layer-specs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 28px;
+    margin: 0 0 30px !important;
+  }
+
+  #packaging-layers .pkg-layer-specs > div {
+    min-width: 0;
+  }
+
+  #packaging-layers .pkg-layer-specs span,
+  #packaging-layers .pkg-layer-specs strong {
+    font-family: var(--font-body) !important;
+  }
+
+  #packaging-layers .pkg-layer-specs strong {
+    display: block;
+    line-height: 1.35;
+  }
+
+  #packaging-layers .pkg-layer-film {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  #packaging-layers .pkg-layer-film-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  @media (max-width: 900px) {
+    #packaging-layers .pkg-layer-panel {
+      align-items: flex-end !important;
+      padding: 92px 24px 54px !important;
+    }
+
+    #packaging-layers .pkg-layer-copy {
+      width: min(100%, 680px);
+      max-width: 100%;
+    }
+
+    #packaging-layers .pkg-layer-panel h2 {
+      font-size: clamp(2.8rem, 10vw, 5.2rem) !important;
+    }
+  }
+
+  @media (max-width: 560px) {
+    #packaging-layers .pkg-layer-panel {
+      padding: 88px 18px 36px !important;
+    }
+
+    #packaging-layers .pkg-layer-specs {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    #packaging-layers .pkg-layer-panel h2 {
+      font-size: clamp(2.5rem, 12vw, 4.2rem) !important;
+    }
+  }
+</style>
+
 <!-- =====================================================
      PACKAGING LAYERS — SCROLL STORY
      One homepage section, four pinned layers.
@@ -986,28 +1144,15 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
     const time = scrollToVideoTime(p);
     setVideoTime(time);
 
-    let opacities = [0,0,0,0];
-    let yOffsets = [0,8,8,8];
-    if (time < 2) {
-      opacities[0] = 1;
-    } else if (time < 3) {
-      const t = ease(clamp(time - 2, 0, 1));
-      opacities[0] = 1 - t; opacities[1] = t;
-      yOffsets[0] = -t * 5; yOffsets[1] = (1 - t) * 5;
-    } else if (time < 5) {
-      opacities[1] = 1;
-    } else if (time < 7) {
-      const t = ease(clamp(time - 5, 0, 1));
-      opacities[1] = 1 - t; opacities[2] = t;
-      yOffsets[1] = -t * 5; yOffsets[2] = (1 - t) * 5;
-    } else {
-      opacities[3] = 1;
-      if (time < 7.35) {
-        const t = ease(clamp((time - 7) / .35, 0, 1));
-        opacities[2] = 1 - t; opacities[3] = t;
-        yOffsets[2] = -t * 5; yOffsets[3] = (1 - t) * 5;
-      }
-    }
+    /*
+     * Show only one text panel at a time.
+     * The previous crossfade left two layer texts visible together,
+     * which caused the alignment and mixed-text problem during Layer 2.
+     */
+    const activeIndex = time < 2 ? 0 : time < 5 ? 1 : time < 7 ? 2 : 3;
+    const opacities = [0, 0, 0, 0];
+    opacities[activeIndex] = 1;
+    const yOffsets = [0, 0, 0, 0];
 
     panels.forEach((panel, i) => {
       const opacity = opacities[i];
