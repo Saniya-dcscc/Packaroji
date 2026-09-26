@@ -7183,37 +7183,36 @@ option,
 }
 
 /* =========================================================
-   EXPLORE OUR RANGE — TALL NARROW CARDS
-   Static cards only. No autoplay, loop, carousel JS, or clones.
+   EXPLORE OUR RANGE — REFERENCE-STYLE FOUR CARDS
+   Four fixed narrow cards. No old fluid-width sizing.
 ========================================================= */
 .home-page .explore-range {
     width: 100%;
     margin: 28px auto 0;
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
     padding: 4px 0 18px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: #315c3d transparent;
 }
 
 .home-page .explore-range-track {
     display: flex;
     flex-wrap: nowrap;
+    justify-content: center;
+    align-items: stretch;
     gap: 24px;
     width: 100%;
-    min-width: 0;
-    align-items: stretch;
 }
 
 .home-page .explore-range-card {
-    flex: 0 0 calc((100% - 72px) / 4);
-    width: calc((100% - 72px) / 4);
-    min-width: 0;
+    flex: 0 0 280px;
+    width: 280px;
     height: 560px;
     min-height: 560px;
+    min-width: 280px;
+    margin: 0;
+    padding: 0;
     border: none;
-    border-radius: 0;
+    border-radius: 16px;
     overflow: hidden;
     background: #efe4d1;
     box-shadow: none;
@@ -7230,8 +7229,8 @@ option,
 
 .home-page .explore-range-content {
     order: 1;
-    flex: 0 0 auto;
-    padding: 18px 14px 14px;
+    flex: 0 0 190px;
+    padding: 28px 22px 18px;
     background: #efe4d1;
 }
 
@@ -7239,7 +7238,7 @@ option,
     margin: 0;
     color: #1f4d36;
     font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-    font-size: 20px !important;
+    font-size: 22px !important;
     line-height: 1.08 !important;
     font-weight: 700;
 }
@@ -7250,7 +7249,7 @@ option,
 
 .home-page .explore-range-visual {
     order: 2;
-    flex-grow: 1;
+    flex: 1 1 auto;
     min-height: 0;
     width: 100%;
     overflow: hidden;
@@ -7269,22 +7268,43 @@ option,
 }
 
 .home-page .explore-range-card:hover {
-    box-shadow: 0 20px 38px rgba(31,77,54,.20);
+    box-shadow: none;
 }
 
 .home-page .explore-range-card:hover .explore-range-visual img {
-    transform: scale(1.025);
+    transform: scale(1.02);
+}
+
+@media (max-width: 1240px) {
+    .home-page .explore-range-card {
+        flex-basis: 240px;
+        width: 240px;
+        min-width: 240px;
+        height: 500px;
+        min-height: 500px;
+    }
+
+    .home-page .explore-range-content {
+        flex-basis: 170px;
+        padding: 24px 18px 16px;
+    }
+
+    .home-page .explore-range-content h3 {
+        font-size: 20px !important;
+    }
 }
 
 @media (max-width: 700px) {
     .home-page .explore-range {
-        margin-top: 22px;
+        overflow-x: auto;
         padding-bottom: 14px;
+        -webkit-overflow-scrolling: touch;
     }
 
     .home-page .explore-range-track {
-        gap: 16px;
+        justify-content: flex-start;
         width: max-content;
+        gap: 16px;
     }
 
     .home-page .explore-range-card {
@@ -7293,6 +7313,15 @@ option,
         min-width: 220px;
         height: 430px;
         min-height: 430px;
+    }
+
+    .home-page .explore-range-content {
+        flex-basis: 145px;
+        padding: 20px 16px 14px;
+    }
+
+    .home-page .explore-range-content h3 {
+        font-size: 18px !important;
     }
 }
 
