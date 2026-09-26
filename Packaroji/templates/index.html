@@ -348,48 +348,56 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
       <p>Start with the layer you need, then explore the products, materials and formats behind it.</p>
     </div>
 
-    <div class="product-carousel homepage-product-carousel" data-product-carousel tabindex="0" aria-label="Packaroji product collections carousel">
-      <button class="product-carousel-arrow product-carousel-prev" type="button" aria-label="Previous collection" data-product-prev>‹</button>
-      <div class="product-carousel-viewport" data-product-viewport>
-        <div class="product-carousel-track" data-product-track>
-          <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='food-wrapping') }}">
-            <a href="{{ url_for('product_collection_page', collection_slug='food-wrapping') }}" class="product-slide-link" aria-label="Food Wrapping">
-              <div class="product-slide-visual">
-                <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-foil.jpg') }}" alt="Food Wrapping" loading="eager"></div>
-              </div>
-              <div class="product-card-content"><h3>Food<br>Wrapping</h3><span class="slide-arrow">→</span></div>
-            </a>
-          </article>
+    <div class="explore-range" aria-label="Explore our range">
+      <div class="explore-range-track">
+        <article class="explore-range-card">
+          <a href="{{ url_for('product_collection_page', collection_slug='food-wrapping') }}" aria-label="Food Wrapping">
+            <div class="explore-range-visual">
+              <img src="{{ url_for('static', filename='images/collections/collection-foil.jpg') }}" alt="Food Wrapping" loading="eager">
+            </div>
+            <div class="explore-range-content">
+              <h3>Food<br>Wrapping</h3>
+              <span class="explore-range-arrow">→</span>
+            </div>
+          </a>
+        </article>
 
-          <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='main-portion-packaging') }}">
-            <a href="{{ url_for('product_collection_page', collection_slug='main-portion-packaging') }}" class="product-slide-link" aria-label="Main Portion Packaging">
-              <div class="product-slide-visual">
-                <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-bagasse.jpg') }}" alt="Main Portion Packaging" loading="eager"></div>
-              </div>
-              <div class="product-card-content"><h3>Main Portion<br>Packaging</h3><span class="slide-arrow">→</span></div>
-            </a>
-          </article>
+        <article class="explore-range-card">
+          <a href="{{ url_for('product_collection_page', collection_slug='main-portion-packaging') }}" aria-label="Main Portion Packaging">
+            <div class="explore-range-visual">
+              <img src="{{ url_for('static', filename='images/collections/collection-bagasse.jpg') }}" alt="Main Portion Packaging" loading="eager">
+            </div>
+            <div class="explore-range-content">
+              <h3>Main Portion<br>Packaging</h3>
+              <span class="explore-range-arrow">→</span>
+            </div>
+          </a>
+        </article>
 
-          <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='takeout-delivery') }}">
-            <a href="{{ url_for('product_collection_page', collection_slug='takeout-delivery') }}" class="product-slide-link" aria-label="Takeout and Delivery">
-              <div class="product-slide-visual">
-                <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-bags.jpg') }}" alt="Takeout and Delivery" loading="eager"></div>
-              </div>
-              <div class="product-card-content"><h3>Takeout &amp;<br>Delivery</h3><span class="slide-arrow">→</span></div>
-            </a>
-          </article>
+        <article class="explore-range-card">
+          <a href="{{ url_for('product_collection_page', collection_slug='takeout-delivery') }}" aria-label="Takeout and Delivery">
+            <div class="explore-range-visual">
+              <img src="{{ url_for('static', filename='images/collections/collection-bags.jpg') }}" alt="Takeout and Delivery" loading="eager">
+            </div>
+            <div class="explore-range-content">
+              <h3>Takeout &amp;<br>Delivery</h3>
+              <span class="explore-range-arrow">→</span>
+            </div>
+          </a>
+        </article>
 
-          <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='branding') }}">
-            <a href="{{ url_for('product_collection_page', collection_slug='branding') }}" class="product-slide-link" aria-label="Branding Options — Full Catalogue">
-              <div class="product-slide-visual">
-                <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-branding.jpg') }}" alt="Branding Options — Full Catalogue" loading="eager"></div>
-              </div>
-              <div class="product-card-content"><h3>Branding<br>Options</h3><span class="slide-arrow">→</span></div>
-            </a>
-          </article>
-        </div>
+        <article class="explore-range-card">
+          <a href="{{ url_for('product_collection_page', collection_slug='branding') }}" aria-label="Branding Options — Full Catalogue">
+            <div class="explore-range-visual">
+              <img src="{{ url_for('static', filename='images/collections/collection-branding.jpg') }}" alt="Branding Options — Full Catalogue" loading="eager">
+            </div>
+            <div class="explore-range-content">
+              <h3>Branding<br>Options</h3>
+              <span class="explore-range-arrow">→</span>
+            </div>
+          </a>
+        </article>
       </div>
-      <button class="product-carousel-arrow product-carousel-next" type="button" aria-label="Next collection" data-product-next>›</button>
     </div>
 
     <div class="packaging-options-browse">
