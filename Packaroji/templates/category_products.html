@@ -22,65 +22,95 @@
   {% if is_collection %}
   <section class="collection-page-compact collection-{{ collection_kind }}">
     <div class="container">
-      <div class="collection-visual-intro">
-        <aside class="collection-side-heading" aria-label="Collection heading">
-          {% if collection_kind == 'layer2' %}
-            <span>Aluminium</span>
-            <span>Kraft Paper</span>
-            <span>Sugarcane Bagasse</span>
-          {% elif collection_kind == 'layer1' %}
-            <span>Food Wrapping</span>
-          {% elif collection_kind == 'layer3' %}
-            <span>Takeout &amp; Delivery</span>
-          {% elif collection_kind == 'branding' %}
-            <span>Branding Options</span>
-          {% else %}
-            <span>{{ material_name|default(category_name) }}</span>
-          {% endif %}
-        </aside>
-      </div>
+      {% if collection_kind == 'layer1' %}
+        <div class="collection-layer1-layout">
+          <div class="collection-layer1-copy">
+            <h1 class="collection-layer1-title">Food Wrapping</h1>
+            <p class="collection-layer1-description">{{ category_description }}</p>
 
-      <div class="collection-subheading-wrap">
-        <p class="collection-subheading">{{ category_description }}</p>
-      </div>
+            <div class="collection-product-option-grid collection-product-option-grid-text" aria-label="Food wrapping product options">
+              {% for product in products %}
+                <a class="collection-product-option-card" href="{{ url_for('product_detail', slug=product.slug) }}">
+                  <span class="collection-product-option-body">
+                    <span class="collection-product-option-name">{{ product.name }}</span>
+                    <span class="collection-product-option-arrow" aria-hidden="true">→</span>
+                  </span>
+                </a>
+              {% endfor %}
+            </div>
 
-      {% if collection_kind == 'layer2' %}
-        <div class="collection-option-grid collection-option-grid-text" aria-label="Main portion packaging options">
-          {% for material in layer2_materials %}
-            <a class="collection-option-card" href="{{ url_for('layer2_material_page', material_slug=material.slug) }}">
-              <span class="collection-option-body">
-                <span class="collection-option-label">{{ material.name }}</span>
-                <span class="collection-option-note">View products</span>
-                <span class="collection-option-arrow" aria-hidden="true">→</span>
-              </span>
-            </a>
-          {% endfor %}
-        </div>
-      {% elif collection_kind == 'layer2-material' %}
-        <div class="collection-product-option-grid collection-product-option-grid-text" aria-label="{{ category_name }} products">
-          {% for product in products %}
-            <a class="collection-product-option-card" href="{{ url_for('product_detail', slug=product.slug) }}">
-              <span class="collection-product-option-body">
-                <span>
-                  <span class="collection-product-option-name">{{ product.name }}</span>
-                  {% if product.size_note %}<span class="collection-product-option-note">{{ product.size_note }}</span>{% endif %}
-                </span>
-                <span class="collection-product-option-arrow" aria-hidden="true">→</span>
-              </span>
-            </a>
-          {% endfor %}
+            <div class="collection-bottom-actions">
+              <a href="{{ url_for('order_page') }}" class="btn btn-secondary">Request Custom Packaging</a>
+              <a href="{{ url_for('products') }}" class="collection-back-link">Back to Products →</a>
+            </div>
+          </div>
+
+          <div class="collection-layer1-image" aria-label="Food wrapping materials">
+            <img
+              src="{{ url_for('static', filename='images/catalogue/layer1-food-wrapping.jpg') }}"
+              alt="Food wrapping materials including foil, kraft and butter paper rolls"
+            >
+          </div>
         </div>
       {% else %}
-        <div class="collection-product-option-grid collection-product-option-grid-text" aria-label="{{ category_name }} product options">
-          {% for product in products %}
-            <a class="collection-product-option-card" href="{{ url_for('product_detail', slug=product.slug) }}">
-              <span class="collection-product-option-body">
-                <span class="collection-product-option-name">{{ product.name }}</span>
-                <span class="collection-product-option-arrow" aria-hidden="true">→</span>
-              </span>
-            </a>
-          {% endfor %}
+        <div class="collection-visual-intro">
+          <aside class="collection-side-heading" aria-label="Collection heading">
+            {% if collection_kind == 'layer2' %}
+              <span>Aluminium</span>
+              <span>Kraft Paper</span>
+              <span>Sugarcane Bagasse</span>
+            {% elif collection_kind == 'layer3' %}
+              <span>Takeout &amp; Delivery</span>
+            {% elif collection_kind == 'branding' %}
+              <span>Branding Options</span>
+            {% else %}
+              <span>{{ material_name|default(category_name) }}</span>
+            {% endif %}
+          </aside>
         </div>
+
+        <div class="collection-subheading-wrap">
+          <p class="collection-subheading">{{ category_description }}</p>
+        </div>
+
+        {% if collection_kind == 'layer2' %}
+          <div class="collection-option-grid collection-option-grid-text" aria-label="Main portion packaging options">
+            {% for material in layer2_materials %}
+              <a class="collection-option-card" href="{{ url_for('layer2_material_page', material_slug=material.slug) }}">
+                <span class="collection-option-body">
+                  <span class="collection-option-label">{{ material.name }}</span>
+                  <span class="collection-option-note">View products</span>
+                  <span class="collection-option-arrow" aria-hidden="true">→</span>
+                </span>
+              </a>
+            {% endfor %}
+          </div>
+        {% elif collection_kind == 'layer2-material' %}
+          <div class="collection-product-option-grid collection-product-option-grid-text" aria-label="{{ category_name }} products">
+            {% for product in products %}
+              <a class="collection-product-option-card" href="{{ url_for('product_detail', slug=product.slug) }}">
+                <span class="collection-product-option-body">
+                  <span>
+                    <span class="collection-product-option-name">{{ product.name }}</span>
+                    {% if product.size_note %}<span class="collection-product-option-note">{{ product.size_note }}</span>{% endif %}
+                  </span>
+                  <span class="collection-product-option-arrow" aria-hidden="true">→</span>
+                </span>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="collection-product-option-grid collection-product-option-grid-text" aria-label="{{ category_name }} product options">
+            {% for product in products %}
+              <a class="collection-product-option-card" href="{{ url_for('product_detail', slug=product.slug) }}">
+                <span class="collection-product-option-body">
+                  <span class="collection-product-option-name">{{ product.name }}</span>
+                  <span class="collection-product-option-arrow" aria-hidden="true">→</span>
+                </span>
+              </a>
+            {% endfor %}
+          </div>
+        {% endif %}
       {% endif %}
 
       <div class="collection-bottom-actions">
