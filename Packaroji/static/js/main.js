@@ -788,48 +788,16 @@ document.addEventListener("DOMContentLoaded", () => {
             const count =
                 originalSlides.length;
 
-            const originals =
-                originalSlides.map(
-                    (slide) =>
-                        slide.cloneNode(true)
-                );
+            /*
+             * Keep exactly one set of the real slides.
+             * No cloned copies are created.
+             */
+            const slides = originalSlides;
 
-            track.innerHTML = "";
-
-            /* Five complete copies give the animation
-               enough runway on both edges. */
-            for (
-                let copy = -2;
-                copy <= 2;
-                copy += 1
-            ) {
-
-                originals.forEach(
-                    (template, index) => {
-
-                        const slide =
-                            template.cloneNode(true);
-
-                        slide.dataset.carouselIndex =
-                            String(index);
-
-                        slide.dataset.carouselAbsolute =
-                            String(
-                                index +
-                                copy * count
-                            );
-
-                        track.appendChild(slide);
-                    }
-                );
-            }
-
-            const slides =
-                Array.from(
-                    track.querySelectorAll(
-                        '[data-product-slide]'
-                    )
-                );
+            slides.forEach((slide, index) => {
+                slide.dataset.carouselIndex = String(index);
+                slide.dataset.carouselAbsolute = String(index);
+            });
 
             let phase = 0;
             let last = performance.now();
@@ -907,12 +875,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const wrapPhase = () => {
-
-                phase =
-                    (
-                        phase % count +
-                        count
-                    ) % count;
+                phase = Math.max(0, Math.min(count - 1, phase));
             };
 
 
@@ -1052,6 +1015,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         : 0.28;
 
 
+            let autoDirection = 1;
+
             const animate = (now) => {
 
                 raf =
@@ -1077,8 +1042,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         s *= 0.58;
                     }
 
-                    phase += s * dt;
-                    wrapPhase();
+                    phase += autoDirection * s * dt;
+
+                    if (phase >= count - 1) {
+                        phase = count - 1;
+                        autoDirection = -1;
+                    } else if (phase <= 0) {
+                        phase = 0;
+                        autoDirection = 1;
+                    }
                 }
 
                 render();
@@ -1088,8 +1060,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const nudge = (direction) => {
 
                 phase += direction;
-
                 wrapPhase();
+
+                autoDirection = direction >= 0 ? 1 : -1;
 
                 render();
             };
