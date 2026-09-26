@@ -8907,7 +8907,10 @@ img, video, iframe, svg { max-width:100%; }
 .collection-unified-option:hover{border-color:#b8c8b0;background:#fffefa;transform:translateX(2px)}
 .collection-unified-option span:last-child{font-size:16px;font-weight:500}
 .collection-unified-image{width:min(100%,380px);height:520px;justify-self:end;display:flex;align-items:center;justify-content:center;overflow:hidden;background:transparent !important;border:0 !important;box-shadow:none !important}
-.collection-unified-image img{display:block;width:100%;height:100%;object-fit:contain;object-position:center center;background:transparent;border:0;box-shadow:none;transform:scale(1.28);transform-origin:center center}
+.collection-unified-image img{display:block;width:100%;height:100%;object-fit:contain;object-position:center center;background:transparent;border:0;box-shadow:none;transform:none;transform-origin:center center}
+.collection-layer2 .collection-unified-image img,
+.collection-layer3 .collection-unified-image img,
+.collection-branding .collection-unified-image img{transform:scale(1.45) translateY(5%);}
 .collection-bottom-actions{margin-top:18px !important;gap:10px !important}
 .collection-bottom-actions .btn{min-height:34px !important;padding:8px 13px !important;border-radius:7px !important;font-size:12px !important}
 .collection-back-link{font-size:10px !important}
