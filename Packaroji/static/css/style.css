@@ -7207,8 +7207,8 @@ option,
 }
 
 .home-page .explore-range-card {
-    flex: 1 1 0;
-    width: auto;
+    flex: 0 1 190px;
+    width: 190px;
     min-width: 0;
     height: 390px;
     min-height: 390px;
@@ -7287,8 +7287,8 @@ option,
     }
 
     .home-page .explore-range-card {
-        flex: 1 1 0;
-        width: auto;
+        flex: 0 1 170px;
+        width: 170px;
         min-width: 0;
         height: 300px;
         min-height: 300px;
