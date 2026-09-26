@@ -799,7 +799,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 slide.dataset.carouselAbsolute = String(index);
             });
 
-            let phase = 0;
+            let phase = 0.5;
             let last = performance.now();
             let raf = 0;
 
@@ -821,45 +821,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (w <= 600) {
 
-                    cardWidth =
-                        Math.min(
-                            195,
-                            Math.max(
-                                165,
-                                w * 0.58
-                            )
-                        );
-
-                    spacing =
-                        cardWidth * 1.10;
+                    cardWidth = 205;
+                    spacing = 220;
 
                 } else if (w <= 980) {
 
-                    cardWidth =
-                        Math.min(
-                            205,
-                            Math.max(
-                                180,
-                                w * 0.33
-                            )
-                        );
-
-                    spacing =
-                        cardWidth * 1.10;
+                    cardWidth = 235;
+                    spacing = 255;
 
                 } else {
 
-                    cardWidth =
-                        Math.min(
-                            220,
-                            Math.max(
-                                205,
-                                w * 0.18
-                            )
-                        );
-
-                    spacing =
-                        cardWidth * 1.10;
+                    cardWidth = 270;
+                    spacing = 300;
                 }
 
                 viewport.style.setProperty(
