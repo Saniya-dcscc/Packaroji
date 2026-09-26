@@ -1326,68 +1326,24 @@ def product_category_page(category_slug):
 def product_collection_page(collection_slug):
     slug = collection_slug.strip().lower()
     collections = {
-        "food-wrapping": {
-            "name": "Food Wrapping",
-            "description": "The layer that touches the food directly: aluminium foil, kraft & butter paper rolls, wrap sheets.",
-            "kind": "layer1",
-            "products": lambda: [p for p in PRODUCTS if p.get("layer") == "Layer 1 — Food Wrapping" and p.get("slug") != "branding-options"],
-        },
-        "main-portion-packaging": {
-            "name": "Main Portion Packaging",
-            "description": "Sustainably sourced materials — aluminium, kraft paper, and sugarcane bagasse — engineered for heat retention, grease resistance, and full biodegradability, from the first wrap to the final bite.",
-            "kind": "layer2",
-            "products": lambda: [p for p in PRODUCTS if p.get("layer") == "Layer 2 — Main Portion Packaging"],
-        },
-        "takeout-delivery": {
-            "name": "Takeout & Delivery",
-            "description": "Takeout & delivery packaging designed for food businesses, from everyday takeaway bags to higher-capacity delivery formats.",
-            "kind": "layer3",
-            "products": lambda: [p for p in PRODUCTS if p.get("layer") == "Layer 3 — Takeout & Delivery"],
-        },
-        "branding": {
-            "name": "Branding Options",
-            "description": "Branded packaging that helps cafes, bakeries, restaurants and food-service businesses carry their identity from the first impression to the final bite.",
-            "kind": "branding",
-            "products": lambda: [p for p in PRODUCTS if p.get("brandable")],
-        },
+        "food-wrapping": {"name":"Food Wrapping","description":"The layer that touches the food directly: aluminium foil, kraft & butter paper rolls, wrap sheets.","kind":"layer1","image":"catalogue/layer1-food-wrapping-v2.webp","image_alt":"Food wrapping materials including foil, kraft and butter paper rolls","products":lambda: [p for p in PRODUCTS if p.get("layer") == "Layer 1 — Food Wrapping" and p.get("slug") != "branding-options"]},
+        "main-portion-packaging": {"name":"Main Portion Packaging","description":"Sustainably sourced materials — aluminium, kraft paper, and sugarcane bagasse — engineered for heat retention, grease resistance, and full biodegradability, from the first wrap to the final bite.","kind":"layer2","image":"catalogue/bagasse-single-clamshell.jpg","image_alt":"Sugarcane bagasse food container","products":lambda: [p for p in PRODUCTS if p.get("layer") == "Layer 2 — Main Portion Packaging"]},
+        "takeout-delivery": {"name":"Takeout & Delivery","description":"Takeout & delivery packaging designed for food businesses, from everyday takeaway bags to higher-capacity delivery formats.","kind":"layer3","image":"catalogue/sos-kraft-bags.jpg","image_alt":"Kraft takeaway and delivery bags","products":lambda: [p for p in PRODUCTS if p.get("layer") == "Layer 3 — Takeout & Delivery"]},
+        "branding": {"name":"Branding Options","description":"Branded packaging that helps cafes, bakeries, restaurants and food-service businesses carry their identity from the first impression to the final bite.","kind":"branding","image":"catalogue/branding-options.jpg","image_alt":"Custom branded food packaging","products":lambda: [p for p in PRODUCTS if p.get("brandable")]},
     }
     collection = collections.get(slug)
     if not collection:
         return render_template("404.html"), 404
-
-    # Layer 2 is intentionally a small material-selection hub.
-    # Each material opens its own product page instead of showing every product here.
+    layer2_materials = []
+    products = collection["products"]()
     if slug == "main-portion-packaging":
         layer2_materials = [
-            {"name": "Aluminium Packaging", "slug": "aluminium-packaging", "category": "Aluminium Foil Packaging", "image": "catalogue/foil-single-compartment.jpg"},
-            {"name": "Kraft Paper Packaging", "slug": "kraft-paper-packaging", "category": "Kraft Paper Packaging", "image": "catalogue/open-food-trays-boats.jpg"},
-            {"name": "Sugarcane Bagasse", "slug": "sugarcane-bagasse", "category": "Sugarcane Bagasse", "image": "catalogue/bagasse-single-clamshell.jpg"},
+            {"name":"Aluminium Packaging","slug":"aluminium-packaging","category":"Aluminium Foil Packaging"},
+            {"name":"Kraft Paper Packaging","slug":"kraft-paper-packaging","category":"Kraft Paper Packaging"},
+            {"name":"Sugarcane Bagasse","slug":"sugarcane-bagasse","category":"Sugarcane Bagasse"},
         ]
-        return render_template(
-            "category_products.html",
-            products=[],
-            category_name=collection["name"],
-            category_description=collection["description"],
-            category_icon="📦",
-            is_all_products=False,
-            is_collection=True,
-            collection_kind=collection["kind"],
-            layer2_materials=layer2_materials,
-            layer2_grouped_products={},
-        )
-
-    return render_template(
-        "category_products.html",
-        products=collection["products"](),
-        category_name=collection["name"],
-        category_description=collection["description"],
-        category_icon="✨" if slug == "branding" else "📦",
-        is_all_products=False,
-        is_collection=True,
-        collection_kind=collection["kind"],
-        layer2_materials=[],
-        layer2_grouped_products={},
-    )
+        products = []
+    return render_template("category_products.html", products=products, category_name=collection["name"], category_description=collection["description"], category_icon="✨" if slug == "branding" else "📦", is_all_products=False, is_collection=True, collection_kind=collection["kind"], collection_image=collection["image"], collection_image_alt=collection["image_alt"], layer2_materials=layer2_materials, layer2_grouped_products={})
 
 
 @app.get("/products/collection/main-portion-packaging/<material_slug>")
