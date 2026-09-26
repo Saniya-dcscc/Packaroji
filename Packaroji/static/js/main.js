@@ -1086,6 +1086,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let didDrag = false;
             let pressedSlide = null;
             let suppressNextPointerClick = false;
+            let pendingSlideNavigation = null;
 
             const beginPointerDrag = (event) => {
                 if (event.pointerType === "mouse" && event.button !== 0) {
@@ -1094,6 +1095,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (event.target?.closest?.('[data-product-prev], [data-product-next]')) {
                     return;
+                }
+
+                if (pendingSlideNavigation) {
+                    clearTimeout(pendingSlideNavigation);
+                    pendingSlideNavigation = null;
                 }
 
                 pointerActive = true;
@@ -1168,17 +1174,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 pointerId = null;
                 pressedSlide = null;
 
+                /*
+                 * Do not navigate from pointerup. A real click is handled
+                 * below with a short delay so a double-click can immediately
+                 * become a drag on the slide without the first click
+                 * navigating away.
+                 */
                 if (shouldOpen) {
-                    const href =
-                        slideToOpen.dataset.slideUrl ||
-                        slideToOpen.querySelector("a[href]")?.href;
-
-                    if (href) {
-                        /* The pointerup performs the navigation so drag/click
-                         * detection is deterministic and cannot be lost. */
-                        suppressNextPointerClick = true;
-                        window.location.assign(href);
-                    }
+                    suppressNextPointerClick = false;
                 }
 
                 /* If it was a drag, swallow the synthetic click that follows it. */
@@ -1211,7 +1214,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 event.preventDefault();
                 event.stopPropagation();
-                window.location.assign(href);
+
+                if (pendingSlideNavigation) {
+                    clearTimeout(pendingSlideNavigation);
+                }
+
+                pendingSlideNavigation = setTimeout(() => {
+                    pendingSlideNavigation = null;
+                    window.location.assign(href);
+                }, 220);
             }, true);
 
             prev?.addEventListener(
