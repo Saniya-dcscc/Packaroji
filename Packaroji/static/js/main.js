@@ -875,7 +875,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
             const wrapPhase = () => {
-                phase = Math.max(0, Math.min(count - 1, phase));
+                phase =
+                    (
+                        phase % count +
+                        count
+                    ) % count;
             };
 
 
@@ -898,18 +902,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 slides.forEach((slide) => {
 
-                    const absoluteIndex =
-                        Number(
-                            slide.dataset.carouselAbsolute
-                        );
-
                     const index =
                         Number(
                             slide.dataset.carouselIndex
                         );
 
-                    const d =
-                        absoluteIndex - phase;
+                    /*
+                     * Use the shortest circular distance between the
+                     * four real slides. This gives us left/right dragging
+                     * without creating cloned DOM slides.
+                     */
+                    let d = index - phase;
+
+                    if (d > count / 2) {
+                        d -= count;
+                    } else if (d < -count / 2) {
+                        d += count;
+                    }
 
                     const ad =
                         Math.abs(d);
@@ -1043,14 +1052,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     phase += autoDirection * s * dt;
-
-                    if (phase >= count - 1) {
-                        phase = count - 1;
-                        autoDirection = -1;
-                    } else if (phase <= 0) {
-                        phase = 0;
-                        autoDirection = 1;
-                    }
+                    wrapPhase();
                 }
 
                 render();
