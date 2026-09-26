@@ -7183,36 +7183,35 @@ option,
 }
 
 /* =========================================================
-   EXPLORE OUR RANGE — REFERENCE-STYLE FOUR CARDS
-   Four fixed narrow cards. No old fluid-width sizing.
+   EXPLORE OUR RANGE — FOUR CARDS FIT ON ONE HOME PAGE
+   Desktop: all four visible at once. No horizontal sliding.
 ========================================================= */
 .home-page .explore-range {
     width: 100%;
     margin: 28px auto 0;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
     padding: 4px 0 18px;
 }
 
 .home-page .explore-range-track {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: stretch;
-    gap: 24px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
     width: 100%;
+    max-width: 1080px;
+    margin: 0 auto;
+    align-items: stretch;
 }
 
 .home-page .explore-range-card {
-    flex: 0 0 280px;
-    width: 280px;
-    height: 560px;
-    min-height: 560px;
-    min-width: 280px;
+    width: 100%;
+    min-width: 0;
+    height: 520px;
+    min-height: 520px;
     margin: 0;
     padding: 0;
     border: none;
-    border-radius: 16px;
+    border-radius: 14px;
     overflow: hidden;
     background: #efe4d1;
     box-shadow: none;
@@ -7229,8 +7228,8 @@ option,
 
 .home-page .explore-range-content {
     order: 1;
-    flex: 0 0 190px;
-    padding: 28px 22px 18px;
+    flex: 0 0 155px;
+    padding: 24px 18px 16px;
     background: #efe4d1;
 }
 
@@ -7238,7 +7237,7 @@ option,
     margin: 0;
     color: #1f4d36;
     font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-    font-size: 22px !important;
+    font-size: 21px !important;
     line-height: 1.08 !important;
     font-weight: 700;
 }
@@ -7275,22 +7274,25 @@ option,
     transform: scale(1.02);
 }
 
-@media (max-width: 1240px) {
+@media (max-width: 1050px) and (min-width: 701px) {
+    .home-page .explore-range-track {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+        max-width: 960px;
+    }
+
     .home-page .explore-range-card {
-        flex-basis: 240px;
-        width: 240px;
-        min-width: 240px;
-        height: 500px;
-        min-height: 500px;
+        height: 450px;
+        min-height: 450px;
     }
 
     .home-page .explore-range-content {
-        flex-basis: 170px;
-        padding: 24px 18px 16px;
+        flex-basis: 135px;
+        padding: 20px 14px 14px;
     }
 
     .home-page .explore-range-content h3 {
-        font-size: 20px !important;
+        font-size: 18px !important;
     }
 }
 
@@ -7302,9 +7304,11 @@ option,
     }
 
     .home-page .explore-range-track {
+        display: flex;
         justify-content: flex-start;
-        width: max-content;
         gap: 16px;
+        width: max-content;
+        max-width: none;
     }
 
     .home-page .explore-range-card {
