@@ -7183,208 +7183,125 @@ option,
 }
 
 /* =========================================================
-   HOMEPAGE PRODUCT CAROUSEL — SINGLE SOURCE OF TRUTH
-   Four real slides only. No cloned/legacy carousel CSS.
+   EXPLORE OUR RANGE — STATIC HORIZONTAL CARD ROW
+   Four real cards. No autoplay, loop, carousel JS, or clones.
 ========================================================= */
-.home-page .homepage-product-carousel {
-    width: min(100%, 1180px);
-    margin: 24px auto 0;
-    padding: 0 42px;
-    box-sizing: border-box;
-}
-
-.home-page .homepage-product-carousel .product-carousel-viewport {
-    position: relative;
+.home-page .explore-range {
     width: 100%;
-    height: 350px;
+    margin: 28px auto 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 0 18px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #315c3d transparent;
+}
+
+.home-page .explore-range-track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 24px;
+    width: max-content;
+    min-width: 100%;
+    align-items: stretch;
+}
+
+.home-page .explore-range-card {
+    flex: 0 0 300px;
+    width: 300px;
+    min-height: 420px;
+    height: 420px;
+    background: #1f4d36;
+    border: 0;
+    border-radius: 16px;
     overflow: hidden;
-    border: 0 !important;
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none !important;
-    perspective: 1100px;
-    perspective-origin: 50% 48%;
-    touch-action: none !important;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
+    box-shadow: 0 14px 30px rgba(31,77,54,.14);
 }
 
-.home-page .homepage-product-carousel .product-carousel-track {
-    position: absolute;
-    inset: 0;
-    display: block !important;
-    width: 100% !important;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    transform: none !important;
-    transition: none !important;
-    transform-style: preserve-3d;
-    will-change: transform;
-}
-
-.home-page .homepage-product-carousel .product-carousel-slide {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 220px;
-    height: 326px;
-    min-width: 0;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    border: 0 !important;
-    outline: 0 !important;
-    transform-origin: 50% 50%;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-    transition: box-shadow .22s ease, opacity .22s ease;
-    will-change: left, transform, opacity;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    pointer-events: auto !important;
-    -webkit-user-drag: none;
-}
-
-.home-page .homepage-product-carousel .product-slide-link {
+.home-page .explore-range-card > a {
     display: flex;
     flex-direction: column;
     width: 100%;
     height: 100%;
-    color: inherit;
+    color: #fff;
     text-decoration: none;
-    pointer-events: none;
-    -webkit-user-drag: none;
 }
 
-.home-page .homepage-product-carousel .category-product-card {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    background: #fffaf0;
-    border: 0 !important;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 14px 30px rgba(76,55,32,.12);
-}
-
-.home-page .homepage-product-carousel .product-image-wrap {
-    height: 218px !important;
-    min-height: 218px;
-    background: #f4ead8;
-    overflow: hidden;
-    border: 0;
-}
-
-.home-page .homepage-product-carousel .product-image-wrap img,
-.home-page .homepage-product-carousel .product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover !important;
-    object-position: center;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 0;
-    display: block;
-    -webkit-user-drag: none;
-}
-
-.home-page .homepage-product-carousel .product-card-content {
-    position: relative;
+.home-page .explore-range-visual {
     flex: 1 1 auto;
-    min-height: 108px;
-    box-sizing: border-box;
-    padding: 12px 12px 46px !important;
-    text-align: center;
+    min-height: 0;
+    overflow: hidden;
+    background: #1f4d36;
 }
 
-.home-page .homepage-product-carousel .product-card-content h3 {
-    color: #38281c;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 18px !important;
-    line-height: 1.16 !important;
-    font-weight: 700;
+.home-page .explore-range-visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border: 0;
+    transition: transform .28s ease;
+    -webkit-user-drag: none;
+}
+
+.home-page .explore-range-content {
+    position: relative;
+    flex: 0 0 104px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px 20px;
+    background: #1f4d36;
+}
+
+.home-page .explore-range-content h3 {
     margin: 0;
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 21px !important;
+    line-height: 1.08 !important;
+    font-weight: 700;
 }
 
-.home-page .homepage-product-carousel .slide-arrow {
-    position: absolute;
-    left: 50%;
-    bottom: 9px;
-    transform: translateX(-50%);
+.home-page .explore-range-arrow {
+    flex: 0 0 auto;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
-    margin: 0;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: #58735e;
-    color: #fff;
+    background: #fff;
+    color: #1f4d36;
     font-size: 22px;
     line-height: 1;
-    pointer-events: none;
 }
 
-.home-page .homepage-product-carousel .product-carousel-arrow {
-    top: 42%;
-    z-index: 20;
-    width: 42px;
-    height: 42px;
-    border: 1px solid rgba(90,60,35,.12);
+.home-page .explore-range-card:hover {
+    box-shadow: 0 20px 38px rgba(31,77,54,.20);
 }
 
-.home-page .homepage-product-carousel .product-carousel-prev { left: 4px; }
-.home-page .homepage-product-carousel .product-carousel-next { right: 4px; }
-
-.home-page .homepage-product-carousel.is-dragging,
-.home-page .homepage-product-carousel.is-dragging * {
-    cursor: grabbing !important;
-}
-
-.home-page .homepage-product-carousel.is-dragging .product-carousel-slide {
-    transition: none !important;
-}
-
-@media (max-width: 980px) {
-    .home-page .homepage-product-carousel {
-        padding-left: 34px;
-        padding-right: 34px;
-    }
-    .home-page .homepage-product-carousel .product-carousel-viewport {
-        height: 330px;
-    }
-    .home-page .homepage-product-carousel .product-carousel-slide {
-        height: 306px;
-    }
-    .home-page .homepage-product-carousel .product-image-wrap {
-        height: 198px !important;
-        min-height: 198px;
-    }
+.home-page .explore-range-card:hover .explore-range-visual img {
+    transform: scale(1.035);
 }
 
 @media (max-width: 700px) {
-    .home-page .homepage-product-carousel {
-        padding-left: 18px;
-        padding-right: 18px;
+    .home-page .explore-range {
+        margin-top: 22px;
+        padding-bottom: 14px;
     }
-    .home-page .homepage-product-carousel .product-carousel-viewport {
-        height: 305px;
-        perspective: 900px;
+
+    .home-page .explore-range-track {
+        gap: 16px;
     }
-    .home-page .homepage-product-carousel .product-carousel-slide {
-        width: 185px;
-        height: 275px;
-    }
-    .home-page .homepage-product-carousel .product-image-wrap {
-        height: 174px !important;
-        min-height: 174px;
-    }
-    .home-page .homepage-product-carousel .product-card-content h3 {
-        font-size: 15px !important;
+
+    .home-page .explore-range-card {
+        flex-basis: 300px;
+        width: 300px;
+        min-height: 420px;
+        height: 420px;
     }
 }
 
@@ -8294,35 +8211,6 @@ h3 { font-size: 1.15rem; }
 }
 
 
-/* V53 — true edge-to-edge homepage carousel and reliable SVG eye tracking. */
-.home-page .homepage-product-carousel {
-    width: 100vw !important;
-    max-width: none !important;
-    margin-left: calc(50% - 50vw) !important;
-    margin-right: calc(50% - 50vw) !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-.home-page .homepage-product-carousel .product-carousel-viewport {
-    width: 100vw !important;
-    max-width: none !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-}
-.home-page .homepage-product-carousel .category-product-card,
-.home-page .homepage-product-carousel .product-carousel-slide {
-    border: 0 !important;
-}
-.home-page .homepage-product-carousel .product-carousel-slide {
-    box-shadow: none;
-}
-.home-page .homepage-product-carousel .product-carousel-arrow.product-carousel-prev { left: 12px; }
-.home-page .homepage-product-carousel .product-carousel-arrow.product-carousel-next { right: 12px; }
-.avatar-pupil {
-    transform: none !important;
-}
-
-
 /* V55 — cache-busted current build: keep the landing trail two-layer canvas
    implementation intact and ensure the generated front layer covers the photo. */
 .home-page .hero-template-landing-photo {
@@ -9067,16 +8955,3 @@ img, video, iframe, svg { max-width:100%; }
 @media (max-width:900px) { .container{width:min(100% - 28px,760px);} .site-header .nav-wrap,.site-header .main-nav{gap:10px;} .new-landing-copy{max-width:100%;} }
 @media (max-width:700px) { .container{width:calc(100% - 24px);} .new-landing-hero{min-height:600px;} .new-landing-hero h1{font-size:clamp(2.35rem,12vw,4.2rem);line-height:.98;} .new-landing-lead{font-size:1rem;max-width:100%;} .new-landing-actions a{padding:12px 17px;font-size:.9rem;} .pkg-layer-story{overflow:clip;} .floating-actions{gap:8px;} }
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important;} }
-
-
-/* V56 — product carousel owns pointer input */
-.home-page .homepage-product-carousel .product-carousel-viewport {
-    touch-action: none !important;
-    user-select: none !important;
-    -webkit-user-select: none !important;
-    -webkit-touch-callout: none;
-}
-.home-page .homepage-product-carousel .product-carousel-slide,
-.home-page .homepage-product-carousel .product-carousel-slide * {
-    -webkit-user-drag: none;
-}
