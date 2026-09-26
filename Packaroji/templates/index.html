@@ -352,41 +352,71 @@ Packaroji provides food packaging solutions for restaurants, cafés, bakeries, c
       <button class="product-carousel-arrow product-carousel-prev" type="button" aria-label="Previous collection" data-product-prev>‹</button>
       <div class="product-carousel-viewport" data-product-viewport>
         <div class="product-carousel-track" data-product-track>
+
           <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='food-wrapping') }}">
             <a href="{{ url_for('product_collection_page', collection_slug='food-wrapping') }}" class="product-slide-link" aria-label="Food Wrapping">
+              <div class="product-slide-header">
+                <span class="product-slide-number">01</span>
+                <span class="product-slide-icon" aria-hidden="true">✦</span>
+              </div>
+              <div class="product-slide-copy">
+                <h3>Food<br>Wrapping</h3>
+                <p>Grease-resistant wraps that keep food protected, warm and ready for the journey.</p>
+              </div>
               <div class="product-slide-visual">
                 <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-foil.jpg') }}" alt="Food Wrapping" loading="eager"></div>
               </div>
-              <div class="product-card-content"><h3>Food<br>Wrapping</h3><span class="slide-arrow">→</span></div>
             </a>
           </article>
 
           <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='main-portion-packaging') }}">
             <a href="{{ url_for('product_collection_page', collection_slug='main-portion-packaging') }}" class="product-slide-link" aria-label="Main Portion Packaging">
+              <div class="product-slide-header">
+                <span class="product-slide-number">02</span>
+                <span class="product-slide-icon" aria-hidden="true">◈</span>
+              </div>
+              <div class="product-slide-copy">
+                <h3>Main Portion<br>Packaging</h3>
+                <p>Clamshells, trays, tubs and meal boxes built around the food you serve.</p>
+              </div>
               <div class="product-slide-visual">
                 <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-bagasse.jpg') }}" alt="Main Portion Packaging" loading="eager"></div>
               </div>
-              <div class="product-card-content"><h3>Main Portion<br>Packaging</h3><span class="slide-arrow">→</span></div>
             </a>
           </article>
 
           <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='takeout-delivery') }}">
             <a href="{{ url_for('product_collection_page', collection_slug='takeout-delivery') }}" class="product-slide-link" aria-label="Takeout and Delivery">
+              <div class="product-slide-header">
+                <span class="product-slide-number">03</span>
+                <span class="product-slide-icon" aria-hidden="true">▣</span>
+              </div>
+              <div class="product-slide-copy">
+                <h3>Takeout &amp;<br>Delivery</h3>
+                <p>Kraft carry bags and delivery-ready formats for the final customer handoff.</p>
+              </div>
               <div class="product-slide-visual">
                 <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-bags.jpg') }}" alt="Takeout and Delivery" loading="eager"></div>
               </div>
-              <div class="product-card-content"><h3>Takeout &amp;<br>Delivery</h3><span class="slide-arrow">→</span></div>
             </a>
           </article>
 
           <article class="product-card category-product-card product-carousel-slide" data-product-slide data-slide-url="{{ url_for('product_collection_page', collection_slug='branding') }}">
             <a href="{{ url_for('product_collection_page', collection_slug='branding') }}" class="product-slide-link" aria-label="Branding Options — Full Catalogue">
+              <div class="product-slide-header">
+                <span class="product-slide-number">04</span>
+                <span class="product-slide-icon" aria-hidden="true">≋</span>
+              </div>
+              <div class="product-slide-copy">
+                <h3>Branding<br>Options</h3>
+                <p>Turn everyday packaging into a recognisable part of your customer experience.</p>
+              </div>
               <div class="product-slide-visual">
                 <div class="product-image-wrap"><img class="product-image" src="{{ url_for('static', filename='images/collections/collection-branding.jpg') }}" alt="Branding Options — Full Catalogue" loading="eager"></div>
               </div>
-              <div class="product-card-content"><h3>Branding<br>Options</h3><span class="slide-arrow">→</span></div>
             </a>
           </article>
+
         </div>
       </div>
       <button class="product-carousel-arrow product-carousel-next" type="button" aria-label="Next collection" data-product-next>›</button>
