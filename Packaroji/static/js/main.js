@@ -1115,7 +1115,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 slider.classList.add("is-dragging");
 
                 try {
-                    viewport.setPointerCapture(event.pointerId);
+                    slider.setPointerCapture(event.pointerId);
                 } catch (_) {}
 
                 /* Prevent native image/link dragging while preserving click semantics. */
@@ -1166,7 +1166,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 try {
                     if (activePointerId !== null) {
-                        viewport.releasePointerCapture(activePointerId);
+                        slider.releasePointerCapture(activePointerId);
                     }
                 } catch (_) {}
 
@@ -1190,11 +1190,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
 
-            viewport.addEventListener("pointerdown", beginPointerDrag, { passive: false });
-            viewport.addEventListener("pointermove", movePointerDrag, { passive: false });
-            viewport.addEventListener("pointerup", finishPointerDrag, { passive: true });
-            viewport.addEventListener("pointercancel", finishPointerDrag, { passive: true });
-            viewport.addEventListener("lostpointercapture", finishPointerDrag, { passive: true });
+            /* Capture pointer input on the outer carousel so cards/images cannot steal drag input. */
+            slider.addEventListener("pointerdown", beginPointerDrag, { capture: true, passive: false });
+            slider.addEventListener("pointermove", movePointerDrag, { capture: true, passive: false });
+            slider.addEventListener("pointerup", finishPointerDrag, { capture: true, passive: true });
+            slider.addEventListener("pointercancel", finishPointerDrag, { capture: true, passive: true });
+            slider.addEventListener("lostpointercapture", finishPointerDrag, { capture: true, passive: true });
 
             /* Keyboard/programmatic clicks still work; pointer clicks are handled
              * on pointerup above so dragging can never accidentally navigate. */
