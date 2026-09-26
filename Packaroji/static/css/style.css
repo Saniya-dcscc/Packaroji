@@ -8775,8 +8775,8 @@ img, video, iframe, svg { max-width:100%; }
 }
 .collection-layer1-title{
   margin:0 0 18px !important;
-  color:#1f5a42 !important;
-  font-family:"Inter",Arial,sans-serif !important;
+  color:#111111 !important;
+  font-family:"Montserrat",Arial,sans-serif !important;
   font-size:clamp(42px,4.2vw,62px) !important;
   font-weight:800 !important;
   line-height:1.04 !important;
@@ -8785,7 +8785,8 @@ img, video, iframe, svg { max-width:100%; }
 .collection-layer1-description{
   max-width:760px;
   margin:0 0 30px !important;
-  color:#6c6051 !important;
+  color:#666666 !important;
+  font-family:"Inter","Open Sans","Roboto",Arial,sans-serif !important;
   font-size:clamp(17px,1.35vw,21px) !important;
   line-height:1.55 !important;
 }
