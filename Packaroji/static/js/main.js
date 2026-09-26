@@ -985,10 +985,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             Math.round(ad * 30)
                         );
 
-                    slide.style.pointerEvents =
-                        ad < 2.7
-                            ? "auto"
-                            : "none";
+                    slide.style.pointerEvents = "auto";
 
                     if (
                         ad <
@@ -1085,7 +1082,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let dragDistance = 0;
             let didDrag = false;
             let pressedSlide = null;
-            let suppressNextPointerClick = false;
+            let suppressClickUntil = 0;
             let pendingSlideNavigation = null;
 
             const beginPointerDrag = (event) => {
@@ -1180,13 +1177,10 @@ document.addEventListener("DOMContentLoaded", () => {
                  * become a drag on the slide without the first click
                  * navigating away.
                  */
-                if (shouldOpen) {
-                    suppressNextPointerClick = false;
-                }
-
-                /* If it was a drag, swallow the synthetic click that follows it. */
+                /* A real click is handled by the delegated click listener below.
+                 * Only a drag gets a short suppression window. */
                 if (didDrag) {
-                    suppressNextPointerClick = true;
+                    suppressClickUntil = performance.now() + 350;
                 }
             };
 
@@ -1200,8 +1194,7 @@ document.addEventListener("DOMContentLoaded", () => {
             /* Keyboard/programmatic clicks still work; pointer clicks are handled
              * on pointerup above so dragging can never accidentally navigate. */
             slider.addEventListener("click", (event) => {
-                if (suppressNextPointerClick) {
-                    suppressNextPointerClick = false;
+                if (performance.now() < suppressClickUntil) {
                     event.preventDefault();
                     event.stopPropagation();
                     return;
@@ -1223,7 +1216,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 pendingSlideNavigation = setTimeout(() => {
                     pendingSlideNavigation = null;
                     window.location.assign(href);
-                }, 220);
+                }, 80);
             }, true);
 
             prev?.addEventListener(
