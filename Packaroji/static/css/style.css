@@ -7200,18 +7200,18 @@ option,
 .home-page .explore-range-track {
     display: flex;
     flex-wrap: nowrap;
-    gap: 16px;
+    gap: 24px;
     width: 100%;
     min-width: 0;
     align-items: stretch;
 }
 
 .home-page .explore-range-card {
-    flex: 0 0 125px;
-    width: 125px;
+    flex: 0 0 calc((100% - 72px) / 4);
+    width: calc((100% - 72px) / 4);
     min-width: 0;
-    height: 360px;
-    min-height: 360px;
+    height: 560px;
+    min-height: 560px;
     border: none;
     border-radius: 0;
     overflow: hidden;
@@ -7283,15 +7283,16 @@ option,
     }
 
     .home-page .explore-range-track {
-        gap: 10px;
+        gap: 16px;
+        width: max-content;
     }
 
     .home-page .explore-range-card {
-        flex: 0 0 115px;
-        width: 115px;
-        min-width: 0;
-        height: 280px;
-        min-height: 280px;
+        flex: 0 0 220px;
+        width: 220px;
+        min-width: 220px;
+        height: 430px;
+        min-height: 430px;
     }
 }
 
