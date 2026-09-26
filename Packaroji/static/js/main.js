@@ -734,608 +734,143 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =========================================================
-       PRODUCT CAROUSEL — CONTINUOUS INFINITE 3D ARC
+       PRODUCT CAROUSEL — REFERENCE-STYLE DRAG ROW
        Homepage only.
-       No dots / no slide counter.
-    ========================================================== */
+========================================================= */
 
     (() => {
-
-        const sliders =
-            document.querySelectorAll(
-                '.homepage-product-carousel[data-product-carousel]'
-            );
-
-        if (!sliders.length) return;
+        const sliders = document.querySelectorAll(
+            '.homepage-product-carousel[data-product-carousel]'
+        );
 
         sliders.forEach((slider) => {
+            const viewport = slider.querySelector('[data-product-viewport]');
+            const track = slider.querySelector('[data-product-track]');
+            const slides = Array.from(slider.querySelectorAll('[data-product-slide]'));
 
-            const viewport =
-                slider.querySelector(
-                    '[data-product-viewport]'
-                );
+            if (!viewport || !track || slides.length < 2) return;
 
-            const track =
-                slider.querySelector(
-                    '[data-product-track]'
-                );
-
-            const originalSlides =
-                Array.from(
-                    slider.querySelectorAll(
-                        '[data-product-slide]'
-                    )
-                );
-
-            const prev =
-                slider.querySelector(
-                    '[data-product-prev]'
-                );
-
-            const next =
-                slider.querySelector(
-                    '[data-product-next]'
-                );
-
-            if (
-                !viewport ||
-                !track ||
-                originalSlides.length < 2
-            ) {
-                return;
-            }
-
-            const count =
-                originalSlides.length;
-
-            /*
-             * Keep exactly one set of the real slides.
-             * No cloned copies are created.
-             */
-            const slides = originalSlides;
-
-            slides.forEach((slide, index) => {
-                slide.dataset.carouselIndex = String(index);
-                slide.dataset.carouselAbsolute = String(index);
-            });
-
-            let phase = 0.5;
-            let last = performance.now();
-            let raf = 0;
-
-            let dragging = false;
-            let pointerId = null;
-            let lastX = 0;
-            let focusInside = false;
-            let draggedDistance = 0;
-
-            let spacing = 0;
-            let cardWidth = 0;
-            let resizeTimer = 0;
-
-
-            const metrics = () => {
-
-                const w =
-                    viewport.clientWidth;
-
-                if (w <= 600) {
-
-                    cardWidth =
-                        Math.min(
-                            195,
-                            Math.max(
-                                165,
-                                w * 0.58
-                            )
-                        );
-
-                    spacing =
-                        cardWidth * 1.10;
-
-                } else if (w <= 980) {
-
-                    cardWidth =
-                        Math.min(
-                            205,
-                            Math.max(
-                                180,
-                                w * 0.33
-                            )
-                        );
-
-                    spacing =
-                        cardWidth * 1.10;
-
-                } else {
-
-                    cardWidth =
-                        Math.min(
-                            220,
-                            Math.max(
-                                205,
-                                w * 0.18
-                            )
-                        );
-
-                    spacing =
-                        cardWidth * 1.10;
-                }
-
-                viewport.style.setProperty(
-                    "--carousel-card-width",
-                    `${cardWidth}px`
-                );
-
-                viewport.style.setProperty(
-                    "--carousel-card-height",
-                    `${w <= 600 ? 315 : 350}px`
-                );
-            };
-
-
-            const wrapPhase = () => {
-                phase =
-                    (
-                        phase % count +
-                        count
-                    ) % count;
-            };
-
-
-            const render = () => {
-
-                if (!spacing) return;
-
-                const center =
-                    viewport.clientWidth / 2;
-
-                let nearestIndex =
-                    Math.round(phase) % count;
-
-                if (nearestIndex < 0) {
-                    nearestIndex += count;
-                }
-
-                let nearestDistance =
-                    Infinity;
-
-                slides.forEach((slide) => {
-
-                    const index =
-                        Number(
-                            slide.dataset.carouselIndex
-                        );
-
-                    /*
-                     * Use the shortest circular distance between the
-                     * four real slides. This gives us left/right dragging
-                     * without creating cloned DOM slides.
-                     */
-                    let d = index - phase;
-
-                    if (d > count / 2) {
-                        d -= count;
-                    } else if (d < -count / 2) {
-                        d += count;
-                    }
-
-                    const ad =
-                        Math.abs(d);
-
-                    const x =
-                        center + d * spacing;
-
-                    const curve =
-                        Math.min(
-                            1,
-                            ad / 2.35
-                        );
-
-                    const sign =
-                        d === 0
-                            ? 0
-                            : d < 0
-                                ? -1
-                                : 1;
-
-                    /* Keep every card on one straight, level line. */
-                    const scale = 1;
-                    const rotateY = 0;
-                    const rotateZ = 0;
-                    const y = 0;
-                    const z = 0;
-
-                    const opacity =
-                        Math.max(
-                            0.55,
-                            1 -
-                            Math.max(
-                                0,
-                                curve - 0.78
-                            ) *
-                            0.85
-                        );
-
-                    slide.style.left =
-                        `${x}px`;
-
-                    slide.style.top =
-                        "50%";
-
-                    slide.style.width =
-                        `${cardWidth}px`;
-
-                    slide.style.transform =
-                        `translate3d(
-                            -50%,
-                            calc(-50% + ${y}px),
-                            ${z}px
-                        )
-                        scale(${scale})
-                        rotateY(${rotateY}deg)
-                        rotateZ(${rotateZ}deg)`;
-
-                    slide.style.opacity =
-                        String(opacity);
-
-                    slide.style.zIndex =
-                        String(
-                            1000 -
-                            Math.round(ad * 30)
-                        );
-
-                    slide.style.pointerEvents =
-                        ad < 2.7
-                            ? "auto"
-                            : "none";
-
-                    if (
-                        ad <
-                        nearestDistance
-                    ) {
-
-                        nearestDistance = ad;
-
-                        nearestIndex = index;
-                    }
-                });
-            };
-
-
-            /*
-             * SLOWED DOWN A LITTLE
-             *
-             * Old:
-             * mobile 1.08
-             * tablet 1.02
-             * desktop 0.96
-             *
-             * New:
-             * mobile 0.36
-             * tablet 0.32
-             * desktop 0.28
-             */
-            const speed = () =>
-                window.innerWidth <= 600
-                    ? 0.36
-                    : window.innerWidth <= 980
-                        ? 0.32
-                        : 0.28;
-
-
-            let autoDirection = 1;
-
-            const animate = (now) => {
-
-                raf =
-                    requestAnimationFrame(
-                        animate
-                    );
-
-                const dt =
-                    Math.min(
-                        0.04,
-                        Math.max(
-                            0,
-                            (now - last) / 1000
-                        )
-                    );
-
-                last = now;
-
-                if (!dragging) {
-                    let s = speed();
-
-                    if (focusInside) {
-                        s *= 0.58;
-                    }
-
-                    phase += autoDirection * s * dt;
-                    wrapPhase();
-                }
-
-                render();
-            };
-
-
-            const nudge = (direction) => {
-
-                phase += direction;
-                wrapPhase();
-
-                autoDirection = direction >= 0 ? 1 : -1;
-
-                render();
-            };
-
-
-            /*
-             * Slider interaction — final behavior
-             *
-             * - Press/hold anywhere in the carousel and drag left/right.
-             * - The carousel follows the pointer while dragging.
-             * - Release resumes automatic movement.
-             * - A true click on a slide opens that slide's product page.
-             * - A drag never opens a product page.
-             */
             let pointerActive = false;
-            let activePointerId = null;
-            let lastPointerX = 0;
+            let pointerId = null;
+            let startX = 0;
+            let lastX = 0;
             let dragDistance = 0;
-            let didDrag = false;
+            let dragged = false;
             let pressedSlide = null;
-            let suppressNextPointerClick = false;
-            let pendingSlideNavigation = null;
+            let suppressClick = false;
 
-            const beginPointerDrag = (event) => {
-                if (event.pointerType === "mouse" && event.button !== 0) {
-                    return;
-                }
+            const setDragging = (value) => {
+                slider.classList.toggle('is-dragging', value);
+                viewport.style.cursor = value ? 'grabbing' : 'grab';
+            };
 
-                if (event.target?.closest?.('[data-product-prev], [data-product-next]')) {
-                    return;
-                }
-
-                if (pendingSlideNavigation) {
-                    clearTimeout(pendingSlideNavigation);
-                    pendingSlideNavigation = null;
-                }
+            const pointerDown = (event) => {
+                if (event.pointerType === 'mouse' && event.button !== 0) return;
 
                 pointerActive = true;
-                activePointerId = event.pointerId;
                 pointerId = event.pointerId;
-                lastPointerX = event.clientX;
+                startX = event.clientX;
                 lastX = event.clientX;
                 dragDistance = 0;
-                didDrag = false;
-                pressedSlide = event.target?.closest?.('[data-slide-url]') || null;
-                dragging = true;
+                dragged = false;
+                pressedSlide = event.target.closest('[data-slide-url]') || null;
 
-                slider.classList.add("is-dragging");
+                setDragging(true);
 
-                try {
-                    viewport.setPointerCapture(event.pointerId);
-                } catch (_) {}
+                try { viewport.setPointerCapture(event.pointerId); } catch (_) {}
+            };
 
-                /* Prevent native image/link dragging while preserving click semantics. */
-                if (event.pointerType !== "mouse") {
+            const pointerMove = (event) => {
+                if (!pointerActive || event.pointerId !== pointerId) return;
+
+                const dx = event.clientX - lastX;
+                lastX = event.clientX;
+                dragDistance += Math.abs(dx);
+
+                if (dragDistance > 6) dragged = true;
+
+                if (dragged) {
                     event.preventDefault();
+                    track.style.transform = 'translate3d(' + (event.clientX - startX) + 'px,0,0)';
                 }
             };
 
-            const movePointerDrag = (event) => {
-                if (!pointerActive || event.pointerId !== activePointerId) {
-                    return;
-                }
+            const pointerUp = (event) => {
+                if (!pointerActive || (event && event.pointerId !== pointerId)) return;
 
-                const dx = event.clientX - lastPointerX;
-                lastPointerX = event.clientX;
-
-                if (dx !== 0) {
-                    dragDistance += Math.abs(dx);
-                    if (dragDistance > 5) {
-                        didDrag = true;
-                    }
-                }
-
-                if (spacing > 0 && dx !== 0) {
-                    phase -= dx / spacing;
-                    wrapPhase();
-                    render();
-                }
-
-                if (didDrag || event.pointerType !== "mouse") {
-                    event.preventDefault();
-                }
-            };
-
-            const finishPointerDrag = (event) => {
-                if (!pointerActive) return;
-                if (event && activePointerId !== null && event.pointerId !== activePointerId) {
-                    return;
-                }
-
-                const slideToOpen = pressedSlide;
-                const shouldOpen = !didDrag && !!slideToOpen;
+                const totalDx = lastX - startX;
+                const wasDrag = dragged;
+                const slide = pressedSlide;
 
                 pointerActive = false;
-                dragging = false;
-                last = performance.now();
-                slider.classList.remove("is-dragging");
-
-                try {
-                    if (activePointerId !== null) {
-                        viewport.releasePointerCapture(activePointerId);
-                    }
-                } catch (_) {}
-
-                activePointerId = null;
                 pointerId = null;
                 pressedSlide = null;
+                setDragging(false);
 
-                /*
-                 * Do not navigate from pointerup. A real click is handled
-                 * below with a short delay so a double-click can immediately
-                 * become a drag on the slide without the first click
-                 * navigating away.
-                 */
-                if (shouldOpen) {
-                    suppressNextPointerClick = false;
-                }
+                try { if (event) viewport.releasePointerCapture(event.pointerId); } catch (_) {}
 
-                /* If it was a drag, swallow the synthetic click that follows it. */
-                if (didDrag) {
-                    suppressNextPointerClick = true;
-                }
-            };
+                if (wasDrag) {
+                    suppressClick = true;
+                    const threshold = Math.max(55, viewport.clientWidth * 0.045);
 
-            viewport.addEventListener("pointerdown", beginPointerDrag, { passive: false });
-            viewport.addEventListener("pointermove", movePointerDrag, { passive: false });
-            viewport.addEventListener("pointerup", finishPointerDrag, { passive: true });
-            viewport.addEventListener("pointercancel", finishPointerDrag, { passive: true });
-            viewport.addEventListener("lostpointercapture", finishPointerDrag, { passive: true });
+                    if (Math.abs(totalDx) >= threshold) {
+                        if (totalDx < 0) {
+                            const first = track.firstElementChild;
+                            if (first) track.appendChild(first);
+                        } else {
+                            const last = track.lastElementChild;
+                            if (last) track.insertBefore(last, track.firstElementChild);
+                        }
+                    }
 
-            /* Keyboard/programmatic clicks still work; pointer clicks are handled
-             * on pointerup above so dragging can never accidentally navigate. */
-            slider.addEventListener("click", (event) => {
-                if (suppressNextPointerClick) {
-                    suppressNextPointerClick = false;
-                    event.preventDefault();
-                    event.stopPropagation();
+                    track.style.transition = 'none';
+                    track.style.transform = 'translate3d(0,0,0)';
+                    window.setTimeout(() => { suppressClick = false; }, 80);
                     return;
                 }
 
-                const slide = event.target?.closest?.("[data-slide-url]");
-                if (!slide || !slider.contains(slide)) return;
+                track.style.transform = 'translate3d(0,0,0)';
 
-                const href = slide.dataset.slideUrl || slide.querySelector("a[href]")?.href;
-                if (!href) return;
-
-                event.preventDefault();
-                event.stopPropagation();
-
-                if (pendingSlideNavigation) {
-                    clearTimeout(pendingSlideNavigation);
+                if (slide) {
+                    const href = slide.dataset.slideUrl || slide.querySelector('a[href]')?.href;
+                    if (href) window.location.assign(href);
                 }
-
-                pendingSlideNavigation = setTimeout(() => {
-                    pendingSlideNavigation = null;
-                    window.location.assign(href);
-                }, 220);
-            }, true);
-
-            prev?.addEventListener(
-                "click",
-                () => nudge(-1)
-            );
-
-            next?.addEventListener(
-                "click",
-                () => nudge(1)
-            );
-
-
-            slider.addEventListener(
-                "keydown",
-                (event) => {
-
-                    if (
-                        event.key ===
-                        "ArrowLeft"
-                    ) {
-
-                        event.preventDefault();
-
-                        nudge(-1);
-                    }
-
-                    if (
-                        event.key ===
-                        "ArrowRight"
-                    ) {
-
-                        event.preventDefault();
-
-                        nudge(1);
-                    }
-                }
-            );
-
-
-            slider.addEventListener(
-                "focusin",
-                () => {
-                    focusInside = true;
-                }
-            );
-
-            slider.addEventListener(
-                "focusout",
-                (event) => {
-
-                    if (
-                        !slider.contains(
-                            event.relatedTarget
-                        )
-                    ) {
-                        focusInside = false;
-                    }
-                }
-            );
-
-
-            const onResize = () => {
-
-                clearTimeout(
-                    resizeTimer
-                );
-
-                resizeTimer =
-                    setTimeout(() => {
-
-                        metrics();
-
-                        render();
-
-                    }, 80);
             };
 
+            viewport.addEventListener('pointerdown', pointerDown, { passive: false });
+            viewport.addEventListener('pointermove', pointerMove, { passive: false });
+            viewport.addEventListener('pointerup', pointerUp, { passive: true });
+            viewport.addEventListener('pointercancel', pointerUp, { passive: true });
+            viewport.addEventListener('lostpointercapture', pointerUp, { passive: true });
 
-            window.addEventListener(
-                "resize",
-                onResize,
-                { passive: true }
-            );
+            slider.addEventListener('click', (event) => {
+                if (suppressClick) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+            }, true);
 
-
-            slider
-                .querySelectorAll("img")
-                .forEach((img) => {
-
+            slides.forEach((slide) => {
+                const img = slide.querySelector('img');
+                if (img) {
                     img.draggable = false;
+                    img.addEventListener('dragstart', (event) => event.preventDefault());
+                }
+            });
 
-                    img.addEventListener(
-                        "dragstart",
-                        (e) =>
-                            e.preventDefault()
-                    );
-                });
+            slider.addEventListener('keydown', (event) => {
+                if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+                event.preventDefault();
 
-
-            metrics();
-
-            render();
-
-            last =
-                performance.now();
-
-            raf =
-                requestAnimationFrame(
-                    animate
-                );
+                if (event.key === 'ArrowLeft') {
+                    const last = track.lastElementChild;
+                    if (last) track.insertBefore(last, track.firstElementChild);
+                } else {
+                    const first = track.firstElementChild;
+                    if (first) track.appendChild(first);
+                }
+            });
         });
-
     })();
 
 
