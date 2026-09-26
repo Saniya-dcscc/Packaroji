@@ -7183,8 +7183,8 @@ option,
 }
 
 /* =========================================================
-   EXPLORE OUR RANGE — STATIC HORIZONTAL CARD ROW
-   Four real cards. No autoplay, loop, carousel JS, or clones.
+   EXPLORE OUR RANGE — TALL NARROW CARDS
+   Static cards only. No autoplay, loop, carousel JS, or clones.
 ========================================================= */
 .home-page .explore-range {
     width: 100%;
@@ -7209,12 +7209,12 @@ option,
 .home-page .explore-range-card {
     flex: 0 0 280px;
     width: 280px;
-    min-height: 390px;
-    height: 390px;
-    background: #1f4d36;
+    height: 560px;
+    min-height: 560px;
     border: 0;
     border-radius: 16px;
     overflow: hidden;
+    background: #efe4d1;
     box-shadow: 0 14px 30px rgba(31,77,54,.14);
 }
 
@@ -7223,15 +7223,37 @@ option,
     flex-direction: column;
     width: 100%;
     height: 100%;
-    color: #fff;
+    color: #1f4d36;
     text-decoration: none;
 }
 
+.home-page .explore-range-content {
+    order: 1;
+    flex: 0 0 auto;
+    padding: 26px 20px 18px;
+    background: #efe4d1;
+}
+
+.home-page .explore-range-content h3 {
+    margin: 0;
+    color: #1f4d36;
+    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+    font-size: 20px !important;
+    line-height: 1.08 !important;
+    font-weight: 700;
+}
+
+.home-page .explore-range-arrow {
+    display: none;
+}
+
 .home-page .explore-range-visual {
-    flex: 1 1 auto;
+    order: 2;
+    flex-grow: 1;
     min-height: 0;
+    width: 100%;
     overflow: hidden;
-    background: #1f4d36;
+    background: #efe4d1;
 }
 
 .home-page .explore-range-visual img {
@@ -7245,47 +7267,12 @@ option,
     -webkit-user-drag: none;
 }
 
-.home-page .explore-range-content {
-    position: relative;
-    flex: 0 0 88px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 14px 16px;
-    background: #1f4d36;
-}
-
-.home-page .explore-range-content h3 {
-    margin: 0;
-    color: #fff;
-    font-family: "Playfair Display", Georgia, "Times New Roman", serif;
-    font-size: 18px !important;
-    line-height: 1.08 !important;
-    font-weight: 700;
-}
-
-.home-page .explore-range-arrow {
-    flex: 0 0 auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: #fff;
-    color: #1f4d36;
-    font-family: Inter, Arial, sans-serif;
-    font-size: 18px;
-    line-height: 1;
-}
-
 .home-page .explore-range-card:hover {
     box-shadow: 0 20px 38px rgba(31,77,54,.20);
 }
 
 .home-page .explore-range-card:hover .explore-range-visual img {
-    transform: scale(1.035);
+    transform: scale(1.025);
 }
 
 @media (max-width: 700px) {
@@ -7295,14 +7282,14 @@ option,
     }
 
     .home-page .explore-range-track {
-        gap: 16px;
+        gap: 24px;
     }
 
     .home-page .explore-range-card {
         flex-basis: 280px;
         width: 280px;
-        min-height: 390px;
-        height: 390px;
+        height: 560px;
+        min-height: 560px;
     }
 }
 
