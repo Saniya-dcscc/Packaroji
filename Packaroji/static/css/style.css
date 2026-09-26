@@ -7282,507 +7282,207 @@ option,
 }
 
 /* =========================================================
-   V23 — HOMEPAGE FEATURED PRODUCT CAROUSEL
-   The homepage packaging section shows real products, not blank
-   category placeholders. Three cards desktop, two tablet, one mobile.
+   HOMEPAGE PRODUCT CAROUSEL — CLEAN BASE
+   One horizontal row. Existing four slides, drag and click
+   behavior are controlled by main.js.
 ========================================================= */
-.homepage-product-carousel {
-    width: min(100%, 1220px);
-    margin-top: 30px;
+.home-page .homepage-product-carousel{
+    width:min(100%,1180px);
+    margin:24px auto 0;
+    padding:0 42px;
+    box-sizing:border-box;
 }
-.homepage-product-carousel .product-carousel-viewport {
-    background: transparent;
-    overflow: hidden;
+.home-page .homepage-product-carousel .product-carousel-viewport{
+    position:relative;
+    width:100%;
+    height:350px;
+    overflow:hidden;
+    border-radius:22px;
+    background:transparent;
+    perspective:1200px;
+    touch-action:pan-y;
+    cursor:grab;
 }
-.homepage-product-carousel .product-carousel-track {
-    display: flex !important;
-    width: auto;
-    gap: 0 !important;
-    transform: translate3d(0,0,0);
+.home-page .homepage-product-carousel .product-carousel-track{
+    position:absolute;
+    inset:0;
+    display:block !important;
+    width:100% !important;
+    height:100%;
+    margin:0;
+    padding:0;
+    transform:none !important;
+    transition:none !important;
+    will-change:transform;
 }
-.homepage-product-carousel .product-carousel-slide {
-    flex: 0 0 33.333333% !important;
-    box-sizing: border-box;
-    padding: 10px;
-    min-width: 0;
+.home-page .homepage-product-carousel .product-carousel-slide{
+    position:absolute !important;
+    top:50%;
+    left:50%;
+    width:220px !important;
+    height:300px;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    box-sizing:border-box;
+    transform-origin:center;
+    transform-style:preserve-3d;
+    transition:opacity .22s ease,box-shadow .22s ease;
+    will-change:left,transform,opacity;
+    cursor:grab;
+    user-select:none;
+    -webkit-user-select:none;
 }
-.homepage-product-carousel .category-product-card {
-    height: 100%;
-    min-height: 100%;
-    background: #fffdf8;
-    border: 1px solid #ded4c3;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 10px 28px rgba(62, 46, 31, .07);
+.home-page .homepage-product-carousel .category-product-card{
+    width:100%;
+    height:100%;
+    min-height:0;
+    box-sizing:border-box;
+    overflow:hidden;
+    border:1px solid #ded4c3;
+    border-radius:20px;
+    background:#fffaf0;
+    box-shadow:0 12px 28px rgba(62,46,31,.09);
 }
-.homepage-product-carousel .product-image-wrap {
-    height: 260px !important;
-    background: #eee4d3;
+.home-page .homepage-product-carousel .product-slide-link{
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    height:100%;
+    color:inherit;
+    text-decoration:none;
+    pointer-events:auto;
 }
-.homepage-product-carousel .product-card-content {
-    padding: 20px !important;
+.home-page .homepage-product-carousel .product-image-wrap{
+    flex:0 0 198px;
+    width:100%;
+    height:198px !important;
+    min-height:198px;
+    padding:10px;
+    box-sizing:border-box;
+    overflow:hidden;
+    background:#f4ead8;
 }
-.homepage-product-carousel .product-category {
-    display: inline-block;
-    margin-bottom: 8px;
-    font-size: 14px !important;
-    font-weight: 800;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-}
-.homepage-product-carousel .product-card-content h3 {
-    font-size: 21px !important;
-    line-height: 1.25 !important;
-    margin: 0 0 9px;
-}
-.homepage-product-carousel .product-card-content p {
-    font-size: 16px !important;
-    line-height: 1.55 !important;
-    margin-bottom: 16px;
-}
-.homepage-product-carousel .product-card-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-}
-.packaging-options-browse {
-    display: flex;
-    justify-content: center;
-    margin-top: 18px;
-}
-@media (max-width: 980px) {
-    .homepage-product-carousel .product-carousel-slide { flex-basis: 50% !important; }
-}
-@media (max-width: 700px) {
-    .homepage-product-carousel .product-carousel-slide { flex-basis: 100% !important; padding: 6px 0; }
-    .homepage-product-carousel { padding-left: 44px; padding-right: 44px; }
-    .homepage-product-carousel .product-image-wrap { height: 235px !important; }
-    .homepage-product-carousel .product-card-content { padding: 18px !important; }
-}
-
-/* =========================================================
-   V35 — HOMEPAGE CONTINUOUS 3D CURVED CAROUSEL
-   Only the existing homepage product carousel is affected.
-========================================================= */
-.home-page .homepage-product-carousel {
-    width: min(100%, 1220px);
-    margin: 24px auto 0;
-    padding: 0 48px 0;
-    box-sizing: border-box;
-}
-
-.home-page .homepage-product-carousel .product-carousel-viewport {
-    position: relative;
-    width: 100%;
-    height: 350px;
-    overflow: hidden;
-    border-radius: 22px;
-    background: transparent;
-    perspective: 1100px;
-    perspective-origin: 50% 48%;
-    touch-action: pan-y;
-}
-
-.home-page .homepage-product-carousel .product-carousel-track {
-    position: absolute;
-    inset: 0;
-    display: block !important;
-    width: 100% !important;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    transform: none !important;
-    transition: none !important;
-    transform-style: preserve-3d;
-    will-change: transform;
-}
-
-.home-page .homepage-product-carousel .product-carousel-slide {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    flex: none !important;
-    width: 240px;
-    min-width: 0;
-    height: 326px;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    transform-origin: 50% 50%;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-    transition: box-shadow .22s ease, opacity .22s ease;
-    will-change: left, transform, opacity;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-.home-page .homepage-product-carousel .product-carousel-viewport {
-    cursor: grab;
-}
-
-.home-page .homepage-product-carousel.is-dragging .product-carousel-viewport,
-.home-page .homepage-product-carousel.is-dragging .product-carousel-slide {
-    cursor: grabbing;
-}
-
-.home-page .homepage-product-carousel.is-dragging .product-carousel-slide {
-    transition: none !important;
-}
-
-.home-page .homepage-product-carousel .category-product-card {
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    background: #fffdf8;
-    border: 1px solid #ded4c3;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 8px 22px rgba(62,46,31,.07);
-}
-
-.home-page .homepage-product-carousel .product-image-wrap {
-    height: 180px !important;
-    min-height: 180px;
-    background: #eee4d3;
-    overflow: hidden;
-}
-
 .home-page .homepage-product-carousel .product-image-wrap img,
-.home-page .homepage-product-carousel .product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain !important;
-    object-position: center;
-    padding: 10px;
-    box-sizing: border-box;
+.home-page .homepage-product-carousel .product-image{
+    display:block;
+    width:100%;
+    height:100%;
+    padding:0;
+    box-sizing:border-box;
+    object-fit:cover !important;
+    object-position:center;
+    border-radius:12px;
 }
-
-.home-page .homepage-product-carousel .product-card-content {
-    padding: 14px 16px 15px !important;
+.home-page .homepage-product-carousel .product-card-content{
+    position:relative;
+    display:flex;
+    flex:1 1 auto;
+    align-items:flex-start;
+    justify-content:center;
+    height:102px;
+    min-height:102px;
+    padding:10px 12px 48px !important;
+    box-sizing:border-box;
+    text-align:center;
 }
-
-.home-page .homepage-product-carousel .product-category {
-    margin-bottom: 5px;
-    font-size: 12px !important;
-    letter-spacing: .07em;
+.home-page .homepage-product-carousel .product-card-content h3{
+    margin:0;
+    max-width:100%;
+    color:#38281c;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:17px !important;
+    line-height:1.16 !important;
+    font-weight:700;
 }
-
-.home-page .homepage-product-carousel .product-card-content h3 {
-    font-size: 18px !important;
-    line-height: 1.25 !important;
-    margin: 0 0 6px;
+.home-page .homepage-product-carousel .slide-arrow{
+    position:absolute;
+    left:50%;
+    bottom:10px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:34px;
+    height:34px;
+    margin:0;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background:#58735e;
+    color:#fff;
+    font-size:20px;
+    line-height:1;
 }
-
-.home-page .homepage-product-carousel .product-card-content p {
-    font-size: 13px !important;
-    line-height: 1.42 !important;
-    margin: 0 0 10px;
+.home-page .homepage-product-carousel .product-carousel-arrow{
+    display:none !important;
 }
-
-.home-page .homepage-product-carousel .product-card-actions {
-    display: flex;
-    gap: 7px;
-    flex-wrap: nowrap;
+.home-page .homepage-product-carousel .product-carousel-controls,
+.home-page .homepage-product-carousel .product-carousel-dots,
+.home-page .homepage-product-carousel .product-carousel-count{
+    display:none !important;
 }
-
-.home-page .homepage-product-carousel .product-card-actions .btn {
-    min-width: 0;
-    min-height: 36px;
-    padding: 7px 10px;
-    font-size: 12px !important;
-    flex: 1 1 0;
-}
-
-.home-page .homepage-product-carousel .product-carousel-slide:hover {
-    transform: none;
-    opacity: inherit;
-}
-
-.home-page .homepage-product-carousel .product-carousel-slide:hover .category-product-card {
-    box-shadow: 0 12px 28px rgba(62,46,31,.10);
-}
-
-.home-page .homepage-product-carousel .product-carousel-arrow {
-    top: 42%;
-    width: 42px;
-    height: 42px;
-    font-size: 25px;
-}
-
-
 .home-page .homepage-product-carousel.is-dragging,
-.home-page .homepage-product-carousel.is-dragging * {
-    cursor: grabbing !important;
+.home-page .homepage-product-carousel.is-dragging *,
+.home-page .homepage-product-carousel.is-dragging .product-carousel-slide{
+    cursor:grabbing !important;
 }
-
-@media (max-width: 980px) {
-    .home-page .homepage-product-carousel .product-carousel-viewport {
-        height: 330px;
-    }
-    .home-page .homepage-product-carousel .product-carousel-slide {
-        height: 306px;
-    }
-    .home-page .homepage-product-carousel .product-image-wrap {
-        height: 166px !important;
-        min-height: 166px;
-    }
+.home-page .homepage-product-carousel .product-carousel-slide:hover .category-product-card{
+    box-shadow:0 16px 32px rgba(62,46,31,.12);
 }
-
-@media (max-width: 700px) {
-    .home-page .homepage-product-carousel {
-        padding-left: 40px;
-        padding-right: 40px;
-        padding-bottom: 0;
+.home-page .homepage-product-carousel .product-carousel-slide:hover .product-image{
+    transform:scale(1.025);
+}
+.home-page .homepage-product-carousel .product-image{
+    transition:transform .35s ease;
+}
+@media(max-width:980px){
+    .home-page .homepage-product-carousel{
+        padding-left:34px;
+        padding-right:34px;
     }
-    .home-page .homepage-product-carousel .product-carousel-viewport {
-        height: 315px;
-        border-radius: 19px;
-        perspective: 900px;
+    .home-page .homepage-product-carousel .product-carousel-viewport{
+        height:315px;
     }
-    .home-page .homepage-product-carousel .product-carousel-slide {
-        height: 292px;
+    .home-page .homepage-product-carousel .product-carousel-slide{
+        width:205px !important;
+        height:290px;
     }
-    .home-page .homepage-product-carousel .product-image-wrap {
-        height: 158px !important;
-        min-height: 158px;
-    }
-    .home-page .homepage-product-carousel .product-card-content {
-        padding: 12px 13px !important;
-    }
-    .home-page .homepage-product-carousel .product-card-content h3 {
-        font-size: 16px !important;
-    }
-    .home-page .homepage-product-carousel .product-card-content p {
-        font-size: 12px !important;
-    }
-    .home-page .homepage-product-carousel .product-carousel-arrow {
-        width: 36px;
-        height: 36px;
-        font-size: 22px;
-    }
-    .home-page .homepage-product-carousel .product-carousel-controls {
-        left: 40px;
-        right: 40px;
+    .home-page .homepage-product-carousel .product-image-wrap{
+        flex-basis:188px;
+        height:188px !important;
+        min-height:188px;
     }
 }
-
-@media (prefers-reduced-motion: reduce) {
-    .home-page .homepage-product-carousel .product-carousel-slide {
-        transition: none !important;
+@media(max-width:700px){
+    .home-page .homepage-product-carousel{
+        padding-left:18px;
+        padding-right:18px;
     }
-}
-
-/* =========================================================
-   V36 — LANDING MASCOT + FOUR COLLECTION CAROUSEL
-   Only the landing mascot and existing homepage carousel are changed.
-========================================================= */
-.home-page .hero-template-character {
-    left: 12.2%;
-    top: 81%;
-    bottom: auto;
-    width: clamp(210px, 19vw, 285px);
-    transform: translate(-50%, -50%);
-}
-.home-page .hero-template-character svg { width: 100%; height: auto; }
-
-.home-page .homepage-product-carousel .product-carousel-viewport {
-    height: 390px;
-    overflow: hidden;
-    perspective: 1200px;
-}
-.home-page .homepage-product-carousel .product-carousel-slide {
-    width: 270px;
-    height: 350px;
-}
-.home-page .homepage-product-carousel .category-product-card {
-    border-radius: 24px;
-    background: #fffaf0;
-    border: 2px solid rgba(255,255,255,.82);
-    box-shadow: 0 18px 40px rgba(76,55,32,.13);
-}
-.home-page .homepage-product-carousel .product-slide-link {
-    display: block;
-    width: 100%;
-    height: 100%;
-    color: inherit;
-    text-decoration: none;
-    /*
-     * Pointer input belongs to the carousel article. The JS controller
-     * handles click navigation and drag, so the nested anchor must not
-     * steal pointer events from the drag surface.
-     */
-    pointer-events: none;
-}
-.home-page .homepage-product-carousel .product-image-wrap {
-    height: 235px !important;
-    min-height: 235px;
-    background: linear-gradient(145deg,#f8f1e2,#eee1c9);
-    padding: 16px;
-    box-sizing: border-box;
-}
-.home-page .homepage-product-carousel .product-image-wrap img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain !important;
-    padding: 0;
-}
-.home-page .homepage-product-carousel .product-card-content {
-    position: relative;
-    min-height: 115px;
-    box-sizing: border-box;
-    padding: 15px 18px 18px !important;
-    text-align: center;
-}
-.home-page .homepage-product-carousel .product-card-content h3 {
-    color: #38281c;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 21px !important;
-    line-height: 1.15 !important;
-    margin: 0;
-}
-.home-page .homepage-product-carousel .slide-arrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    margin-top: 11px;
-    border-radius: 50%;
-    background: #58735e;
-    color: #fff;
-    font-size: 24px;
-    line-height: 1;
-}
-@media (max-width: 980px) {
-    .home-page .homepage-product-carousel .product-carousel-slide { width: 235px; height: 315px; }
-    .home-page .homepage-product-carousel .product-image-wrap { height: 205px !important; min-height: 205px; }
-}
-@media (max-width: 700px) {
-    .home-page .hero-template-character {
-        left: 16%; top: 80%; width: min(34vw, 220px);
+    .home-page .homepage-product-carousel .product-carousel-viewport{
+        height:305px;
+        border-radius:19px;
     }
-    .home-page .homepage-product-carousel .product-carousel-viewport { height: 335px; }
-    .home-page .homepage-product-carousel .product-carousel-slide { width: 205px; height: 295px; }
-    .home-page .homepage-product-carousel .product-image-wrap { height: 185px !important; min-height: 185px; }
-    .home-page .homepage-product-carousel .product-card-content h3 { font-size: 17px !important; }
-}
-
-/* =========================================================
-   V38 — COMPACT, EVEN FOUR-CARD COLLECTION CAROUSEL
-   Keep the landing mascot unchanged. Only tighten the existing
-   collection carousel so every slide has identical structure.
-========================================================= */
-.home-page .homepage-product-carousel {
-    width: min(100%, 1180px);
-    margin: 0 auto;
-    padding: 0 42px 0;
-}
-.home-page .homepage-product-carousel .product-carousel-viewport {
-    height: 325px;
-    overflow: hidden;
-    perspective: 1200px;
-    perspective-origin: 50% 46%;
-}
-.home-page .homepage-product-carousel .product-carousel-track {
-    position: absolute;
-    inset: 0;
-}
-.home-page .homepage-product-carousel .product-carousel-slide {
-    width: 220px;
-    height: 300px;
-    box-sizing: border-box;
-}
-.home-page .homepage-product-carousel .category-product-card {
-    border-radius: 20px;
-    background: #fffaf0;
-    border: 2px solid rgba(255,255,255,.9);
-    box-shadow: 0 14px 30px rgba(76,55,32,.12);
-    overflow: hidden;
-}
-.home-page .homepage-product-carousel .product-slide-link {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    color: inherit;
-    text-decoration: none;
-}
-.home-page .homepage-product-carousel .product-image-wrap {
-    flex: 0 0 198px;
-    height: 198px !important;
-    min-height: 198px;
-    background: #f4ead8;
-    padding: 10px;
-    box-sizing: border-box;
-}
-.home-page .homepage-product-carousel .product-image-wrap img,
-.home-page .homepage-product-carousel .product-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover !important;
-    object-position: center;
-    padding: 0;
-    border-radius: 12px;
-    display: block;
-}
-.home-page .homepage-product-carousel .product-card-content {
-    position: relative;
-    flex: 1 1 auto;
-    min-height: 100px;
-    height: 102px;
-    box-sizing: border-box;
-    padding: 10px 12px 50px !important;
-    text-align: center;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-}
-.home-page .homepage-product-carousel .product-card-content h3 {
-    color: #38281c;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 17px !important;
-    line-height: 1.16 !important;
-    font-weight: 700;
-    margin: 0;
-    max-width: 100%;
-}
-.home-page .homepage-product-carousel .slide-arrow {
-    position: absolute;
-    left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    margin: 0;
-    border-radius: 50%;
-    background: #58735e;
-    color: #fff;
-    font-size: 20px;
-    line-height: 1;
-}
-
-@media (max-width: 980px) {
-    .home-page .homepage-product-carousel { padding-left: 34px; padding-right: 34px; }
-    .home-page .homepage-product-carousel .product-carousel-viewport { height: 315px; }
-    .home-page .homepage-product-carousel .product-carousel-slide { width: 205px; height: 290px; }
-    .home-page .homepage-product-carousel .product-image-wrap { flex-basis: 188px; height: 188px !important; min-height: 188px; }
-    .home-page .homepage-product-carousel .product-card-content { height: 102px; min-height: 102px; }
-    .home-page .homepage-product-carousel .product-card-content h3 { font-size: 16px !important; }
-}
-
-@media (max-width: 700px) {
-    .home-page .homepage-product-carousel { padding-left: 18px; padding-right: 18px; }
-    .home-page .homepage-product-carousel .product-carousel-viewport { height: 305px; perspective: 1000px; }
-    .home-page .homepage-product-carousel .product-carousel-slide { width: 185px; height: 275px; }
-    .home-page .homepage-product-carousel .product-image-wrap { flex-basis: 174px; height: 174px !important; min-height: 174px; }
-    .home-page .homepage-product-carousel .product-card-content { height: 101px; min-height: 101px; padding-left: 9px !important; padding-right: 9px !important; }
-    .home-page .homepage-product-carousel .product-card-content h3 { font-size: 15px !important; }
-    .home-page .homepage-product-carousel .slide-arrow { width: 32px; height: 32px; font-size: 19px; bottom: 9px; }
+    .home-page .homepage-product-carousel .product-carousel-slide{
+        width:185px !important;
+        height:275px;
+    }
+    .home-page .homepage-product-carousel .product-image-wrap{
+        flex-basis:174px;
+        height:174px !important;
+        min-height:174px;
+    }
+    .home-page .homepage-product-carousel .product-card-content{
+        height:101px;
+        min-height:101px;
+    }
+    .home-page .homepage-product-carousel .product-card-content h3{
+        font-size:15px !important;
+    }
+    .home-page .homepage-product-carousel .slide-arrow{
+        width:32px;
+        height:32px;
+        bottom:9px;
+        font-size:19px;
+    }
 }
 
 /* =========================================================
