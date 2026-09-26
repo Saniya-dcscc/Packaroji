@@ -799,7 +799,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 slide.dataset.carouselAbsolute = String(index);
             });
 
-            let phase = 0;
+            let phase = 0.5;
             let last = performance.now();
             let raf = 0;
 
